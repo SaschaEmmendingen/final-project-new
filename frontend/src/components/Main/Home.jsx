@@ -130,7 +130,6 @@ const Home = () => {
 
   const handleAddToCart = (product, quantity) => {
     if (!token) {
-      navigate("/login"); // Leite Benutzer zur Login-Seite weiter, wenn nicht angemeldet
       return;
     }
     addToCart({ ...product, quantity });
@@ -196,7 +195,7 @@ const Home = () => {
                 onClick={() => handleAddToCart(product)}
                 className="mt-4 bg-blue-500 text-white px-4 py-2 rounded-lg shadow-md hover:bg-blue-600 mx-auto block"
               >
-                <FaShoppingCart className="inline mr-2" /> Kaufen
+                <FaShoppingCart className="inline mr-2" /> In den Warenkorb
               </button>
             </div>
           ))}

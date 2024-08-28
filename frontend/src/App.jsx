@@ -34,14 +34,7 @@ function App() {
                 <Route path="Laptops" element={<Laptops />} />
                 <Route path="Kontakt" element={<Kontakt />} />
                 <Route path="Konto" element={<Konto />} />
-                <Route
-                  path="/warenkorb"
-                  element={
-                    <ProtectedRoute>
-                      <Warenkorb />
-                    </ProtectedRoute>
-                  }
-                />
+                <Route path="/warenkorb" element={<Warenkorb />} />
                 <Route path="*" element={<PageNotFound />} />
                 <Route path="/login" element={<Login />} />
                 <Route

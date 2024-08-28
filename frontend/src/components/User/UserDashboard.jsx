@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import UserProfile from './UserProfile'; // Deine UserProfile-Komponente
-import OrderManagment from './OrderManagment';
+import OrderManagmentUser from '../Order/OrderManagmentUser'
 import Button3Component from './Button3Component'; // Deine Button3-Komponente
 import { useNavigate } from 'react-router-dom'; // Importiere useNavigate
 
@@ -38,7 +38,7 @@ const UserDashboard = () => {
       case 'profile':
         return <UserProfile user={user} />;
       case 'orders':
-        return <OrderManagment />;
+        return <OrderManagmentUser />;
       case 'button3':
         return <Button3Component />;
       default:
@@ -74,21 +74,21 @@ const UserDashboard = () => {
       
       {/* Buttons */}
       <button 
-        className='bg-violet-600 border text-white p-2 mb-2 border-pink-400 rounded' 
+        className='bg-pink-600 border text-white p-2 mb-2 border-pink-400 rounded' 
         onClick={() => handleButtonClick('profile')}
       >
         Profil
       </button>
       <br />
       <button 
-        className='bg-violet-600 border text-white p-2 mb-2 border-pink-400 rounded'
+        className='bg-pink-600 border text-white p-2 mb-2 border-pink-400 rounded'
         onClick={() => handleButtonClick('orders')}
       >
         Bestellungen
       </button>
       <br />
       <button 
-        className='bg-violet-600 border text-white p-2 mb-2 border-pink-400 rounded'
+        className='bg-pink-600 border text-white p-2 mb-2 border-pink-400 rounded'
         onClick={() => handleButtonClick('button3')}
       >
         Button 3

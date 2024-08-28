@@ -6,7 +6,6 @@ import Footer from "./Footer";
 import { useCart } from "../CartContext";
 import canvaSVG from "../../media/Untitled design.svg";
 
-
 const Parent = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { cartItems } = useCart(); // Füge diesen Hook hinzu
@@ -20,9 +19,9 @@ const Parent = () => {
   };
 
   return (
-    <div className>
-      <nav className="bg-white w-[100] py-6">
-        <div className="w-100 mx-auto px-4 lg:px-8 mb-4">
+    <div>
+      <nav className="bg-white w-full py-6 sticky top-0 z-50 shadow-md">
+        <div className="w-full mx-auto px-4 lg:px-8 mb-4">
           <div className="grid grid-cols-1 lg:grid-cols-4 gap-4 items-center">
             {/* Logo */}
             <div className="flex justify-center items-center lg:justify-start lg:col-span-1 lg-row-span-2">

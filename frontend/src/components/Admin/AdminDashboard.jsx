@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import ProductManagement from "../Order/ProductManagment";
 import AdminProfile from "./AdminProfile";
 import UserManagment from "../User/UserManagment";
-import OrderManagment from "../Order/OrderManagment";
+import OrderManagment from "../Order/OrderManagmentAdmin";
 import { useNavigate } from 'react-router-dom';
 
 const AdminDashboard = () => {

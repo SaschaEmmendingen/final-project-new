@@ -19,10 +19,11 @@ const cartReducer = (state, action) => {
             console.log('State before add:', state);
             const existingItemIndex = state.cartItems.findIndex(item => item.productId === action.payload.productId);
             console.log('Existing item index:', existingItemIndex);
+
             if (existingItemIndex !== -1) {
                 const updatedCartItems = state.cartItems.map((item, index) =>
                     index === existingItemIndex
-                        ? { ...item, quantity: item.quantity + action.payload.quantity }
+                        ? { ...item, quantity: (item.quantity || 0) + (action.payload.quantity || 1) }
                         : item
                 );
                 console.log('State after update:', { ...state, cartItems: updatedCartItems });
@@ -49,18 +50,28 @@ const cartReducer = (state, action) => {
             };
         }
         default:
+            console.log('Unknown action type:', action.type);
             return state;
     }
 };
+
 // CartProvider-Komponente
 export const CartProvider = ({ children }) => {
     const [state, dispatch] = useReducer(cartReducer, initialState);
 
     const addToCart = (item) => {
-        dispatch({ type: "ADD_TO_CART", payload: item });
-      };
+        console.log('Adding item to cart:', item);
+        dispatch({
+            type: "ADD_TO_CART",
+            payload: {
+                ...item,
+                quantity: item.quantity || 1
+            }
+        });
+    };
 
     const removeFromCart = (item) => {
+        console.log('Removing item from cart:', item);
         dispatch({ type: "REMOVE_FROM_CART", payload: item });
     };
 
