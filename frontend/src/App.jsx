@@ -32,8 +32,8 @@ function App() {
                 <Route path="GamingPC" element={<GamingPC />} />
                 <Route path="Handys" element={<Handys />} />
                 <Route path="Laptops" element={<Laptops />} />
-                <Route path="kontakt" element={<Kontakt />} />
-                <Route path="konto" element={<Konto />} />
+                <Route path="Kontakt" element={<Kontakt />} />
+                <Route path="Konto" element={<Konto />} />
                 <Route
                   path="/warenkorb"
                   element={
