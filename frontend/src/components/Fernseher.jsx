@@ -7,7 +7,8 @@ const TVs = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const { addToCart } = useCart();
-
+  const token = useState();
+  
   useEffect(() => {
     const fetchProducts = async () => {
       try {
@@ -25,6 +26,21 @@ const TVs = () => {
 
     fetchProducts();
   }, []);
+
+  const handleAddToCart = (product, quantity = 1) => {
+    console.log("Selected product:", product); // Überprüfe, welches Produkt übergeben wird
+    if (!token) {
+      // navigate("/login");
+
+      return;
+    }
+    addToCart({
+      productId: product._id,
+      name: product.name,
+      price: product.price,
+      quantity,
+    });
+  };
 
   return (
     <div className="relative w-full md:w-[95%] lg:w-[95%] xl:w-[95%] mx-auto">
@@ -58,7 +74,7 @@ const TVs = () => {
                 {product.price} €
               </p>
               <button
-                onClick={() => addToCart(product)}
+                onClick={() => handleAddToCart(product)}
                 className="mt-4 bg-blue-500 text-white px-4 py-2 rounded-lg shadow-md hover:bg-blue-600 mx-auto block"
               >
                 <FaShoppingCart className="inline mr-2" /> In den Warenkorb

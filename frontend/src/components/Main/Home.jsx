@@ -128,11 +128,19 @@ const Home = () => {
     );
   };
 
-  const handleAddToCart = (product, quantity) => {
+  const handleAddToCart = (product, quantity = 1) => {
+    console.log("Selected product:", product); // Überprüfe, welches Produkt übergeben wird
     if (!token) {
+      // navigate("/login");
+
       return;
     }
-    addToCart({ ...product, quantity });
+    addToCart({
+      productId: product._id,
+      name: product.name,
+      price: product.price,
+      quantity,
+    });
   };
 
   return (

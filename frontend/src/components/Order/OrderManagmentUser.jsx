@@ -46,7 +46,7 @@ const UserDashboard = () => {
                   Order #{order._id}
                 </h3>
                 <p className="text-md text-gray-700">Total: {order.total} €</p>
-                <p className="text-md text-gray-700">Status: {order.status}</p>
+                {/* <p className="text-md text-gray-700">Status: {order.status}</p> */}
                 <ul className="mt-4">
                   {order.items.map((item, i) => (
                     <li key={i} className="flex items-center space-x-2">

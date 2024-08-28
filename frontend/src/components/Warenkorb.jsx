@@ -7,8 +7,8 @@ import { useAuth } from './Main/AuthContext'; // Importiere den AuthContext
 import { useNavigate } from 'react-router-dom';
 
 const Warenkorb = () => {
-  const { cartItems, removeFromCart } = useCart();
-  const { token, user } = useAuth(); // Hole Token und User aus dem AuthContext
+  const { cartItems, removeFromCart, clearCart } = useCart();
+  const { token } = useAuth(); // Hole Token aus dem AuthContext
   const navigate = useNavigate();
 
   // Gesamtsumme berechnen
@@ -18,7 +18,7 @@ const Warenkorb = () => {
         ? parseFloat(item.price.replace("€", "").replace(",", "."))
         : item.price;
 
-      return total + (isNaN(priceNumber) ? 0 : priceNumber);
+      return total + (isNaN(priceNumber) ? 0 : priceNumber * (item.quantity || 1));
     },
     0
   ).toFixed(2);
@@ -27,7 +27,7 @@ const Warenkorb = () => {
   const prepareOrderData = () => {
     return {
       items: cartItems.map(item => ({
-        productId: item._id,
+        productId: item.productId,
         quantity: item.quantity || 1,
         price: typeof item.price === 'string'
           ? parseFloat(item.price.replace("€", "").replace(",", "."))
@@ -57,6 +57,7 @@ const Warenkorb = () => {
       });
       if (response.status === 201) {
         alert('Bestellung erfolgreich abgeschlossen!');
+        clearCart();
         // Hier kannst du den Warenkorb leeren, wenn gewünscht
       } else {
         alert('Fehler beim Abschließen der Bestellung. Bitte versuche es erneut.');
@@ -92,7 +93,7 @@ const Warenkorb = () => {
                     />
                     <div>
                       <h3 className="text-lg font-medium">{item.name}</h3>
-                      <p className="text-sm font-semibold">{item.price}</p>
+                      <p className="text-sm font-semibold">{item.price} x {item.quantity || 1}</p>
                     </div>
                   </div>
                   <button
