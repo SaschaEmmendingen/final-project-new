@@ -215,11 +215,13 @@ const Home = () => {
               key={index}
               className="bg-white p-4 rounded-lg shadow-md flex-shrink-0 w-48"
             >
-              <img
-                src={bestseller.imageUrl}
-                alt={bestseller.name}
-                className="w-full h-32 object-cover mb-2"
-              />
+              <a href={`/products/${bestseller._id}`}>
+                <img
+                  src={bestseller.imageUrl}
+                  alt={bestseller.name}
+                  className="w-full h-32 object-contain mb-4"
+                />
+              </a>
               <h3 className="text-lg font-semibold text-center">
                 {bestseller.name}
               </h3>
