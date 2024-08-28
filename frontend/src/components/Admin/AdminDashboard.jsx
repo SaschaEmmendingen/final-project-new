@@ -4,15 +4,20 @@ import AdminProfile from "./AdminProfile";
 import UserManagment from "../User/UserManagment";
 import OrderManagment from "../Order/OrderManagmentAdmin";
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../Main/AuthContext'; // Importieren des AuthContext
 
 const AdminDashboard = () => {
   const [activeView, setActiveView] = useState("dashboard");
-  const [role, setRole] = useState("");
+  const { role, user } = useAuth(); // Verwenden des AuthContext
   const navigate = useNavigate();
+
   useEffect(() => {
-    const storedRole = localStorage.getItem("role");
-    setRole(storedRole || "Unbekannt");
-  }, []);
+    if (role !== 'admin') {
+      // Falls der Benutzer nicht admin ist, weiterleiten oder Fehlerbehandlung
+      navigate('/login'); // Oder eine andere Seite für nicht autorisierte Benutzer
+    }
+  }, [role, navigate]);
+
   const renderView = () => {
     switch (activeView) {
       case "product":
@@ -23,21 +28,23 @@ const AdminDashboard = () => {
         return <UserManagment />;
       case "orders":
         return <OrderManagment />;
-      // Füge weitere Cases für andere Ansichten hinzu
       default:
         return <div>Willkommen im Admin Dashboard</div>;
     }
   };
+
   const handleLogout = () => {
-    localStorage.removeItem("token"); // Entferne das Token aus dem lokalen Speicher
-    navigate("/login"); // Leite den Benutzer zur Anmeldeseite um
+    localStorage.removeItem("token");
+    localStorage.removeItem("userInfo");
+    localStorage.removeItem("role");
+    navigate("/login");
   };
 
   return (
     <div className="w-4/5 mx-auto mt-8 bg-white p-8 shadow-lg rounded-lg border border-blue-400">
       <h3 className="text-xl font-bold mb-4">Admin Dashboard</h3>
-      <p className="mb-4">
-        <strong>Rolle:</strong> {role}
+      <p className="mb-4 text-green-600">
+        <strong>Eingeloggt:</strong> {user?.name || 'Unbekannt'}
       </p>
       <button
         onClick={() => setActiveView("profile")}
@@ -69,11 +76,10 @@ const AdminDashboard = () => {
       <br />
       <button
         className="bg-red-600 border text-white p-2 mb-2 border-pink-400 rounded"
-        onClick={handleLogout} // Logout-Funktion aufrufen
+        onClick={handleLogout}
       >
         Logout
       </button>
-      {/* Weitere Admin-Funktionen hier */}
       <div className="mt-8">{renderView()}</div>
     </div>
   );

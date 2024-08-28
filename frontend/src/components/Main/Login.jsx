@@ -1,46 +1,23 @@
 import React, { useState } from 'react';
-import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from './AuthContext'; // Verwende useAuth Hook
+import { useAuth } from './AuthContext';
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
   const [loginType, setLoginType] = useState('user');
-  const { setToken, setUser } = useAuth(); // Hole setToken und setUser aus AuthContext
+  const [error, setError] = useState('');
+  const { login } = useAuth();
   const navigate = useNavigate();
 
   const handleLogin = async (e) => {
     e.preventDefault();
+
     try {
-      const endpoint = loginType === 'admin'
-        ? 'http://localhost:1312/api/admins/login'
-        : 'http://localhost:1312/api/auth/login';
-
-      const response = await axios.post(endpoint, { email, password });
-
-      const token = response.data.token;
-      const userData = loginType === 'admin' ? response.data.admin : response.data.user;
-
-      // Token und User-Daten im AuthContext speichern
-      setToken(token);
-      setUser(userData);
-
-      localStorage.setItem('token', token);
-      localStorage.setItem(loginType === 'admin' ? 'adminInfo' : 'userInfo', JSON.stringify(userData));
-
-      if (loginType === 'admin') {
-        navigate('/admin-dashboard');
-      } else {
-        navigate('/dashboard');
-      }
+      await login(email, password, loginType);
+      navigate(loginType === 'admin' ? '/admin-dashboard' : '/dashboard');
     } catch (err) {
-      if (err.response) {
-        setError('Login fehlgeschlagen: ' + err.response.data.message);
-      } else {
-        setError('Login fehlgeschlagen: ' + err.message);
-      }
+      setError('Login fehlgeschlagen: ' + err.message);
     }
   };
 

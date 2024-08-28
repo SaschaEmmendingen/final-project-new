@@ -1,14 +1,16 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { Link, Outlet } from "react-router-dom";
 import { FaSearch, FaUser, FaShoppingCart, FaPhone } from "react-icons/fa";
 import { motion, AnimatePresence } from "framer-motion";
 import Footer from "./Footer";
 import { useCart } from "../CartContext";
+import { useAuth } from "../Main/AuthContext"; // Importieren Sie useAuth
 import canvaSVG from "../../media/Untitled design.svg";
 
 const Parent = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const { cartItems } = useCart(); // Füge diesen Hook hinzu
+  const { cartItems } = useCart();
+  const { user, role } = useAuth(); // Holen Sie Benutzer und Rolle aus dem AuthContext
 
   const handleMenuToggle = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -36,7 +38,7 @@ const Parent = () => {
 
             {/* Suchleiste (nur auf Desktop sichtbar) */}
             <motion.div
-              className="hidden lg:flex items-center border border-gray-300 rounded-lg p-3 bg-white shadow-md lg:col-span-2 "
+              className="hidden lg:flex items-center border border-gray-300 rounded-lg p-3 bg-white shadow-md lg:col-span-2"
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.5, ease: "easeOut" }}
@@ -51,7 +53,7 @@ const Parent = () => {
               </button>
             </motion.div>
             {/* Icons: Kontakt, Konto, Warenkorb */}
-            <div className="flex justify-center lg:justify-end lg:col-span-1 lg:space-x-10 relative ">
+            <div className="flex justify-center lg:justify-end lg:col-span-1 lg:space-x-10 relative">
               <Link
                 to="/kontakt"
                 className="flex flex-col items-center text-black hover:text-gray-700"
@@ -81,6 +83,13 @@ const Parent = () => {
             </div>
           </div>
         </div>
+
+        {/* Anzeige der Rolle */}
+        {user && (
+          <div className="text-center mt-4 text-green-600">
+            Eingeloggt: {role === 'admin' ? `Admin ${user.name}` : `${user.name}`}
+          </div>
+        )}
 
         {/* Links für Desktop (nur sichtbar auf größeren Bildschirmen) */}
         <div className="hidden lg:w-1/2 lg:mx-auto lg:py-4 lg:flex lg:grid lg:grid-cols-5 lg:gap-2 lg:justify-items-center">
@@ -210,7 +219,7 @@ const Parent = () => {
                 </Link>
                 <Link
                   to="/warenkorb"
-                  className="text-white hover:text-gray-400 flex flex-col items-center relative"
+                  className="text-white hover:text-gray-400 flex flex-col items-center"
                   onClick={handleLinkClick}
                 >
                   <FaShoppingCart className="text-3xl" />
@@ -227,8 +236,8 @@ const Parent = () => {
         </AnimatePresence>
       </nav>
 
-      {/* Outlet for nested routes */}
-      <main className="min-h-screen">
+      {/* Main Content */}
+      <main>
         <Outlet />
       </main>
 

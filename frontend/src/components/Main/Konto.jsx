@@ -7,15 +7,19 @@ import { FaRegClock, FaList, FaShippingFast, FaTag } from 'react-icons/fa';
 
 const Konto = () => {
   const [isRegistering, setIsRegistering] = useState(false);
-  const { token } = useAuth(); // Token aus dem AuthContext holen
+  const { token, user, role, login } = useAuth(); // Token, User und Role aus dem AuthContext holen
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Wenn der Benutzer eingeloggt ist, leite ihn zum User Dashboard weiter
+    // Wenn der Benutzer eingeloggt ist, leite ihn abhängig von seiner Rolle weiter
     if (token) {
-      navigate('/dashboard'); // Der Pfad zum User Dashboard kann angepasst werden
+      if (role === 'admin') {
+        navigate('/admin-dashboard');
+      } else if (role === 'user') {
+        navigate('/dashboard');
+      }
     }
-  }, [token, navigate]);
+  }, [token, role, navigate]);
 
   return (
     <div className="w-4/5 mx-auto mt-8 grid grid-cols-1 lg:grid-cols-2 gap-8">

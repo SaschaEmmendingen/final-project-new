@@ -40,17 +40,13 @@ function App() {
                 <Route
                   path="/dashboard"
                   element={
-                    <ProtectedRoute>
-                      <UserDashboard />
-                    </ProtectedRoute>
+                    <ProtectedRoute element={<UserDashboard />} />
                   }
                 />
                 <Route
                   path="/admin-dashboard"
                   element={
-                    <ProtectedRoute>
-                      <AdminDashboard />
-                    </ProtectedRoute>
+                    <ProtectedRoute element={<AdminDashboard />} />
                   }
                 />
                 <Route path="/products/:id" element={<ProductDetail />} />
