@@ -85,11 +85,11 @@ const Parent = () => {
         </div>
 
         {/* Anzeige der Rolle */}
-        {user && (
+        {/* {user && (
           <div className="text-center mt-4 text-green-600">
-            Eingeloggt: {role === 'admin' ? `Admin ${user.name}` : `${user.name}`}
+            Eingeloggt: {role === 'admin' ? `${user.name}` : `${user.name}`}
           </div>
-        )}
+        )} */}
 
         {/* Links für Desktop (nur sichtbar auf größeren Bildschirmen) */}
         <div className="hidden lg:w-1/2 lg:mx-auto lg:py-4 lg:flex lg:grid lg:grid-cols-5 lg:gap-2 lg:justify-items-center">

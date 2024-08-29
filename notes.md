@@ -21,3 +21,8 @@
 
 - Home: 
     
+
+    alles verlinkt an seiten,
+    admin dashboard noch verbessern
+    user dashboard funktionen einfügen?
+    
