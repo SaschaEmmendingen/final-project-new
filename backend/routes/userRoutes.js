@@ -7,7 +7,7 @@ const router = express.Router();
 // Registrierung - keine Authentifizierung erforderlich
 router.post('/', registerUser);
 
-// Alle weiteren Routen erfordern Authentifizierung
+// Alle weiteren Routen erfordern Authentifizierung 
 router.use(protect); // Alle nachfolgenden Routen erfordern Authentifizierung
 
 router.get('/profile', getUserProfile); // Profil-Details abrufen

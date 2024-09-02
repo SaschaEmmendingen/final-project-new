@@ -1,21 +1,20 @@
 import express from 'express';
-import { loginAdmin, createAdmin, getAdmin, getAllAdmins, updateAdmin, deleteAdmin } from '../controllers/adminController.js';
-import { isAdmin } from '../middleware/authMiddleware.js';
-import { getAdminDashboard } from '../controllers/adminController.js';
+import { createAdmin, getAdmin, getAllAdmins, updateAdmin, deleteAdmin, getAdminDashboard } from '../controllers/adminController.js';
+import { protect, isAdmin } from '../middleware/authMiddleware.js';
 
 const router = express.Router();
 
-// Admin-Login-Route
-router.post('/login', loginAdmin);
-// router.use(isAdmin);
+// Admin-CRUD und Dashboard Routen
+router.use(protect); // Authentifizierung erforderlich
+router.use(isAdmin); // Nur Admins haben Zugriff auf diese Routen
 
-// Admin-CRUD
 router.post('/', createAdmin);
 router.get('/', getAllAdmins);
 router.get('/:id', getAdmin);
 router.put('/:id', updateAdmin);
 router.delete('/:id', deleteAdmin);
-router.post('/login', loginAdmin);
+
+// Admin-Dashboard
 router.get('/dashboard', getAdminDashboard);
 
 export default router;

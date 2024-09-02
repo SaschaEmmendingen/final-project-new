@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { FaBoxOpen, FaCheckCircle, FaTimesCircle } from 'react-icons/fa';
-// import { useAuth } from './AuthContext';  // Assuming you have an AuthContext for user authentication
+import { FaBoxOpen, FaTrashAlt } from 'react-icons/fa';
 import { useAuth } from '../Main/AuthContext';
 
 const UserDashboard = () => {
@@ -28,6 +27,31 @@ const UserDashboard = () => {
     fetchOrders();
   }, [token]);
 
+  const handleDeleteOrder = async (orderId) => {
+    const confirmDelete = window.confirm('Are you sure you want to delete this order?');
+    
+    if (!confirmDelete) return;
+
+    try {
+      const response = await fetch(`http://localhost:1312/api/orders/${orderId}`, {
+        method: 'DELETE',
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to delete order');
+      }
+
+      // Remove the deleted order from the state
+      setOrders((prevOrders) => prevOrders.filter((order) => order._id !== orderId));
+    } catch (error) {
+      console.error('Error deleting order:', error);
+    }
+  };
+
   return (
     <div className="relative w-full md:w-[95%] lg:w-[95%] xl:w-[95%] mx-auto">
       <h1 className="text-3xl font-bold my-8 text-center">My Orders</h1>
@@ -37,16 +61,15 @@ const UserDashboard = () => {
       ) : (
         <div className="space-y-4">
           {orders.length > 0 ? (
-            orders.map((order, index) => (
+            orders.map((order) => (
               <div
-                key={index}
+                key={order._id}
                 className="bg-white border border-gray-200 rounded-lg shadow-md p-4"
               >
                 <h3 className="text-lg font-semibold">
                   Order #{order._id}
                 </h3>
                 <p className="text-md text-gray-700">Total: {order.total} €</p>
-                {/* <p className="text-md text-gray-700">Status: {order.status}</p> */}
                 <ul className="mt-4">
                   {order.items.map((item, i) => (
                     <li key={i} className="flex items-center space-x-2">
@@ -55,6 +78,13 @@ const UserDashboard = () => {
                     </li>
                   ))}
                 </ul>
+                <button
+                  onClick={() => handleDeleteOrder(order._id)}
+                  className="bg-red-600 text-white py-2 px-4 rounded mt-2 flex items-center space-x-2"
+                >
+                  <FaTrashAlt className="mr-2" />
+                  Delete Order
+                </button>
               </div>
             ))
           ) : (

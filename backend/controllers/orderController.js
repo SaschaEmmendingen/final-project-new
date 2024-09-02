@@ -1,6 +1,7 @@
 import Order from '../models/Order.js';
 
-const createOrder = async (req, res) => {
+// Erstelle eine neue Bestellung
+export const createOrder = async (req, res) => {
   const { items, total } = req.body;
 
   // Validierung der Daten
@@ -20,7 +21,7 @@ const createOrder = async (req, res) => {
   }
 
   try {
-    const newOrder = new Order({ items, total });
+    const newOrder = new Order({ items, total, user: req.user._id }); // Benutzer wird hier zugewiesen
     await newOrder.save();
     res.status(200).json({ message: 'Bestellung erfolgreich erstellt' });
   } catch (error) {
@@ -29,4 +30,49 @@ const createOrder = async (req, res) => {
   }
 };
 
-export default createOrder;
+// Lösche eine Bestellung
+export const deleteOrder = async (req, res) => {
+  try {
+    const orderId = req.params.id;
+    const userId = req.user._id;
+    
+    // Überprüfe, ob der Benutzer ein Administrator ist
+    if (req.user.isAdmin) {
+      // Wenn Admin, lösche jede Bestellung
+      const deletedOrder = await Order.findByIdAndDelete(orderId);
+      
+      if (!deletedOrder) {
+        return res.status(404).json({ message: 'Bestellung nicht gefunden' });
+      }
+      
+      return res.json({ message: 'Bestellung erfolgreich gelöscht' });
+    } else {
+      // Wenn Benutzer, lösche nur die eigene Bestellung
+      const deletedOrder = await Order.findOneAndDelete({ _id: orderId, user: userId });
+      
+      if (!deletedOrder) {
+        return res.status(404).json({ message: 'Bestellung nicht gefunden oder nicht berechtigt' });
+      }
+      
+      return res.json({ message: 'Bestellung erfolgreich gelöscht' });
+    }
+  } catch (error) {
+    res.status(500).json({ message: 'Fehler beim Löschen der Bestellung', error });
+  }
+};
+
+// Hole eine Bestellung nach ID
+export const getOrderById = async (req, res) => {
+  try {
+    const orderId = req.params.id;
+    const order = await Order.findById(orderId);
+
+    if (!order) {
+      return res.status(404).json({ message: 'Bestellung nicht gefunden' });
+    }
+
+    res.json(order);
+  } catch (error) {
+    res.status(500).json({ message: 'Fehler beim Abrufen der Bestellung', error });
+  }
+};

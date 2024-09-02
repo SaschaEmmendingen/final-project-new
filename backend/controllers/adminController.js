@@ -42,7 +42,7 @@ export const createAdmin = async (req, res) => {
   const { name, email, password, address, phone } = req.body;
   
   try {
-    const admin = new Admin({ name, email, password, address, phone });
+    const admin = new Admin({ name, email, password, address, phone, role: 'admin' });
     await admin.save();
     res.status(201).json({ message: 'Admin erstellt', admin });
   } catch (error) {

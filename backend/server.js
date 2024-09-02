@@ -36,6 +36,7 @@ app.get('/api/products', async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 });
+
 // Fehlerbehandlung für ungültige Routen
 app.use((req, res, next) => {
   res.status(404).json({ message: "Not Found" });
@@ -47,7 +48,7 @@ app.use((err, req, res, next) => {
   res.status(500).json({ message: "Server Error" }); // Sende eine generische Fehlermeldung
 });
 
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 1312;
 
 app.listen(PORT, () =>
   console.log(`\x1b[36mServer running on port ${PORT}\x1b[0m`)
