@@ -9,6 +9,7 @@ const ProductManagement = () => {
     price: "",
     category: "",
     stock: "",
+    imageUrl: "", // Hinzugefügtes Feld für das Bild
   });
   const [editingProduct, setEditingProduct] = useState(null);
 
@@ -31,6 +32,13 @@ const ProductManagement = () => {
 
   const handleAddProduct = async () => {
     try {
+      console.log("Zu sendende Produktdaten:", newProduct);  // Debugging
+  
+      if (!newProduct.name || !newProduct.description || !newProduct.price || !newProduct.category || !newProduct.stock || !newProduct.imageUrl) {
+        console.error("Alle Felder müssen ausgefüllt werden.");
+        return;
+      }
+  
       await axios.post("http://localhost:1312/api/products", newProduct);
       fetchProducts();
       setNewProduct({
@@ -39,9 +47,10 @@ const ProductManagement = () => {
         price: "",
         category: "",
         stock: "",
+        imageUrl: "" // Leert das Bildfeld nach dem Hinzufügen
       });
     } catch (error) {
-      console.error("Error adding product:", error);
+      console.error("Fehler beim Hinzufügen des Produkts:", error);
     }
   };
 
@@ -74,6 +83,7 @@ const ProductManagement = () => {
             handleEditProduct(editingProduct);
           }}
         >
+          {/* Bearbeitungsformular */}
           <input
             type="text"
             value={editingProduct.name}
@@ -109,15 +119,25 @@ const ProductManagement = () => {
             }
             placeholder="Kategorie"
             className="border p-2 mb-2 w-full border-pink-400"
-          /><input
-          type="number"
-          value={editingProduct.stock}
-          onChange={(e) =>
-            setEditingProduct({ ...editingProduct, stock: e.target.value })
-          }
-          placeholder="Lagerbestand"
-          className="border p-2 mb-2 w-full border-pink-400"
-        />
+          />
+          <input
+            type="number"
+            value={editingProduct.stock}
+            onChange={(e) =>
+              setEditingProduct({ ...editingProduct, stock: e.target.value })
+            }
+            placeholder="Lagerbestand"
+            className="border p-2 mb-2 w-full border-pink-400"
+          />
+          <input
+            type="text"
+            value={editingProduct.imageUrl}
+            onChange={(e) =>
+              setEditingProduct({ ...editingProduct, imageUrl: e.target.value })
+            }
+            placeholder="Bild-URL"
+            className="border p-2 mb-2 w-full border-pink-400"
+          />
           <button
             type="submit"
             className="bg-green-500 text-white py-2 px-4 rounded"
@@ -168,6 +188,14 @@ const ProductManagement = () => {
             onChange={handleChange}
             className="border p-2 mb-2 w-full border-pink-400"
           />
+          <input
+            type="text"
+            name="imageUrl"
+            placeholder="Bild-URL"
+            value={newProduct.imageUrl}
+            onChange={handleChange}
+            className="border p-2 mb-2 w-full border-pink-400"
+          />
           <button
             onClick={handleAddProduct}
             className="bg-green-500 text-white py-2 px-4 rounded"
@@ -182,6 +210,7 @@ const ProductManagement = () => {
           {products.map((product) => (
             <li key={product._id} className="border p-2 mb-2 border-pink-400">
               {product.name} - {product.price}€
+              <img src={product.imageUrl} alt={product.name} className="w-16 h-16" />
               <button
                 onClick={() => setEditingProduct(product)}
                 className="bg-yellow-500 text-white ml-4 px-2 py-1 rounded"

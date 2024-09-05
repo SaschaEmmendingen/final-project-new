@@ -41,7 +41,6 @@ router.post('/', async (req, res) => {
   try {
     const { name, description, price, category, stock, imageUrl } = req.body;
 
-    // Überprüfen, ob alle erforderlichen Felder vorhanden sind
     if (!name || !description || !price || !category || !stock || !imageUrl) {
       return res.status(400).json({ message: 'Alle Felder müssen ausgefüllt werden.' });
     }
@@ -52,13 +51,14 @@ router.post('/', async (req, res) => {
       price,
       category,
       stock,
-      imageUrl  // Bild-URL hinzufügen
+      imageUrl
     });
 
     const createdProduct = await product.save();
     res.status(201).json(createdProduct);
   } catch (error) {
-    res.status(500).json({ message: 'Server error' });
+    console.error('Serverfehler:', error);
+    res.status(500).json({ message: 'Serverfehler beim Hinzufügen des Produkts' });
   }
 });
 
