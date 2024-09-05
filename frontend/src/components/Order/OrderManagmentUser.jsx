@@ -71,7 +71,7 @@ const UserDashboard = () => {
                 <h3 className="text-lg font-semibold">
                   {formatOrderId(order._id)}
                 </h3>
-                <p className="text-md text-gray-700">Total: {order.total} €</p>
+                <p className="text-md text-green-700 font-bold">Total: {order.total} €</p>
                 <ul className="mt-4">
                   {order.items.map((item, i) => (
                     <li key={i} className="flex items-center space-x-2">

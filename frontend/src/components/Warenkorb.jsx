@@ -1,10 +1,10 @@
-import React from 'react';
-import { useCart } from '../components/CartContext';
-import { FaTrashAlt, FaShoppingCart } from 'react-icons/fa';
+import React from "react";
+import { useCart } from "../components/CartContext";
+import { FaTrashAlt, FaShoppingCart } from "react-icons/fa";
 import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
-import axios from 'axios';
-import { useAuth } from './Main/AuthContext'; // Importiere den AuthContext
-import { useNavigate } from 'react-router-dom';
+import axios from "axios";
+import { useAuth } from "./Main/AuthContext"; // Importiere den AuthContext
+import { useNavigate } from "react-router-dom";
 
 const Warenkorb = () => {
   const { cartItems, removeFromCart, clearCart } = useCart();
@@ -12,39 +12,41 @@ const Warenkorb = () => {
   const navigate = useNavigate();
 
   // Gesamtsumme berechnen
-  const totalAmount = cartItems.reduce(
-    (total, item) => {
-      const priceNumber = typeof item.price === 'string'
-        ? parseFloat(item.price.replace("€", "").replace(",", "."))
-        : item.price;
+  const totalAmount = cartItems
+    .reduce((total, item) => {
+      const priceNumber =
+        typeof item.price === "string"
+          ? parseFloat(item.price.replace("€", "").replace(",", "."))
+          : item.price;
 
-      return total + (isNaN(priceNumber) ? 0 : priceNumber * (item.quantity || 1));
-    },
-    0
-  ).toFixed(2);
+      return (
+        total + (isNaN(priceNumber) ? 0 : priceNumber * (item.quantity || 1))
+      );
+    }, 0)
+    .toFixed(2);
 
   // Funktion zum Vorbereiten der Bestelldaten
   const prepareOrderData = () => {
     return {
-      items: cartItems.map(item => ({
+      items: cartItems.map((item) => ({
         productId: item.productId,
         quantity: item.quantity || 1,
-        price: typeof item.price === 'string'
-          ? parseFloat(item.price.replace("€", "").replace(",", "."))
-          : item.price
+        price:
+          typeof item.price === "string"
+            ? parseFloat(item.price.replace("€", "").replace(",", "."))
+            : item.price,
       })),
-      total: parseFloat(totalAmount)
+      total: parseFloat(totalAmount),
     };
   };
 
   // Funktion zum Senden der Bestellung an das Backend
   const handleCheckout = async () => {
     if (!token) {
-      // Wenn kein Token vorhanden ist, leite den Benutzer zur Login-Seite weiter
       navigate('/login');
       return;
     }
-
+  
     try {
       const orderData = prepareOrderData();
   
@@ -52,14 +54,18 @@ const Warenkorb = () => {
   
       const response = await axios.post('http://localhost:1312/api/orders', orderData, {
         headers: {
-          Authorization: `Bearer ${token}` // Füge das Token in den Header ein
+          Authorization: `Bearer ${token}`
         }
       });
+  
+      console.log('Server-Antwort:', response); // Debugging-Informationen
+  
       if (response.status === 201) {
         alert('Bestellung erfolgreich abgeschlossen!');
-        clearCart();
-        // Hier kannst du den Warenkorb leeren, wenn gewünscht
+        clearCart(); // Leere den Warenkorb nur, wenn die Bestellung erfolgreich war
+        navigate('/'); // Weiterleitung zur Startseite oder zu einer Bestellbestätigungsseite
       } else {
+        console.error('Unerwarteter Statuscode:', response.status); // Debugging-Informationen
         alert('Fehler beim Abschließen der Bestellung. Bitte versuche es erneut.');
       }
     } catch (error) {
@@ -69,12 +75,19 @@ const Warenkorb = () => {
   };
 
   return (
-    <PayPalScriptProvider options={{ "client-id": "ASN-Y6PN9gc5OIAIQQWCMgDQXTTt_sGAxEw5-R_xPexA95xgPQmha2h8s2I2iAXxkEjFXUgpKt_K6vHr" }}>
+    <PayPalScriptProvider
+      options={{
+        "client-id":
+          "ASN-Y6PN9gc5OIAIQQWCMgDQXTTt_sGAxEw5-R_xPexA95xgPQmha2h8s2I2iAXxkEjFXUgpKt_K6vHr",
+      }}
+    >
       <div className="w-4/5 mx-auto mt-8">
         {cartItems.length === 0 ? (
           <div className="flex flex-col items-center justify-center mt-16">
             <FaShoppingCart className="text-gray-400 text-6xl mb-4" />
-            <p className="text-gray-500 text-lg">Dein Warenkorb ist derzeit leer...</p>
+            <p className="text-gray-500 text-lg">
+              Dein Warenkorb ist derzeit leer...
+            </p>
           </div>
         ) : (
           <div className="grid grid-cols-2 gap-4">
@@ -93,7 +106,9 @@ const Warenkorb = () => {
                     />
                     <div>
                       <h3 className="text-lg font-medium">{item.name}</h3>
-                      <p className="text-sm font-semibold">{item.price} x {item.quantity || 1}</p>
+                      <p className="text-sm font-semibold">
+                        {item.price} x {item.quantity || 1}
+                      </p>
                     </div>
                   </div>
                   <button
@@ -109,10 +124,12 @@ const Warenkorb = () => {
             {/* Rechte Col: Gesamtsumme + Buttons */}
             <div className="bg-white p-6 rounded-lg shadow-md h-full flex flex-col items-center justify-center">
               <div className="text-center">
-                <h3 className="text-xl font-bold mb-4">Gesamtsumme: {totalAmount} €</h3>
-                
+                <h3 className="text-xl font-bold mb-4">
+                  Gesamtsumme: {totalAmount} €
+                </h3>
+
                 {/* Grüner Button "Zur Kasse" */}
-                <button 
+                <button
                   className="bg-green-500 text-white py-2 px-4 rounded-md w-full mb-4 hover:bg-green-600"
                   onClick={handleCheckout} // Bestellung an das Backend senden
                 >
@@ -120,7 +137,9 @@ const Warenkorb = () => {
                 </button>
 
                 {/* Trennlinie und Express-Kauf Text */}
-                <p className="text-gray-500 my-2">---------------------oder express kaufen-------------------</p>
+                <p className="text-gray-500 my-2">
+                  ---------------------oder express kaufen-------------------
+                </p>
 
                 {/* PayPal Button von npm*/}
                 <div className="w-full mb-4">
@@ -128,27 +147,38 @@ const Warenkorb = () => {
                     style={{ layout: "vertical" }}
                     createOrder={(data, actions) => {
                       return actions.order.create({
-                        purchase_units: [{
-                          amount: {
-                            value: totalAmount, // Die Gesamtsumme der Warenkorbartikel
+                        purchase_units: [
+                          {
+                            amount: {
+                              value: totalAmount, // Die Gesamtsumme der Warenkorbartikel
+                            },
                           },
-                        }],
+                        ],
                       });
                     }}
                     onApprove={async (data, actions) => {
                       try {
                         const details = await actions.order.capture();
-                        alert(`Transaktion abgeschlossen durch ${details.payer.name.given_name}`);
+                        alert(
+                          `Transaktion abgeschlossen durch ${details.payer.name.given_name}`
+                        );
                         // Hier kannst du die Bestellung ebenfalls an das Backend senden, wenn gewünscht
-                        await handleCheckout();
+                        await handleCheckout(); // Bestellung abschicken
                       } catch (error) {
-                        console.error('Fehler bei der Zahlungsabwicklung:', error);
-                        alert('Es gab ein Problem bei der Zahlungsabwicklung. Bitte versuche es erneut.');
+                        console.error(
+                          "Fehler bei der Zahlungsabwicklung:",
+                          error
+                        );
+                        alert(
+                          "Es gab ein Problem bei der Zahlungsabwicklung. Bitte versuche es erneut."
+                        );
                       }
                     }}
                     onError={(err) => {
-                      console.error('PayPal-Fehler:', err);
-                      alert('Es gab ein Problem bei der Verbindung zu PayPal. Bitte versuche es später erneut.');
+                      console.error("PayPal-Fehler:", err);
+                      alert(
+                        "Es gab ein Problem bei der Verbindung zu PayPal. Bitte versuche es später erneut."
+                      );
                     }}
                   />
                 </div>
@@ -163,7 +193,11 @@ const Warenkorb = () => {
         {/* Zeige eine Nachricht an, wenn der Benutzer nicht eingeloggt ist */}
         {!token && (
           <div className="mt-4 p-4 bg-red-100 text-red-700 border border-red-300 rounded-lg">
-            Du musst eingeloggt sein, um eine Bestellung aufzugeben. Bitte <a href="/login" className="text-blue-500 underline">logge dich hier ein</a>.
+            Du musst eingeloggt sein, um eine Bestellung aufzugeben. Bitte{" "}
+            <a href="/login" className="text-blue-500 underline">
+              logge dich hier ein
+            </a>
+            .
           </div>
         )}
       </div>

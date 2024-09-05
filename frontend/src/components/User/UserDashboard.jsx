@@ -52,7 +52,7 @@ const UserDashboard = () => {
 
   const handleLogout = () => {
     localStorage.removeItem('token'); // Entferne das Token aus dem lokalen Speicher
-    // window.location.reload(); // Seiten-Refresh auslösen
+    window.location.reload(); // Seiten-Refresh auslösen
     navigate('/login'); // Leite den Benutzer zur Anmeldeseite um
   };
 

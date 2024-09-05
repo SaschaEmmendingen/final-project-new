@@ -23,7 +23,7 @@ export const createOrder = async (req, res) => {
   try {
     const newOrder = new Order({ items, total, user: req.user._id }); // Benutzer wird hier zugewiesen
     await newOrder.save();
-    res.status(200).json({ message: 'Bestellung erfolgreich erstellt' });
+    res.status(201).json({ message: 'Bestellung erfolgreich erstellt' });
   } catch (error) {
     console.error('Fehler beim Erstellen der Bestellung:', error);
     res.status(500).json({ message: 'Serverfehler' });
@@ -37,7 +37,7 @@ export const deleteOrder = async (req, res) => {
     const userId = req.user._id;
     
     // Überprüfe, ob der Benutzer ein Administrator ist
-    if (req.user.isAdmin) {
+    if (req.user.role === 'admin') {
       // Wenn Admin, lösche jede Bestellung
       const deletedOrder = await Order.findByIdAndDelete(orderId);
       
@@ -57,7 +57,8 @@ export const deleteOrder = async (req, res) => {
       return res.json({ message: 'Bestellung erfolgreich gelöscht' });
     }
   } catch (error) {
-    res.status(500).json({ message: 'Fehler beim Löschen der Bestellung', error });
+    console.error('Fehler beim Löschen der Bestellung:', error);
+    res.status(500).json({ message: 'Fehler beim Löschen der Bestellung' });
   }
 };
 

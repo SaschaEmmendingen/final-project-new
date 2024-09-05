@@ -1,5 +1,6 @@
 import User from "../models/User.js";
 import Order from "../models/Order.js";
+import bcrypt from "bcryptjs"
 
 export const getUserProfile = async (req, res) => {
   try {
@@ -40,6 +41,7 @@ export const registerUser = async (req, res) => {
     await user.save();
     res.status(201).json({ message: "User registriert", user });
   } catch (error) {
+    console.error('Fehler bei der Registrierung:', error); // Zusätzliche Fehlermeldung
     res
       .status(400)
       .json({ message: "Fehler bei der Registrierung des Users", error });

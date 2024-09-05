@@ -37,10 +37,7 @@ const AdminBestellungen = () => {
   };
 
   if (loading) return <p>Bestellungen werden geladen...</p>;
-  if (error) return <p className="text-red-500">Fehler: {error}</p>;
-
-  if (loading) return <p>Bestellungen werden geladen...</p>;
-  if (error) return <p className="text-red-500">Fehler: {error}</p>;
+  if (error) return <p className="text-red-500">Fehler: {error.message || "Unbekannter Fehler"}</p>;
 
   return (
     <div className="w-4/5 mx-auto mt-8">
@@ -57,10 +54,11 @@ const AdminBestellungen = () => {
               <h3 className="text-lg font-medium">
                 Bestellung #{order._id}
               </h3>
-              <p className="text-sm">Gesamtbetrag: {order.total} €</p>
-              <p className="text-sm">
-                Erstellt von: {order.user ? order.user.name : "Unbekannt"}
+              <p className="text-base">
+                Erstellt von: <span className="font-bold text-orange-500">{order.user ? order.user.name : "Unbekannt"}</span>
               </p>
+              <p className="text-base font-bold">Gesamtbetrag: {order.total} €</p>
+              <br />
               <ul>
                 {order.items.map((item) => (
                   <li key={item._id} className="border-b py-1">

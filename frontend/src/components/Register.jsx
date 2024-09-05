@@ -21,10 +21,19 @@ const Registrierung = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:1312/api/users/register', formData); // Stelle sicher, dass der Endpunkt korrekt ist
+      const response = await axios.post('http://localhost:1312/api/auth/register', formData); // Stelle sicher, dass der Endpunkt korrekt ist
       console.log('Server Antwort:', response.data);
       setSuccess('Registrierung erfolgreich!');
       setError('');
+  
+      // Formular zurücksetzen
+      setFormData({
+        name: '',
+        email: '',
+        password: '',
+        address: '',
+        phone: '',
+      });
     } catch (err) {
       if (err.response) {
         console.error('Server antwortete mit Fehler:', err.response.data);
