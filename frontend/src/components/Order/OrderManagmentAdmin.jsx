@@ -1,19 +1,23 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 
 const AdminBestellungen = () => {
   const [orders, setOrders] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchOrders = async () => {
       try {
-        const token = localStorage.getItem('token'); // Token aus dem lokalen Speicher holen
-        const response = await axios.get('http://localhost:1312/api/orders', {
-          headers: { 'Authorization': `Bearer ${token}` }
+        const token = localStorage.getItem("token"); // Token aus dem lokalen Speicher holen
+        const response = await axios.get("http://localhost:1312/api/orders", {
+          headers: { Authorization: `Bearer ${token}` },
         });
         setOrders(response.data);
       } catch (error) {
-        console.error('Fehler beim Laden der Bestellungen:', error.response ? error.response.data : error.message);
+        setError(error.response ? error.response.data : error.message);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -22,15 +26,21 @@ const AdminBestellungen = () => {
 
   const handleDeleteOrder = async (orderId) => {
     try {
-      const token = localStorage.getItem('token'); // Holen Sie sich das Token aus dem lokalen Speicher
+      const token = localStorage.getItem("token"); // Holen Sie sich das Token aus dem lokalen Speicher
       await axios.delete(`http://localhost:1312/api/orders/${orderId}`, {
-        headers: { 'Authorization': `Bearer ${token}` }
+        headers: { Authorization: `Bearer ${token}` },
       });
-      setOrders(orders.filter(order => order._id !== orderId)); // Bestellungen nach dem Löschen aktualisieren
+      setOrders(orders.filter((order) => order._id !== orderId)); // Bestellungen nach dem Löschen aktualisieren
     } catch (error) {
-      console.error('Fehler beim Löschen der Bestellung:', error.response ? error.response.data : error.message);
+      setError(error.response ? error.response.data : error.message);
     }
   };
+
+  if (loading) return <p>Bestellungen werden geladen...</p>;
+  if (error) return <p className="text-red-500">Fehler: {error}</p>;
+
+  if (loading) return <p>Bestellungen werden geladen...</p>;
+  if (error) return <p className="text-red-500">Fehler: {error}</p>;
 
   return (
     <div className="w-4/5 mx-auto mt-8">
@@ -40,13 +50,21 @@ const AdminBestellungen = () => {
       ) : (
         <ul>
           {orders.map((order) => (
-            <li key={order._id} className="bg-white p-4 rounded-lg shadow-md mb-4">
-              <h3 className="text-lg font-medium">Bestellung #{order._id}</h3>
+            <li
+              key={order._id}
+              className="bg-white p-4 rounded-lg shadow-md mb-4"
+            >
+              <h3 className="text-lg font-medium">
+                Bestellung #{order._id}
+              </h3>
               <p className="text-sm">Gesamtbetrag: {order.total} €</p>
+              <p className="text-sm">
+                Erstellt von: {order.user ? order.user.name : "Unbekannt"}
+              </p>
               <ul>
                 {order.items.map((item) => (
-                  <li key={item._id}>
-                    {item.name} - {item.price}
+                  <li key={item._id} className="border-b py-1">
+                    {item.productId.name} - {item.price} €
                   </li>
                 ))}
               </ul>

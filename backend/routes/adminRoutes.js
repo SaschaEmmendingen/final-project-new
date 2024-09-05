@@ -1,20 +1,36 @@
-import express from 'express';
-import { createAdmin, getAdmin, getAllAdmins, updateAdmin, deleteAdmin, getAdminDashboard } from '../controllers/adminController.js';
-import { protect, isAdmin } from '../middleware/authMiddleware.js';
+import express from "express";
+import {
+  createAdmin,
+  getAdmin,
+  getAllAdmins,
+  updateAdmin,
+  deleteAdmin,
+  getAdminDashboard,
+} from "../controllers/adminController.js";
+import { protect, isAdmin } from "../middleware/authMiddleware.js";
 
 const router = express.Router();
 
-// Admin-CRUD und Dashboard Routen
-router.use(protect); // Authentifizierung erforderlich
-router.use(isAdmin); // Nur Admins haben Zugriff auf diese Routen
+// Admin Dashboard
+router.get("/dashboard", protect, isAdmin, getAdminDashboard);
 
-router.post('/', createAdmin);
-router.get('/', getAllAdmins);
-router.get('/:id', getAdmin);
-router.put('/:id', updateAdmin);
-router.delete('/:id', deleteAdmin);
+// Alle anderen Admin-Routen erfordern Authentifizierung und Admin-Rolle
+router.use(protect); // Alle nachfolgenden Routen erfordern Authentifizierung
+router.use(isAdmin); // Alle nachfolgenden Routen erfordern Admin-Rolle
 
-// Admin-Dashboard
-router.get('/dashboard', getAdminDashboard);
+// Admin erstellen
+router.post("/", createAdmin);
+
+// Admin nach ID abrufen
+router.get("/:id", getAdmin);
+
+// Alle Admins abrufen
+router.get("/", getAllAdmins);
+
+// Admin aktualisieren
+router.put("/:id", updateAdmin);
+
+// Admin löschen
+router.delete("/:id", deleteAdmin);
 
 export default router;

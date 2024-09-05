@@ -7,10 +7,10 @@ login test - ok
 get profile test - ok
 
 eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2YmYyNTRjZTc2OTYzNGM0ZGJmOTBmNSIsImlhdCI6MTcyMzgwMjk4OSwiZXhwIjoxNzI2Mzk0OTg5fQ.QTAf2a948w40Fm2AVnfhNt_vXWjPXmwjFu2RlUwiaeE
-
-"email": "admin1@example.com", 
-"password": "adminpassword1"
-
+{
+ "email": "admin1@db.com", 
+ "password": "123"
+}
 frontend (need for connection: axios)
 
 [

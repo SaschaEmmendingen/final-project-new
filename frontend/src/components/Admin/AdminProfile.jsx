@@ -9,12 +9,14 @@ const AdminProfile = () => {
   useEffect(() => {
     const storedRole = localStorage.getItem('role');
     setRole(storedRole || 'Unbekannt');
+    console.log('Stored Role:', storedRole);
   }, []);
 
   useEffect(() => {
     const fetchProfile = () => {
-      const adminInfo = JSON.parse(localStorage.getItem('adminInfo'));
-
+      const adminInfo = JSON.parse(localStorage.getItem('userInfo'));
+      console.log('Fetched User Info:', adminInfo);
+    
       if (adminInfo) {
         setProfile(adminInfo);
         setLoading(false);

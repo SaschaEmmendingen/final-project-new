@@ -1,32 +1,42 @@
-import React, { useEffect, useState } from "react";
-import ProductManagement from "../Order/ProductManagment";
-import AdminProfile from "./AdminProfile";
-import UserManagment from "../User/UserManagment";
-import OrderManagment from "../Order/OrderManagmentAdmin";
+import React, { useEffect, useState } from 'react';
+import ProductManagement from '../Order/ProductManagment';
+import AdminProfile from './AdminProfile';
+import UserManagment from '../User/UserManagment';
+import OrderManagment from '../Order/OrderManagmentAdmin';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../Main/AuthContext'; // Importieren des AuthContext
 
 const AdminDashboard = () => {
-  const [activeView, setActiveView] = useState("dashboard");
-  const { role, user } = useAuth(); // Verwenden des AuthContext
+  const [activeView, setActiveView] = useState('dashboard');
+  const [role, setRole] = useState('');
+  const [user, setUser] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (role !== 'admin') {
-      // Falls der Benutzer nicht admin ist, weiterleiten oder Fehlerbehandlung
-      navigate('/login'); // Oder eine andere Seite für nicht autorisierte Benutzer
+    // Rolle und Benutzerinformationen aus localStorage holen
+    const storedRole = localStorage.getItem('role');
+    const storedUser = localStorage.getItem('userInfo');
+
+    console.log('Stored Role on Dashboard Load:', storedRole); // Debugging-Ausgabe
+    console.log('Stored User Info on Dashboard Load:', storedUser); // Debugging-Ausgabe
+
+    setRole(storedRole || 'Unbekannt');
+    setUser(storedUser ? JSON.parse(storedUser) : null);
+
+    // Weiterleitung bei fehlender Admin-Rolle
+    if (storedRole !== 'admin') {
+      navigate('/login'); // Weiterleitung zu einer anderen Seite
     }
-  }, [role, navigate]);
+  }, [navigate]);
 
   const renderView = () => {
     switch (activeView) {
-      case "product":
+      case 'product':
         return <ProductManagement />;
-      case "profile":
+      case 'profile':
         return <AdminProfile />;
-      case "user":
+      case 'user':
         return <UserManagment />;
-      case "orders":
+      case 'orders':
         return <OrderManagment />;
       default:
         return <div>Willkommen im Admin Dashboard</div>;
@@ -34,10 +44,10 @@ const AdminDashboard = () => {
   };
 
   const handleLogout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("userInfo");
-    localStorage.removeItem("role");
-    navigate("/login");
+    localStorage.removeItem('token');
+    localStorage.removeItem('role');
+    localStorage.removeItem('userInfo');
+    navigate('/login');
   };
 
   return (
@@ -47,28 +57,28 @@ const AdminDashboard = () => {
         <strong>Eingeloggt:</strong> {user?.name || 'Unbekannt'}
       </p>
       <button
-        onClick={() => setActiveView("profile")}
+        onClick={() => setActiveView('profile')}
         className="bg-pink-400 text-white py-2 px-4 rounded my-1"
       >
         Profil
       </button>
       <br />
       <button
-        onClick={() => setActiveView("user")}
+        onClick={() => setActiveView('user')}
         className="bg-blue-500 text-white py-2 px-4 rounded my-1"
       >
         User Verwaltung
       </button>
       <br />
       <button
-        onClick={() => setActiveView("product")}
-        className="bg-red-600 text-white py-2 px-4 rounded my-1"
+        onClick={() => setActiveView('product')}
+        className="bg-yellow-600 text-white py-2 px-4 rounded my-1"
       >
         Produkt Verwaltung
       </button>
       <br />
       <button
-        onClick={() => setActiveView("orders")}
+        onClick={() => setActiveView('orders')}
         className="bg-green-600 text-white py-2 px-4 rounded my-1"
       >
         Bestellungen

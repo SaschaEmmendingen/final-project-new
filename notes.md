@@ -35,3 +35,7 @@
   "phone": "123-456-7890",
   "role": "admin"
 }
+
+
+
+NEWS einbauen, banner mit neuigkeiten und sowas

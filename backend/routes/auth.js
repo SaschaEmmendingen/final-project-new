@@ -1,6 +1,7 @@
 import express from "express";
 import User from "../models/User.js";
 import jwt from "jsonwebtoken";
+import Admin from "../models/Admin.js";
 
 const router = express.Router();
 
@@ -45,47 +46,48 @@ router.post("/register", async (req, res) => {
   }
 });
 
-router.post("/login", async (req, res) => {
+router.post('/login', async (req, res) => {
   const { email, password } = req.body;
-  const user = await User.findOne({ email });
-  console.log("User data:", user); // Überprüfe die vollständigen Benutzerdaten
 
-  if (!user) {
-    return res.status(404).json({ message: "No user found with this email" });
-  }
   try {
-    const user = await User.findOne({ email });
+    let user = await User.findOne({ email });
+    if (!user) {
+      user = await Admin.findOne({ email });
+    }
 
     if (!user) {
-      return res.status(404).json({ message: "No user found with this email" });
+      return res.status(404).json({ message: 'Kein Benutzer mit dieser E-Mail gefunden' });
     }
 
     const isMatch = await user.matchPassword(password);
-
     if (!isMatch) {
-      return res.status(401).json({ message: "Invalid password" });
+      return res.status(401).json({ message: 'Ungültiges Passwort' });
     }
+
+    console.log('User Data:', user);  // Logge das User-Objekt
 
     const token = jwt.sign(
       { id: user._id, role: user.role },
       process.env.JWT_SECRET,
-      {
-        expiresIn: "30m",
-      }
+      { expiresIn: '30m' }
     );
 
-    // Sende die Rolle explizit zurück
     res.json({
       _id: user._id,
       name: user.name,
       email: user.email,
+      address: user.address,  // Diese Felder
+      phone: user.phone,      // Diese Felder
       token,
-      role: user.role, // Die Rolle hier zurückgeben
+      role: user.role,
     });
   } catch (error) {
-    res.status(500).json({ message: "Server error" });
+    console.error('Login Error:', error);
+    res.status(500).json({ message: 'Serverfehler' });
   }
 });
+
+
 
 // Batch-Registrierung
 // router.post("/register/batch", async (req, res) => {

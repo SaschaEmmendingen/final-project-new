@@ -7,7 +7,7 @@ import { FaRegClock, FaList, FaShippingFast, FaTag } from 'react-icons/fa';
 
 const Konto = () => {
   const [isRegistering, setIsRegistering] = useState(false);
-  const { token, user, role, login } = useAuth(); // Token, User und Role aus dem AuthContext holen
+  const { token, role } = useAuth(); // Token und Role aus dem AuthContext holen
   const navigate = useNavigate();
 
   useEffect(() => {

@@ -18,31 +18,27 @@ const Registrierung = () => {
     setFormData({ ...formData, [name]: value });
   };
 
-const handleSubmit = async (e) => {
-  e.preventDefault();
-  try {
-    const response = await axios.post('http://localhost:1312/api/users/', formData);
-    console.log('Server Antwort:', response.data);
-    setSuccess('Registrierung erfolgreich!');
-    setError('');
-  } catch (err) {
-    // Überprüfen und Protokollieren der Fehlerdetails
-    if (err.response) {
-      // Fehlerantwort vom Server
-      console.error('Server antwortete mit Fehler:', err.response.data);
-      setError('Fehler bei der Registrierung: ' + (err.response.data.message || 'Unbekannter Fehler'));
-    } else if (err.request) {
-      // Kein Antwort vom Server erhalten
-      console.error('Keine Antwort vom Server erhalten:', err.request);
-      setError('Netzwerkfehler. Bitte überprüfen Sie Ihre Verbindung.');
-    } else {
-      // Andere Fehler
-      console.error('Fehler:', err.message);
-      setError('Fehler: ' + err.message);
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await axios.post('http://localhost:1312/api/users/register', formData); // Stelle sicher, dass der Endpunkt korrekt ist
+      console.log('Server Antwort:', response.data);
+      setSuccess('Registrierung erfolgreich!');
+      setError('');
+    } catch (err) {
+      if (err.response) {
+        console.error('Server antwortete mit Fehler:', err.response.data);
+        setError('Fehler bei der Registrierung: ' + (err.response.data.message || 'Unbekannter Fehler'));
+      } else if (err.request) {
+        console.error('Keine Antwort vom Server erhalten:', err.request);
+        setError('Netzwerkfehler. Bitte überprüfen Sie Ihre Verbindung.');
+      } else {
+        console.error('Fehler:', err.message);
+        setError('Fehler: ' + err.message);
+      }
+      setSuccess('');
     }
-    setSuccess('');
-  }
-};
+  };
 
   return (
     <div className="bg-white p-8 shadow-lg rounded-lg">

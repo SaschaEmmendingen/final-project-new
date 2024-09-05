@@ -1,59 +1,57 @@
 import jwt from 'jsonwebtoken';
+import mongoose from 'mongoose';
 import User from '../models/User.js';
+import Admin from '../models/Admin.js'; // Importiere das Admin-Modell
 
-export const isAdmin = async (req, res, next) => {
-  try {
-    const token = req.headers.authorization?.split(' ')[1];
-    if (!token) {
-      return res.status(401).json({ message: 'Nicht autorisiert, kein Token vorhanden' });
+const JWT_SECRET = process.env.JWT_SECRET || 'dein_geheimer_schluessel';
+
+export const protect = async (req, res, next) => {
+  let token;
+
+  if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
+    try {
+      token = req.headers.authorization.split(' ')[1];
+      const decoded = jwt.verify(token, JWT_SECRET);
+
+      console.log('(AM)Decoded Token:', decoded);
+
+      // Konvertiere die ID in ObjectId
+      const userId = new mongoose.Types.ObjectId(decoded.id);
+      console.log('UserId:', userId);
+
+      // Suche den Benutzer in der `users`-Collection
+      let user = await User.findById(userId).select('-password');
+
+      // Falls nicht gefunden, suche in der `admins`-Collection
+      if (!user) {
+        user = await Admin.findById(userId).select('-password');
+      }
+
+      console.log('Found User:', user);
+
+      if (!user) {
+        console.log('User not found in database');
+        return res.status(404).json({ message: 'Benutzer nicht gefunden' });
+      }
+
+      req.user = user;
+
+      console.log('(AM)User Role:', req.user.role);
+
+      next();
+    } catch (error) {
+      console.error('Token Error:', error);
+      res.status(401).json({ message: 'Nicht autorisiert, Token ungültig' });
     }
-
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    const user = await User.findById(decoded.id).select('role'); // Nur die Rolle laden
-
-    if (!user || user.role !== 'admin') {
-      return res.status(403).json({ message: 'Zugriff verweigert, keine Admin-Rechte' });
-    }
-
-    req.user = user;
-    next();
-  } catch (error) {
-    console.error('Fehler bei der Admin-Überprüfung:', error);
-    res.status(401).json({ message: 'Fehler bei der Authentifizierung', error });
+  } else {
+    return res.status(401).json({ message: 'Nicht autorisiert, kein Token' });
   }
 };
 
-export const protect = (req, res, next) => {
-  const token = req.headers.authorization?.split(' ')[1];
-
-  if (!token) {
-    return res.status(401).json({ message: 'Kein Token, keine Authentifizierung' });
-  }
-
-  try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    req.user = decoded; // Benutzer-Daten speichern, falls nötig
+export const isAdmin = (req, res, next) => {
+  if (req.user && req.user.role === 'admin') {
     next();
-  } catch (error) {
-    return res.status(401).json({ message: 'Fehler bei der Authentifizierung', error });
+  } else {
+    res.status(403).json({ message: 'Zugriff verweigert, Admin-Rechte erforderlich' });
   }
 };
-
-const authMiddleware = async (req, res, next) => {
-  const token = req.header('Authorization')?.replace('Bearer ', '');
-
-  if (!token) {
-    return res.status(401).json({ message: 'Kein Token, keine Authentifizierung' });
-  }
-
-  try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    req.user = await User.findById(decoded.id).select('-password');
-    next();
-  } catch (error) {
-    console.error('Auth middleware error:', error);
-    res.status(401).json({ message: 'Token ist nicht gültig' });
-  }
-};
-
-export default authMiddleware;

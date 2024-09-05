@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import UserProfile from './UserProfile'; // Deine UserProfile-Komponente
 import OrderManagmentUser from '../Order/OrderManagmentUser'
-import Button3Component from './Button3Component'; // Deine Button3-Komponente
 import { useNavigate } from 'react-router-dom'; // Importiere useNavigate
+import Retoure from './Retoure';
 
 const UserDashboard = () => {
   const [user, setUser] = useState(null);
@@ -24,12 +24,12 @@ const UserDashboard = () => {
         setUser(response.data.data.user);
       } catch (err) {
         setError('Fehler beim Laden des Dashboards.');
-        console.error(err);
+        console.error('Fetch User Profile Error:', err.response ? err.response.data : err.message);
       } finally {
         setLoading(false);
       }
     };
-
+  
     fetchUserProfile();
   }, []);
 
@@ -40,7 +40,7 @@ const UserDashboard = () => {
       case 'orders':
         return <OrderManagmentUser />;
       case 'button3':
-        return <Button3Component />;
+        return <Retoure />;
       default:
         return <p>Bitte wählen Sie eine Option.</p>;
     }
@@ -52,7 +52,7 @@ const UserDashboard = () => {
 
   const handleLogout = () => {
     localStorage.removeItem('token'); // Entferne das Token aus dem lokalen Speicher
-    window.location.reload(); // Seiten-Refresh auslösen
+    // window.location.reload(); // Seiten-Refresh auslösen
     navigate('/login'); // Leite den Benutzer zur Anmeldeseite um
   };
 
@@ -91,7 +91,7 @@ const UserDashboard = () => {
         className='bg-pink-600 border text-white p-2 mb-2 border-pink-400 rounded'
         onClick={() => handleButtonClick('button3')}
       >
-        Button 3
+        Retoure
       </button>
       <br />
       <button 
@@ -102,7 +102,7 @@ const UserDashboard = () => {
       </button>
       
       {/* Sektion anzeigen */}
-      <div className="mt-4 p-4 border-t border-gray-200">
+      <div className="mt-4 p-4 border-t border-red-600">
         {renderSection()}
       </div>
     </div>

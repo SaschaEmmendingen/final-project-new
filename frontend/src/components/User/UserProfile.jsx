@@ -8,6 +8,7 @@ const UserProfile = ({ user }) => {
   return (
     <div>
       <h4 className="text-lg font-semibold">Profilinformationen:</h4>
+      <p>Name: {user.name}</p>
       <p>Email: {user.email}</p>
       <p>Adresse: {user.address}</p>
       <p>Telefon: {user.phone}</p>

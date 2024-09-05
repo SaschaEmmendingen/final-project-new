@@ -52,10 +52,12 @@ const UserDashboard = () => {
     }
   };
 
+  const formatOrderId = (id) => `Order #${id}`;
+
   return (
     <div className="relative w-full md:w-[95%] lg:w-[95%] xl:w-[95%] mx-auto">
       <h1 className="text-3xl font-bold my-8 text-center">My Orders</h1>
-
+  
       {loading ? (
         <div className="text-center">Loading...</div>
       ) : (
@@ -64,10 +66,10 @@ const UserDashboard = () => {
             orders.map((order) => (
               <div
                 key={order._id}
-                className="bg-white border border-gray-200 rounded-lg shadow-md p-4"
+                className="bg-white border border-red-500 rounded-lg shadow-md p-4"
               >
                 <h3 className="text-lg font-semibold">
-                  Order #{order._id}
+                  {formatOrderId(order._id)}
                 </h3>
                 <p className="text-md text-gray-700">Total: {order.total} €</p>
                 <ul className="mt-4">
@@ -94,6 +96,5 @@ const UserDashboard = () => {
       )}
     </div>
   );
-};
-
+}
 export default UserDashboard;
