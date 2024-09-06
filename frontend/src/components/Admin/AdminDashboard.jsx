@@ -4,6 +4,7 @@ import AdminProfile from './AdminProfile';
 import UserManagment from '../User/UserManagment';
 import OrderManagment from '../Order/OrderManagmentAdmin';
 import { useNavigate } from 'react-router-dom';
+import RetourenManagement from '../Order/RetourenManagement';
 
 const AdminDashboard = () => {
   const [activeView, setActiveView] = useState('dashboard');
@@ -38,6 +39,8 @@ const AdminDashboard = () => {
         return <UserManagment />;
       case 'orders':
         return <OrderManagment />;
+      case 'retoure':
+        return <RetourenManagement />;
       default:
         return <div>Willkommen im Admin Dashboard</div>;
     }
@@ -82,6 +85,13 @@ const AdminDashboard = () => {
         className="bg-green-600 text-white py-2 px-4 rounded my-1"
       >
         Bestellungen
+      </button>
+      <br />
+      <button
+        onClick={() => setActiveView('retoure')}
+        className="bg-violet-600 text-white py-2 px-4 rounded my-1"
+      >
+        Retouren Verwaltung
       </button>
       <br />
       <button

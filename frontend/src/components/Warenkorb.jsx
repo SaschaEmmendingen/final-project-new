@@ -99,10 +99,15 @@ const Warenkorb = () => {
                   className="flex items-center justify-between bg-white p-4 rounded-lg shadow-md mb-4"
                 >
                   <div className="flex items-center">
+                    {/* Bild-URL in der Konsole überprüfen */}
                     <img
-                      src={item.image}
+                      src={item.image || 'https://via.placeholder.com/150'}
                       alt={item.name}
                       className="w-20 h-25 object-contain mr-4"
+                      onError={(e) => {
+                        // Platzhalterbild bei Fehler anzeigen
+                        e.target.src = 'https://via.placeholder.com/150';
+                      }}
                     />
                     <div>
                       <h3 className="text-lg font-medium">{item.name}</h3>
