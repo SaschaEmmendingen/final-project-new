@@ -5,6 +5,7 @@ import {
   createOrder,
   deleteOrder,
   getOrderById,
+  returnOrder,
 } from "../controllers/orderController.js";
 
 const router = express.Router();
@@ -12,7 +13,9 @@ const router = express.Router();
 // Hole alle Bestellungen (nur Admins)
 router.get("/", protect, isAdmin, async (req, res) => {
   try {
-    const orders = await Order.find().populate("items.productId").populate("user");
+    const orders = await Order.find()
+      .populate("items.productId")
+      .populate("user");
     res.json(orders);
   } catch (error) {
     console.error("Error fetching all orders:", error);
@@ -50,31 +53,7 @@ router.get("/:id", protect, isAdmin, async (req, res) => {
 });
 
 // Return an order (only the owner can return their own orders)
-router.post("/:id/return", protect, async (req, res) => {
-  try {
-    const order = await Order.findById(req.params.id);
-
-    if (!order) {
-      return res.status(404).json({ message: "Order not found" });
-    }
-
-    if (order.user.toString() !== req.user._id.toString()) {
-      return res
-        .status(401)
-        .json({ message: "You can only return your own orders" });
-    }
-
-    // Process the return (e.g., update order status, store return reason)
-    order.isReturned = true; // You can add this field in your Order model
-    order.returnReason = req.body.reason; // Store the return reason
-    await order.save();
-
-    res.json({ message: "Order returned successfully" });
-  } catch (error) {
-    console.error("Error processing return:", error);
-    res.status(500).json({ message: "Server error" });
-  }
-});
+router.post("/:id/return", protect, returnOrder);
 
 // Erstelle eine neue Bestellung (alle Nutzer)
 router.post("/", protect, createOrder);

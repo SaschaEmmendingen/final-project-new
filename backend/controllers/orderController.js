@@ -77,3 +77,57 @@ export const getOrderById = async (req, res) => {
     res.status(500).json({ message: 'Fehler beim Abrufen der Bestellung', error });
   }
 };
+
+export const returnOrder = async (req, res) => {
+  try {
+    const orderId = req.params.id;
+    const { reason, items } = req.body;
+
+    console.log("Order ID:", orderId); // Log der Order ID
+    console.log("Return Reason:", reason); // Log des Rücksendegrunds
+    console.log("Selected Items:", items); // Log der ausgewählten Artikel
+
+    // Überprüfe, ob die Bestellung existiert
+    const order = await Order.findById(orderId);
+
+    if (!order) {
+      console.log("Order not found");
+      return res.status(404).json({ message: 'Bestellung nicht gefunden' });
+    }
+
+    console.log("Order found:", order); // Log der gefundenen Bestellung
+
+    // Überprüfe, ob der Benutzer der Besteller ist
+    if (order.user.toString() !== req.user._id.toString()) {
+      console.log("Unauthorized user");
+      return res.status(401).json({ message: 'Sie können nur Ihre eigenen Bestellungen retournieren' });
+    }
+
+    console.log("Authorized user:", req.user._id); // Log der Benutzer-ID
+
+    // Füge die Rücksendedetails hinzu
+    const returnDetails = {
+      reason,
+      items: items.map(itemId => {
+        const orderItem = order.items.find(i => i.productId.toString() === itemId);
+        return {
+          productId: orderItem.productId,
+          quantity: orderItem.quantity,
+        };
+      }),
+    };
+
+    console.log("Return details:", returnDetails); // Log der Rücksendedetails
+
+    order.returns.push(returnDetails);
+
+    // Speichere die Bestellung mit den Rücksendedaten
+    await order.save();
+
+    console.log("Return saved successfully"); // Log der erfolgreichen Speicherung
+    res.status(200).json({ message: 'Rücksendung erfolgreich verarbeitet' });
+  } catch (error) {
+    console.error('Fehler bei der Rücksendung:', error);
+    res.status(500).json({ message: 'Serverfehler' });
+  }
+};

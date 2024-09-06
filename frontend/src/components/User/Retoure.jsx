@@ -41,20 +41,26 @@ const Retoure = () => {
 
   const handleReturn = async () => {
     const selectedItems = Object.keys(returnItems).filter((itemId) => returnItems[itemId]);
-  
+
+    console.log("Selected Items for Return:", selectedItems); // Log ausgewählte Artikel
+
     if (selectedItems.length === 0) {
       alert("Please select at least one item for return.");
       return;
     }
-  
+
     try {
       const token = localStorage.getItem('token'); // Hole den Token aus localStorage
-  
+
       if (!token) {
         alert('You are not authenticated. Please log in again.');
         return;
       }
-  
+
+      console.log("Token:", token); // Log den Token
+      console.log("Selected Order:", selectedOrder); // Log die ausgewählte Bestellung
+      console.log("Return Reason:", reason); // Log den Rücksendegrund
+
       const response = await fetch(`http://localhost:1312/api/orders/${selectedOrder}/return`, {
         method: 'POST',
         headers: {
@@ -63,7 +69,9 @@ const Retoure = () => {
         },
         body: JSON.stringify({ reason, items: selectedItems }),
       });
-  
+
+      console.log("Response Status:", response.status); // Log den Status der Antwort
+
       if (response.ok) {
         alert('Return processed successfully');
       } else {
@@ -75,6 +83,14 @@ const Retoure = () => {
       console.error('Error processing return:', error);
       alert('Error processing return');
     }
+  };
+
+  const isItemReturned = (order, itemId) => {
+    return order.returns.some(returnItem =>
+      returnItem.items.some(returnedItem =>
+        returnedItem.productId.toString() === itemId
+      )
+    );
   };
 
   return (
@@ -120,9 +136,12 @@ const Retoure = () => {
                         type="checkbox"
                         checked={returnItems[item.productId._id] || false}
                         onChange={() => handleItemSelection(item.productId._id)}
+                        disabled={isItemReturned(orders.find((order) => order._id === selectedOrder), item.productId._id)}
                       />
                     </td>
-                    <td className="px-4 py-2 border">{item.productId.name}</td>
+                    <td className={`px-4 py-2 border ${isItemReturned(orders.find((order) => order._id === selectedOrder), item.productId._id) ? 'text-gray-500' : ''}`}>
+                      {item.productId.name} {isItemReturned(orders.find((order) => order._id === selectedOrder), item.productId._id) && '(Zurückgeschickt)'}
+                    </td>
                     <td className="px-4 py-2 border text-center">{item.quantity}</td>
                   </tr>
                 ))}

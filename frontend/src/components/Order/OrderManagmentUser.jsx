@@ -16,6 +16,9 @@ const UserDashboard = () => {
           },
         });
         const data = await response.json();
+        
+        console.log("Fetched Orders with Returns:", data); // <-- Prüfe hier die Daten
+        
         setOrders(data);
         setLoading(false);
       } catch (error) {
@@ -73,12 +76,31 @@ const UserDashboard = () => {
                 </h3>
                 <p className="text-md text-green-700 font-bold">Total: {order.total} €</p>
                 <ul className="mt-4">
-                  {order.items.map((item, i) => (
-                    <li key={i} className="flex items-center space-x-2">
-                      <FaBoxOpen className="text-gray-500" />
-                      <span>{item.productId.name} (x{item.quantity})</span>
-                    </li>
-                  ))}
+                  {order.items.map((item) => {
+                    // Prüfen, ob das Item in den Rücksendungen enthalten ist
+                    const isReturned = order.returns.some(returnItem =>
+                      returnItem.items.some(returnedItem =>
+                        returnedItem.productId.toString() === item.productId._id
+                      )
+                    );
+
+                    console.log("Item:", item.productId.name, "Returned:", isReturned); // <-- Console Log hier
+
+                    return (
+                      <li
+                        key={item.productId._id}
+                        className={`flex items-center space-x-2 ${isReturned ? 'text-gray-400' : ''}`}
+                      >
+                        <FaBoxOpen className="text-gray-500" />
+                        <span>{item.productId.name} </span>
+                        <span className="text-md text-green-700 font-bold">{item.productId.price}€</span>
+                        <span className="font-bold">(x{item.quantity})</span>
+                        {isReturned && (
+                          <span className="text-red-500 font-bold ml-2">Zurückgeschickt</span>
+                        )}
+                      </li>
+                    );
+                  })}
                 </ul>
                 <button
                   onClick={() => handleDeleteOrder(order._id)}
@@ -97,4 +119,5 @@ const UserDashboard = () => {
     </div>
   );
 }
+
 export default UserDashboard;
