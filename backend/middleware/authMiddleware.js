@@ -13,7 +13,7 @@ export const protect = async (req, res, next) => {
       token = req.headers.authorization.split(' ')[1];
       const decoded = jwt.verify(token, JWT_SECRET);
 
-      console.log('(AM)Decoded Token:', decoded);
+      console.log('(AM) Decoded Token:', decoded);
 
       // Konvertiere die ID in ObjectId
       const userId = new mongoose.Types.ObjectId(decoded.id);
@@ -36,7 +36,7 @@ export const protect = async (req, res, next) => {
 
       req.user = user;
 
-      console.log('(AM)User Role:', req.user.role);
+      console.log('(AM) User Role:', req.user.role);
 
       next();
     } catch (error) {
@@ -54,4 +54,17 @@ export const isAdmin = (req, res, next) => {
   } else {
     res.status(403).json({ message: 'Zugriff verweigert, Admin-Rechte erforderlich' });
   }
+};
+
+export const authenticateToken = (req, res, next) => {
+  const authHeader = req.headers['authorization'];
+  const token = authHeader && authHeader.split(' ')[1];
+
+  if (token == null) return res.sendStatus(401);
+
+  jwt.verify(token, JWT_SECRET, (err, user) => {
+    if (err) return res.sendStatus(403);
+    req.user = user;
+    next();
+  });
 };

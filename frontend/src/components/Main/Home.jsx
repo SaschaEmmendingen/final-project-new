@@ -1,10 +1,10 @@
-import { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import {
   FaArrowLeft,
   FaArrowRight,
   FaShoppingCart,
   FaStar,
-  FaCheckCircle,
+  FaHeart,
 } from "react-icons/fa";
 import { useCart } from "../CartContext";
 import FirstBanner from "../../banner/FirstBanner.jpg";
@@ -58,9 +58,6 @@ const Home = () => {
   const [products, setProducts] = useState([]); // State for products
   const [loading, setLoading] = useState(true); // State for loading indicator
   const token = useState();
-
-  const scrollRef = useRef(null);
-  const reviewRef = useRef(null);
   const { addToCart } = useCart(); // Use cart context
 
   useEffect(() => {
@@ -132,7 +129,6 @@ const Home = () => {
     console.log("Selected product:", product); // Überprüfe, welches Produkt übergeben wird
     if (!token) {
       // navigate("/login");
-
       return;
     }
     addToCart({
@@ -141,6 +137,28 @@ const Home = () => {
       price: product.price,
       quantity,
     });
+  };
+
+  const handleAddToWishlist = async (product) => {
+    try {
+      const response = await fetch("http://localhost:1312/api/wishlist/add", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem('token')}`, // JWT Token
+        },
+        body: JSON.stringify({ productId: product._id }),
+      });
+      const data = await response.json();
+      if (response.ok) {
+        console.log("Produkt zur Wunschliste hinzugefügt:", data);
+        // Optionally, update the UI or state here
+      } else {
+        console.error("Error adding to wishlist:", data);
+      }
+    } catch (error) {
+      console.error("Error adding to wishlist:", error);
+    }
   };
 
   return (
@@ -199,105 +217,26 @@ const Home = () => {
               <p className="text-md font-medium text-gray-700 text-center">
                 {product.price}
               </p>
-              <button
-                onClick={() => handleAddToCart(product)}
-                className="mt-4 bg-blue-500 text-white px-4 py-2 rounded-lg shadow-md hover:bg-blue-600 mx-auto block"
-              >
-                <FaShoppingCart className="inline mr-2" /> In den Warenkorb
-              </button>
+              <div className="flex justify-center space-x-2">
+                <button
+                  onClick={() => handleAddToCart(product)}
+                  className="mt-4 bg-blue-500 text-white px-4 py-2 rounded-lg shadow-md hover:bg-blue-600"
+                >
+                  <FaShoppingCart className="inline mr-2" /> In den Warenkorb
+                </button>
+                <button
+                  onClick={() => handleAddToWishlist(product)}
+                  className="mt-4 bg-red-500 text-white px-4 py-2 rounded-lg shadow-md hover:bg-red-600"
+                >
+                  <FaHeart className="inline mr-2" /> Zur Wunschliste
+                </button>
+              </div>
             </div>
           ))}
         </div>
       )}
 
-      <h2 className="text-2xl font-bold mt-4 mb-2 py-8 p-4">Bestseller</h2>
-      <div className="relative py-1 p-4">
-        <div
-          className="flex overflow-x-auto space-x-4 scrollbar-hide"
-          ref={scrollRef}
-          style={{ maxWidth: "100%", overflowX: "hidden" }}
-        >
-          {products.map((bestseller, index) => (
-            <div
-              key={index}
-              className="bg-white p-4 rounded-lg shadow-md flex-shrink-0 w-48"
-            >
-              <a href={`/products/${bestseller._id}`}>
-                <img
-                  src={bestseller.imageUrl}
-                  alt={bestseller.name}
-                  className="w-full h-32 object-contain mb-4"
-                />
-              </a>
-              <h3 className="text-lg font-semibold text-center">
-                {bestseller.name}
-              </h3>
-              <div className="flex items-center justify-center mb-2">
-                {Array.from({ length: 4 }).map((_, i) => (
-                  <FaStar key={i} className="text-yellow-500" />
-                ))}
-              </div>
-              <p className="text-md font-medium text-gray-700 text-center">
-                {bestseller.price}
-              </p>
-            </div>
-          ))}
-        </div>
-        <button
-          className="absolute top-1/2 left-2 transform -translate-y-1/2 bg-white p-2 rounded-full shadow-md hover:bg-gray-200 z-10"
-          onClick={handlePrevBestseller}
-        >
-          <FaArrowLeft />
-        </button>
-        <button
-          className="absolute top-1/2 right-2 transform -translate-y-1/2 bg-white p-2 rounded-full shadow-md hover:bg-gray-200 z-10"
-          onClick={handleNextBestseller}
-        >
-          <FaArrowRight />
-        </button>
-      </div>
-
-      <h2 className="text-2xl font-bold mt-4 mb-2 py-8 p-4">
-        Neueste Bewertungen
-      </h2>
-      <div className="relative py-1 p-4">
-        <div
-          className="flex overflow-x-auto space-x-4 scrollbar-hide"
-          ref={reviewRef}
-          style={{ maxWidth: "100%", overflowX: "hidden" }}
-        >
-          {reviews.map((review, index) => (
-            <div
-              key={index}
-              className="bg-white p-4 rounded-lg shadow-md flex-shrink-0 w-64"
-            >
-              <div className="flex items-center mb-2">
-                <FaCheckCircle className="text-green-500 mr-2" />
-                <h3 className="text-md font-semibold">{review.name}</h3>
-              </div>
-              <p className="text-sm text-gray-500">{review.timeAgo}</p>
-              <div className="flex items-center mt-2 mb-4">
-                {Array.from({ length: review.rating }).map((_, i) => (
-                  <FaStar key={i} className="text-yellow-500" />
-                ))}
-              </div>
-              <p className="text-md text-gray-700">{review.comment}</p>
-            </div>
-          ))}
-        </div>
-        <button
-          className="absolute top-1/2 left-2 transform -translate-y-1/2 bg-white p-2 rounded-full shadow-md hover:bg-gray-200 z-10"
-          onClick={handlePrevReview}
-        >
-          <FaArrowLeft />
-        </button>
-        <button
-          className="absolute top-1/2 right-2 transform -translate-y-1/2 bg-white p-2 rounded-full shadow-md hover:bg-gray-200 z-10"
-          onClick={handleNextReview}
-        >
-          <FaArrowRight />
-        </button>
-      </div>
+      {/* Optional: Add sections for bestsellers and reviews */}
     </div>
   );
 };

@@ -15,7 +15,7 @@ const router = express.Router();
 // router.use(protect); // Alle nachfolgenden Routen erfordern Authentifizierung
 
 // Benutzerprofil des angemeldeten Benutzers abrufen
-router.get("/profile", getUserProfile);
+router.get("/profile", protect, getUserProfile);
 
 // Benutzer nach ID abrufen
 router.get("/:id", getUser);
@@ -24,7 +24,7 @@ router.get("/:id", getUser);
 router.get("/", isAdmin, getAllUsers);
 
 // Benutzer aktualisieren - nur für Admins
-router.put("/:id", isAdmin, updateUser);
+router.put("/profile", protect, updateUser);
 
 // Benutzer löschen - nur für Admins
 router.delete("/:id", isAdmin, deleteUser);

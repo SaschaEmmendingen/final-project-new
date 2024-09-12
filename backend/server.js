@@ -7,10 +7,10 @@ import productRoutes from './routes/productRoutes.js';
 import userRoutes from './routes/userRoutes.js';
 import adminRoutes from './routes/adminRoutes.js';
 import orderRoutes from './routes/orderRoutes.js';
-import jwt from 'jsonwebtoken';
+import wishlistRoutes from './routes/wishlistRoutes.js';
+import { protect } from './middleware/authMiddleware.js';
 
 dotenv.config();
-console.log('JWT_SECRET in server.js:', process.env.JWT_SECRET); // Debugging
 
 connectDB();
 
@@ -24,33 +24,13 @@ app.use(
   })
 );
 
-// Token-Authentifizierungsmiddleware
-const authenticateToken = (req, res, next) => {
-  const authHeader = req.headers['authorization'];
-  const token = authHeader && authHeader.split(' ')[1];
-
-  console.log('Received Token:', token); // Debugging-Zwecke
-
-  if (token == null) return res.sendStatus(401); // Kein Token
-
-  jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
-    if (err) {
-      console.error('Token Verification Error:', err); // Debugging-Zwecke
-      return res.sendStatus(403); // Ungültiger Token
-    }
-    req.user = user;
-    next();
-  });
-};
-
 // Routen
 app.use('/api/auth', authRoutes);
 app.use('/api/products', productRoutes);
-
-// Middleware für geschützte Routen
-app.use('/api/users', authenticateToken, userRoutes);
-app.use('/api/admins', authenticateToken, adminRoutes);
-app.use('/api/orders', authenticateToken, orderRoutes);
+app.use('/api/users', protect, userRoutes); // Schütze die Benutzerrouten
+app.use('/api/admins', protect, adminRoutes); // Schütze die Adminrouten
+app.use('/api/orders', protect, orderRoutes); // Schütze die Bestellrouten
+app.use('/api/wishlist', protect, wishlistRoutes); // Schütze die Wunschlistenrouten
 
 // Fehlerbehandlung
 app.use((req, res, next) => {
@@ -69,4 +49,3 @@ app.listen(PORT, () =>
 );
 
 export default app;
-

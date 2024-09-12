@@ -10,6 +10,7 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
     unique: true,
+    index: true, // Index für schnellere Abfragen
   },
   password: {
     type: String,
@@ -22,6 +23,23 @@ const userSchema = new mongoose.Schema({
     enum: ['user', 'admin'],
     default: 'user',
   },
+  activities: [
+    {
+      type: {
+        type: String,
+        enum: ['Order Created', 'Return Created', 'Wishlist Updated', 'Profile Updated'],
+        required: true,
+      },
+      description: {
+        type: String,
+        required: true,
+      },
+      date: {
+        type: Date,
+        default: Date.now,
+      },
+    },
+  ],
 });
 
 userSchema.pre('save', async function (next) {
@@ -40,12 +58,12 @@ userSchema.pre('save', async function (next) {
 });
 
 userSchema.methods.matchPassword = async function (enteredPassword) {
-    console.log('Entered Password:', enteredPassword);
-    console.log('Stored Hashed Password:', this.password);
-    const isMatch = await bcrypt.compare(enteredPassword, this.password);
-    console.log('Password Match:', isMatch);
-    return isMatch;
-  };
+  console.log('Entered Password:', enteredPassword);
+  console.log('Stored Hashed Password:', this.password);
+  const isMatch = await bcrypt.compare(enteredPassword, this.password);
+  console.log('Password Match:', isMatch);
+  return isMatch;
+};
 
 const User = mongoose.model('User', userSchema);
 

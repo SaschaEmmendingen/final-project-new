@@ -69,7 +69,7 @@ const UserDashboard = () => {
             orders.map((order) => (
               <div
                 key={order._id}
-                className="bg-white border border-red-500 rounded-lg shadow-md p-4"
+                className="max-w-lg mx-auto p-4 border-2 border-pink-500 rounded-md"
               >
                 <h3 className="text-lg font-semibold">
                   {formatOrderId(order._id)}

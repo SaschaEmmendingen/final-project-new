@@ -5,6 +5,7 @@ const returnSchema = mongoose.Schema({
   items: [
     {
       productId: { type: mongoose.Schema.Types.ObjectId, ref: 'Product', required: true },
+      name: { type: String, required: true },  // Füge den Namen des Produkts hinzu
       quantity: { type: Number, required: true },
     }
   ],
@@ -12,7 +13,7 @@ const returnSchema = mongoose.Schema({
 });
 
 const orderSchema = mongoose.Schema({
-  user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },  // User reference
+  user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
   items: [
     {
       productId: { type: mongoose.Schema.Types.ObjectId, ref: 'Product', required: true },
