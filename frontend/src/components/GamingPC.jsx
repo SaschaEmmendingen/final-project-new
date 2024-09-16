@@ -3,12 +3,13 @@ import { FaStar, FaShoppingCart, FaHeart } from "react-icons/fa";
 import { useCart } from "./CartContext";
 import axios from "axios";
 import { Link } from "react-router-dom";
+import gamingpc from "../banner/gamingpc.jpg"
 
 const GamingPC = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-  const [token, setToken] = useState(localStorage.getItem('token')); // Token von localStorage
+  const [token, setToken] = useState(localStorage.getItem("token")); // Token von localStorage
   const { addToCart } = useCart();
 
   useEffect(() => {
@@ -53,27 +54,29 @@ const GamingPC = () => {
     }
     try {
       const response = await axios.post(
-        'http://localhost:1312/api/wishlist/add',
+        "http://localhost:1312/api/wishlist/add",
         {
           productId: product._id,
           name: product.name,
-          price: product.price
+          price: product.price,
         },
         {
           headers: {
-            Authorization: `Bearer ${token}`
-          }
+            Authorization: `Bearer ${token}`,
+          },
         }
       );
-      console.log('Item added to wishlist:', response.data);
+      console.log("Item added to wishlist:", response.data);
     } catch (error) {
-      console.error('Error adding item to wishlist:', error);
+      console.error("Error adding item to wishlist:", error);
     }
   };
 
   return (
     <div className="relative w-full md:w-[95%] lg:w-[95%] xl:w-[95%] mx-auto">
       <h1 className="text-3xl font-bold my-8 text-center">GAMING PC</h1>
+      <img src={gamingpc} alt="Gaming PC Banner"
+      style={{height: "500px", width: "100vw"}}/>
 
       {loading ? (
         <div className="text-center">Loading...</div>
@@ -115,7 +118,8 @@ const GamingPC = () => {
                     onClick={() => handleAddToWishlist(product)}
                     className="bg-red-500 text-white px-4 py-2 rounded-lg shadow-md hover:bg-red-600"
                   >
-                    <FaHeart className="inline mr-2" /> Zur Wunschliste hinzufügen
+                    <FaHeart className="inline mr-2" /> Zur Wunschliste
+                    hinzufügen
                   </button>
                 </div>
               </div>

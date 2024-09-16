@@ -27,7 +27,7 @@ const userSchema = new mongoose.Schema({
     {
       type: {
         type: String,
-        enum: ['Order Created', 'Return Created', 'Wishlist Updated', 'Profile Updated'],
+        enum: ['Bestellung erstellt', 'Retoure erstellt', 'Zur Wunschliste hinzugefügt', 'Profil aktualisiert'],
         required: true,
       },
       description: {

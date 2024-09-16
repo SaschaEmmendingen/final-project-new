@@ -162,7 +162,7 @@ const Home = () => {
   };
 
   return (
-    <div className="relative w-full md:w-[95%] lg:w-[95%] xl:w-[95%] mx-auto">
+    <div className="relative w-full md:w-[95%] lg:w-[95%] xl:w-[95%] mx-auto py-8">
       <div className="relative h-[400px] md:h-[600px] lg:h-[700px] xl:h-[660px] w-[100%]">
         <img
           src={images[currentIndex]}

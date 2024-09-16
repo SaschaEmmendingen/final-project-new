@@ -68,7 +68,7 @@ const UserDashboard = () => {
       case "activities":
         return <Activities />;
       default:
-        return <p>Please select an option.</p>;
+        return <p>default</p>;
     }
   };
 
@@ -82,15 +82,15 @@ const UserDashboard = () => {
     navigate("/login");
   };
 
-  if (loading) return <p>Loading...</p>;
+  if (loading) return <p>Laden...</p>;
 
   if (error) return <p className="text-red-500">{error}</p>;
 
-  if (!user) return <p>User not found.</p>;
+  if (!user) return <p>User nicht gefunden.</p>;
 
   return (
     <div className="w-4/5 mx-auto mt-8 bg-white p-8 shadow-lg rounded-lg border border-blue-600">
-      <h3 className="text-xl font-bold mb-4">Welcome, {user.name}!</h3>
+      <h3 className="text-xl font-bold mb-4">Willkommen, {user.name}!</h3>
       <div className="flex flex-wrap gap-2 mb-4">
         <button
           className="flex-1 p-2 rounded text-white border border-transparent transition-transform duration-300 ease-in-out hover:scale-105"

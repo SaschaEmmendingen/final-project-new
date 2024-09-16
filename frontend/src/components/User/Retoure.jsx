@@ -105,17 +105,17 @@ const Retoure = () => {
 
   return (
     <div>
-      <h1 className="text-3xl font-bold my-8 text-center">Returns</h1>
+      <h1 className="text-3xl font-bold my-8 text-center">Retouren</h1>
       <div className="max-w-lg mx-auto p-4 border-2 border-pink-500 rounded-md">
         <div className="mb-4">
           <label className="block text-sm font-medium mb-2">
-            Select Order:
+            Bestellungen:
             <select
               value={selectedOrder}
               onChange={(e) => setSelectedOrder(e.target.value)}
               className="mt-1 block w-full px-3 py-2 border border-pink-500 rounded-md shadow-sm focus:outline-none focus:ring-pink-500 focus:border-pink-500 sm:text-sm"
             >
-              <option value="">Select an order</option>
+              <option value="">Wähle eine Bestellung:</option>
               {orders.map((order) => (
                 <option key={order._id} value={order._id}>
                   {order._id} - {order.createdAt}
@@ -128,14 +128,14 @@ const Retoure = () => {
         {selectedOrder && (
           <div className="mb-4">
             <h2 className="text-xl font-semibold mb-2">
-              Select items to return:
+              Wähle ein Artikel:
             </h2>
             <table className="min-w-full bg-white border">
               <thead>
                 <tr>
-                  <th className="px-4 py-2 border">Select</th>
-                  <th className="px-4 py-2 border">Item Name</th>
-                  <th className="px-4 py-2 border">Quantity</th>
+                  <th className="px-4 py-2 border"></th>
+                  <th className="px-4 py-2 border">Artikel</th>
+                  <th className="px-4 py-2 border">Anzahl</th>
                 </tr>
               </thead>
               <tbody>
@@ -184,7 +184,7 @@ const Retoure = () => {
 
         <div className="mb-4">
           <label className="block text-sm font-medium mb-2">
-            Reason for Return:
+            Grund:
             <textarea
               value={reason}
               onChange={(e) => setReason(e.target.value)}
@@ -197,7 +197,7 @@ const Retoure = () => {
           onClick={handleReturn}
           className="w-full bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 transition duration-300"
         >
-          Submit Return
+          Senden
         </button>
       </div>
     </div>

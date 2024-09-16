@@ -59,10 +59,10 @@ const UserDashboard = () => {
 
   return (
     <div className="relative w-full md:w-[95%] lg:w-[95%] xl:w-[95%] mx-auto">
-      <h1 className="text-3xl font-bold my-8 text-center">My Orders</h1>
+      <h1 className="text-3xl font-bold my-8 text-center">Meine Bestellungen</h1>
   
       {loading ? (
-        <div className="text-center">Loading...</div>
+        <div className="text-center">Laden...</div>
       ) : (
         <div className="space-y-4">
           {orders.length > 0 ? (
@@ -107,7 +107,7 @@ const UserDashboard = () => {
                   className="bg-red-600 text-white py-2 px-4 rounded mt-2 flex items-center space-x-2"
                 >
                   <FaTrashAlt className="mr-2" />
-                  Delete Order
+                  Bestellung löschen
                 </button>
               </div>
             ))

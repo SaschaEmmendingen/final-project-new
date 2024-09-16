@@ -49,13 +49,13 @@ const Wishlist = () => {
     }
   };
 
-  if (loading) return <p>Loading...</p>;
+  if (loading) return <p>Laden...</p>;
 
   if (error) return <p className="text-red-500">{error}</p>;
 
   return (
     <div>
-      <h1 className="text-3xl font-bold my-8 text-center">Wishlist</h1>
+      <h1 className="text-3xl font-bold my-8 text-center">Wunschliste</h1>
       <div className="max-w-lg mx-auto p-4 border-2 border-pink-500 rounded-md">
         {" "}
         {wishlist.length > 0 ? (
@@ -73,13 +73,13 @@ const Wishlist = () => {
                   onClick={() => handleRemoveItem(item.productId)}
                   className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition duration-300"
                 >
-                  Remove
+                  Löschen
                 </button>
               </li>
             ))}
           </ul>
         ) : (
-          <p className="text-center text-gray-500">Your wishlist is empty.</p>
+          <p className="text-center text-gray-500">Deine Wunschliste ist leer...</p>
         )}
       </div>
     </div>

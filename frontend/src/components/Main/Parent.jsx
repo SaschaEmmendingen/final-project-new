@@ -22,7 +22,7 @@ const Parent = () => {
 
   return (
     <div>
-      <nav className="bg-white w-full py-6 sticky top-0 z-50 shadow-md">
+      <nav className="bg-white w-full py-4 sticky top-0 z-50 shadow-lg rounded-b-lg border-b border-gray-300">
         <div className="w-full mx-auto px-4 lg:px-8 mb-4">
           <div className="grid grid-cols-1 lg:grid-cols-4 gap-4 items-center">
             {/* Logo */}
@@ -38,7 +38,7 @@ const Parent = () => {
 
             {/* Suchleiste (nur auf Desktop sichtbar) */}
             <motion.div
-              className="hidden lg:flex items-center border border-gray-300 rounded-lg p-3 bg-white shadow-md lg:col-span-2"
+              className="hidden lg:flex items-center border border-gray-300 rounded-lg p-1 bg-white shadow-md lg:col-span-2"
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.5, ease: "easeOut" }}
