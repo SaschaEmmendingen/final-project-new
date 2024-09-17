@@ -2,7 +2,7 @@ import Admin from "../models/Admin.js";
 import User from "../models/User.js";
 import Product from "../models/Product.js";
 import Order from "../models/Order.js";
-import { sendNotification } from "../webSocket/websocketServer.js";
+// import { sendNotification } from "../webSocket/websocketServer.js";
 
 export const getAdminDashboard = async (req, res) => {
   try {

@@ -57,6 +57,20 @@ const UserDashboard = () => {
 
   const formatOrderId = (id) => `Order #${id}`;
 
+  if (!token) {
+    return (
+      <div className="flex justify-center items-center pt-4">
+        <div className="w-3/5 mt-4 p-4 bg-red-100 text-red-700 border border-red-300 rounded-lg">
+          Du musst eingeloggt sein, um deine Bestellungen zu sehen. Bitte{" "}
+          <a href="/login" className="text-blue-500 underline">
+            logge dich hier ein
+          </a>
+          .
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="relative w-full md:w-[95%] lg:w-[95%] xl:w-[95%] mx-auto">
       <h1 className="text-3xl font-bold my-8 text-center">Meine Bestellungen</h1>

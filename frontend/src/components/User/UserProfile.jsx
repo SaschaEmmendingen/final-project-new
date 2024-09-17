@@ -35,7 +35,10 @@ const UserProfile = ({ user }) => {
         throw new Error("Unbekannter Fehler beim Aktualisieren");
       }
     } catch (error) {
-      console.error("Fehlerdetails:", error.response ? error.response.data : error.message);
+      console.error(
+        "Fehlerdetails:",
+        error.response ? error.response.data : error.message
+      );
       setMessage("Fehler beim Aktualisieren des Profils");
       setIsError(true);
     }
@@ -49,7 +52,13 @@ const UserProfile = ({ user }) => {
   }, [user]);
 
   return (
-    <div className="max-w-lg mx-auto p-4 border-2 border-pink-500 rounded-md">
+    <div
+      className="mx-20 w-full p-8 border border-gray-400 rounded-md relative"
+      style={{ 
+        background: "linear-gradient(to top, gray, white 10%)",
+        height:"40vh"
+      }}
+    >
       <h1 className="text-3xl font-bold mb-4 text-center">Profil</h1>
 
       {message && (
@@ -59,79 +68,89 @@ const UserProfile = ({ user }) => {
       )}
 
       {!isEditing ? (
-        <div>
-          <p><strong>Name:</strong> {name}</p>
-          <p><strong>Email:</strong> {email}</p>
-          <p><strong>Adresse:</strong> {address}</p>
-          <p><strong>Telefon:</strong> {phone}</p>
+        <div className="mb-4 pl-4">
+          <p>
+            <strong>Name:</strong> {name}
+          </p>
+          <p>
+            <strong>Email:</strong> {email}
+          </p>
+          <p>
+            <strong>Adresse:</strong> {address}
+          </p>
+          <p>
+            <strong>Telefon:</strong> {phone}
+          </p>
 
           <button
             onClick={() => setIsEditing(true)}
-            className="bg-pink-500 text-white p-2 mt-4 rounded"
+            className="bg-pink-500 text-white text-xs p-2 mt-4 rounded absolute bottom-4 right-4"
           >
             Profil bearbeiten
           </button>
         </div>
       ) : (
-        <form onSubmit={handleSubmit}>
-          <div className="mb-4">
-            <label className="block mb-2">Name</label>
+        <form onSubmit={handleSubmit} className="relative flex flex-col h-full">
+          <div className="mb-4 pl-4">
+            <label className="block mb-1 text-sm">Name</label>
             <input
               type="text"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              className="w-full p-2 border"
+              className="w-2/3 p-2 border border-stone-800 rounded-md"
             />
           </div>
-          <div className="mb-4">
-            <label className="block mb-2">Email</label>
+          <div className="mb-4 pl-4">
+            <label className="block mb-1 text-sm">Email</label>
             <input
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full p-2 border"
+              className="w-2/3 p-2 border border-stone-800 rounded-md"
             />
           </div>
-          <div className="mb-4">
-            <label className="block mb-2">Adresse</label>
+          <div className="mb-4 pl-4">
+            <label className="block mb-1 text-sm">Adresse</label>
             <input
               type="text"
               value={address}
               onChange={(e) => setAddress(e.target.value)}
-              className="w-full p-2 border"
+              className="w-2/3 p-2 border border-stone-800 rounded-md"
             />
           </div>
-          <div className="mb-4">
-            <label className="block mb-2">Telefon</label>
+          <div className="mb-4 pl-4">
+            <label className="block mb-1 text-sm">Telefon</label>
             <input
               type="text"
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
-              className="w-full p-2 border"
+              className="w-2/3 p-2 border border-stone-800 rounded-md"
             />
           </div>
-          <div className="mb-4">
-            <label className="block mb-2">Neues Passwort (optional)</label>
+          <div className="mb-4 pl-4">
+            <label className="block mb-1 text-sm">Neues Passwort (optional)</label>
             <input
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full p-2 border"
+              className="w-2/3 p-2 border border-stone-800 rounded-md"
             />
           </div>
-          <button
-            type="submit"
-            className="bg-pink-500 text-white p-2 rounded"
-          >
-            Änderungen speichern
-          </button>
-          <button
-            type="button"
-            onClick={() => setIsEditing(false)}
-            className="bg-gray-500 text-white p-2 rounded ml-2"
-          >
-            Abbrechen
-          </button>
+          <div className="mt-auto pl-4 flex justify-end space-x-2">
+            <button
+              type="submit"
+              className="bg-pink-500 text-white text-xs p-2 rounded"
+            >
+              Änderungen speichern
+            </button>
+            <button
+              type="button"
+              onClick={() => setIsEditing(false)}
+              className="bg-gray-500 text-white text-xs p-2 rounded"
+            >
+              Abbrechen
+            </button>
+          </div>
         </form>
       )}
     </div>

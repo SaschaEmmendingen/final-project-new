@@ -50,10 +50,10 @@ const Registrierung = () => {
   };
 
   return (
-    <div className="bg-white p-8 shadow-lg rounded-lg">
-      <h3 className="text-xl font-bold mb-4">Registrieren</h3>
+    <div className="bg-stone-900 p-8 shadow-lg rounded-lg">
+      <h3 className="text-xl font-bold mb-4 text-gray-400">Registrieren</h3>
       <form onSubmit={handleSubmit}>
-        <label className="block mb-2">
+        <label className="block mb-2 text-gray-400">
           Name <span className="text-red-500">*</span>
         </label>
         <input
@@ -61,12 +61,12 @@ const Registrierung = () => {
           name="name"
           value={formData.name}
           onChange={handleChange}
-          className="w-full border p-2 mb-4 rounded-lg focus:outline-none focus:border-blue-500"
+          className="w-full border-0 p-2 mb-4 rounded-lg focus:outline-none focus:border-blue-500 bg-stone-600"
           placeholder="Name"
           required
         />
 
-        <label className="block mb-2">
+        <label className="block mb-2 text-gray-400">
           E-Mail Adresse <span className="text-red-500">*</span>
         </label>
         <input
@@ -74,12 +74,12 @@ const Registrierung = () => {
           name="email"
           value={formData.email}
           onChange={handleChange}
-          className="w-full border p-2 mb-4 rounded-lg focus:outline-none focus:border-blue-500"
+          className="w-full border-0 p-2 mb-4 rounded-lg focus:outline-none focus:border-blue-500 bg-stone-600"
           placeholder="E-Mail Adresse"
           required
         />
 
-        <label className="block mb-2">
+        <label className="block mb-2 text-gray-400">
           Passwort <span className="text-red-500">*</span>
         </label>
         <input
@@ -87,12 +87,12 @@ const Registrierung = () => {
           name="password"
           value={formData.password}
           onChange={handleChange}
-          className="w-full border p-2 mb-4 rounded-lg focus:outline-none focus:border-blue-500"
+          className="w-full border-0 p-2 mb-4 rounded-lg focus:outline-none focus:border-blue-500 bg-stone-600"
           placeholder="Passwort"
           required
         />
 
-        <label className="block mb-2">
+        <label className="block mb-2 text-gray-400">
           Adresse
         </label>
         <input
@@ -100,11 +100,11 @@ const Registrierung = () => {
           name="address"
           value={formData.address}
           onChange={handleChange}
-          className="w-full border p-2 mb-4 rounded-lg focus:outline-none focus:border-blue-500"
+          className="w-full border-0 p-2 mb-4 rounded-lg focus:outline-none focus:border-blue-500 bg-stone-600"
           placeholder="Adresse"
         />
 
-        <label className="block mb-2">
+        <label className="block mb-2 text-gray-400">
           Telefonnummer
         </label>
         <input
@@ -112,7 +112,7 @@ const Registrierung = () => {
           name="phone"
           value={formData.phone}
           onChange={handleChange}
-          className="w-full border p-2 mb-4 rounded-lg focus:outline-none focus:border-blue-500"
+          className="w-full border-0 p-2 mb-4 rounded-lg focus:outline-none focus:border-blue-500 bg-stone-600"
           placeholder="Telefonnummer"
         />
 

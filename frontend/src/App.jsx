@@ -17,7 +17,9 @@ import AdminDashboard from "./components/Admin/AdminDashboard";
 import ProductDetail from "./components/Order/ProductDetail";
 import { AuthProvider } from "./components/Main/AuthContext";
 import ProtectedRoute from "./components/Main/ProtectedRoute";
+import OrderManagmentUser from "../src/components/Order/OrderManagmentUser";
 import "./index.css";
+import Retoure from "./components/User/Retoure";
 
 function App() {
   return (
@@ -37,6 +39,8 @@ function App() {
                 <Route path="/warenkorb" element={<Warenkorb />} />
                 <Route path="*" element={<PageNotFound />} />
                 <Route path="/login" element={<Login />} />
+                <Route path="/orders" element={<OrderManagmentUser />} />
+                <Route path="/retoure" element={<Retoure />} />
                 <Route
                   path="/dashboard"
                   element={

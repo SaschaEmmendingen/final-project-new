@@ -17,6 +17,8 @@ const UserDashboard = () => {
   const [activeSection, setActiveSection] = useState("");
   const navigate = useNavigate();
 
+  const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+
   useEffect(() => {
     const fetchUserProfile = async () => {
       const token = localStorage.getItem("token");
@@ -27,6 +29,8 @@ const UserDashboard = () => {
       }
 
       try {
+        await delay(2000); // Verzögerung von 2 Sekunden
+
         const response = await axios.get(
           "http://localhost:1312/api/users/profile",
           {
@@ -47,6 +51,23 @@ const UserDashboard = () => {
 
     fetchUserProfile();
   }, []);
+
+  const handleButtonClick = async (section) => {
+    console.log(`Button clicked: ${section}`); // Debugging line
+    await delay(500); // Verzögerung von 0.5 Sekunden
+    setActiveSection(section);
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    navigate("/login");
+  };
+
+  if (loading) return <p>Laden...</p>;
+
+  if (error) return <p className="text-red-500">{error}</p>;
+
+  if (!user) return <p>User nicht gefunden.</p>;
 
   const renderSection = () => {
     console.log(`Rendering section: ${activeSection}`); // Debugging line
@@ -72,90 +93,76 @@ const UserDashboard = () => {
     }
   };
 
-  const handleButtonClick = (section) => {
-    console.log(`Button clicked: ${section}`); // Debugging line
-    setActiveSection(section);
-  };
-
-  const handleLogout = () => {
-    localStorage.removeItem("token");
-    navigate("/login");
-  };
-
-  if (loading) return <p>Laden...</p>;
-
-  if (error) return <p className="text-red-500">{error}</p>;
-
-  if (!user) return <p>User nicht gefunden.</p>;
-
   return (
-    <div className="w-4/5 mx-auto mt-8 bg-white p-8 shadow-lg rounded-lg border border-blue-600">
+    <div
+      className="w-4/5 mx-auto mt-8 bg-white p-8 shadow-lg rounded-lg border border-gray-400"
+      style={{ background: "linear-gradient(gray, white 10%)" }}
+    >
       <h3 className="text-xl font-bold mb-4">Willkommen, {user.name}!</h3>
-      <div className="flex flex-wrap gap-2 mb-4">
-        <button
-          className="flex-1 p-2 rounded text-white border border-transparent transition-transform duration-300 ease-in-out hover:scale-105"
-          style={{ backgroundColor: "red" }}
-          onClick={() => handleButtonClick("profile")}
-        >
-          Profil
-        </button>
-        <button
-          className="flex-1 p-2 rounded text-white border border-transparent transition-transform duration-300 ease-in-out hover:scale-105"
-          style={{ backgroundColor: "orange", color: "black" }}
-          onClick={() => handleButtonClick("orders")}
-        >
-          Bestellungen
-        </button>
-        <button
-          className="flex-1 p-2 rounded text-white border border-transparent transition-transform duration-300 ease-in-out hover:scale-105"
-          style={{ backgroundColor: "yellow", color: "black" }}
-          onClick={() => handleButtonClick("button3")}
-        >
-          Retoure
-        </button>
-        <button
-          className="flex-1 p-2 rounded text-white border border-transparent transition-transform duration-300 ease-in-out hover:scale-105"
-          style={{ backgroundColor: "green" }}
-          onClick={() => handleButtonClick("wishlist")}
-        >
-          Wunschliste
-        </button>
-        <button
-          className="flex-1 p-2 rounded text-white border border-transparent transition-transform duration-300 ease-in-out hover:scale-105"
-          style={{ backgroundColor: "blue" }}
-          onClick={() => handleButtonClick("notifications")}
-        >
-          Nachrichten
-        </button>
-        <button
-          className="flex-1 p-2 rounded text-white border border-transparent transition-transform duration-300 ease-in-out hover:scale-105"
-          style={{ backgroundColor: "indigo" }}
-          onClick={() => handleButtonClick("support")}
-        >
-          Support
-        </button>
-        <button
-          className="flex-1 p-2 rounded text-white border border-transparent transition-transform duration-300 ease-in-out hover:scale-105"
-          style={{ backgroundColor: "violet" }}
-          onClick={() => handleButtonClick("payment")}
-        >
-          Rechungen
-        </button>
-        <button
-          className="flex-1 p-2 rounded text-white border border-transparent transition-transform duration-300 ease-in-out hover:scale-105"
-          style={{ backgroundColor: "pink" }}
-          onClick={() => handleButtonClick("activities")}
-        >
-          Benutzer Aktivitäten
-        </button>
+      <div className="flex">
+        {/* Sidebar Buttons */}
+        <div className="w-1/8 flex flex-col gap-2">
+          <button
+            className="p-2 rounded text-white bg-stone-800 border border-transparent transition-transform duration-300 ease-in-out hover:scale-105"
+            onClick={() => handleButtonClick("profile")}
+          >
+            Profil
+          </button>
+          <button
+            className="p-2 rounded text-white bg-stone-800 border border-transparent transition-transform duration-300 ease-in-out hover:scale-105"
+            onClick={() => handleButtonClick("orders")}
+          >
+            Bestellungen
+          </button>
+          <button
+            className="p-2 rounded text-white bg-stone-800 border border-transparent transition-transform duration-300 ease-in-out hover:scale-105"
+            onClick={() => handleButtonClick("button3")}
+          >
+            Retoure
+          </button>
+          <button
+            className="p-2 rounded text-white bg-stone-800 border border-transparent transition-transform duration-300 ease-in-out hover:scale-105"
+            onClick={() => handleButtonClick("wishlist")}
+          >
+            Wunschliste
+          </button>
+          <button
+            className="p-2 rounded text-white bg-stone-800 border border-transparent transition-transform duration-300 ease-in-out hover:scale-105"
+            onClick={() => handleButtonClick("notifications")}
+          >
+            Nachrichten
+          </button>
+          <button
+            className="p-2 rounded text-white bg-stone-800 border border-transparent transition-transform duration-300 ease-in-out hover:scale-105"
+            onClick={() => handleButtonClick("support")}
+          >
+            Support
+          </button>
+          <button
+            className="p-2 rounded text-white bg-stone-800 border border-transparent transition-transform duration-300 ease-in-out hover:scale-105"
+            onClick={() => handleButtonClick("payment")}
+          >
+            Rechnungen
+          </button>
+          <button
+            className="p-2 rounded text-white bg-stone-800 border border-transparent transition-transform duration-300 ease-in-out hover:scale-105"
+            onClick={() => handleButtonClick("activities")}
+          >
+            Benutzer Aktivitäten
+          </button>
+          <button
+            className="mt-4 bg-red-600 border text-white p-2 border-pink-300 rounded"
+            onClick={handleLogout}
+          >
+            Logout
+          </button>
+        </div>
+
+        {/* Main Content */}
+        <div className="w-3/4 m-5 p-4 border-l-2 border-stone-600">
+          {renderSection()}
+        </div>
       </div>
-      <button
-        className="bg-red-600 border text-white p-2 mb-2 border-pink-300 rounded"
-        onClick={handleLogout}
-      >
-        Logout
-      </button>
-      <div className="mt-4 p-4 border-t border-red-600">{renderSection()}</div>
     </div>
   );
 };

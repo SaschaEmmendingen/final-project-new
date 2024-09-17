@@ -1,13 +1,19 @@
 import React, { useState, useEffect } from "react";
+import { useAuth } from "../Main/AuthContext"; // AuthContext importieren
 
 const Retoure = () => {
   const [orders, setOrders] = useState([]);
   const [selectedOrder, setSelectedOrder] = useState("");
   const [reason, setReason] = useState("");
-  const [returnItems, setReturnItems] = useState({}); // Speichert die ausgewählten Artikel für die Rücksendung
+  const [returnItems, setReturnItems] = useState({});
+  const { token } = useAuth(); // Token aus dem AuthContext holen
 
   useEffect(() => {
     const fetchOrders = async () => {
+      if (!token) {
+        return; // Keine Bestellung abrufen, wenn kein Token vorhanden ist
+      }
+
       try {
         const response = await fetch(
           "http://localhost:1312/api/orders/my-orders",
@@ -15,7 +21,7 @@ const Retoure = () => {
             method: "GET",
             headers: {
               "Content-Type": "application/json",
-              Authorization: `Bearer ${localStorage.getItem("token")}`, // Stelle sicher, dass der Token gesetzt ist
+              Authorization: `Bearer ${token}`, // Token in den Headers setzen
             },
           }
         );
@@ -31,8 +37,9 @@ const Retoure = () => {
         alert(error.message);
       }
     };
+
     fetchOrders();
-  }, []);
+  }, [token]);
 
   // Funktion zum Handhaben der Checkboxen
   const handleItemSelection = (itemId) => {
@@ -55,16 +62,10 @@ const Retoure = () => {
     }
 
     try {
-      const token = localStorage.getItem("token"); // Hole den Token aus localStorage
-
       if (!token) {
         alert("You are not authenticated. Please log in again.");
         return;
       }
-
-      console.log("Token:", token); // Log den Token
-      console.log("Selected Order:", selectedOrder); // Log die ausgewählte Bestellung
-      console.log("Return Reason:", reason); // Log den Rücksendegrund
 
       const response = await fetch(
         `http://localhost:1312/api/orders/${selectedOrder}/return`,
@@ -77,8 +78,6 @@ const Retoure = () => {
           body: JSON.stringify({ reason, items: selectedItems }),
         }
       );
-
-      console.log("Response Status:", response.status); // Log den Status der Antwort
 
       if (response.ok) {
         alert("Return processed successfully");
@@ -102,6 +101,20 @@ const Retoure = () => {
       )
     );
   };
+
+  if (!token) {
+    return (
+      <div className="flex justify-center items-center pt-4">
+        <div className="w-3/5 mt-4 p-4 bg-red-100 text-red-700 border border-red-300 rounded-lg">
+          Du musst eingeloggt sein, um Retouren zu verwalten. Bitte{" "}
+          <a href="/login" className="text-blue-500 underline">
+            logge dich hier ein
+          </a>
+          .
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div>
@@ -127,9 +140,7 @@ const Retoure = () => {
 
         {selectedOrder && (
           <div className="mb-4">
-            <h2 className="text-xl font-semibold mb-2">
-              Wähle ein Artikel:
-            </h2>
+            <h2 className="text-xl font-semibold mb-2">Wähle ein Artikel:</h2>
             <table className="min-w-full bg-white border">
               <thead>
                 <tr>

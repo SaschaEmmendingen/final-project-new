@@ -45,29 +45,29 @@ const Login = () => {
   };
 
   return (
-    <div className="w-4/5 mx-auto mt-8 bg-white p-8 shadow-lg rounded-lg">
-      <h3 className="text-xl font-bold mb-4">Anmelden</h3>
+    <div className="w-2/5 mx-auto mt-8 bg-stone-900 p-8 shadow-lg rounded-lg">
+      <h3 className="text-xl font-bold mb-4 text-gray-400">Anmelden</h3>
       <form onSubmit={handleLogin}>
-        <label className="block mb-2">
+        <label className="block mb-2 text-gray-400">
           E-Mail Adresse <span className="text-red-500">*</span>
         </label>
         <input
           type="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          className="w-full border p-2 mb-4 rounded-lg focus:outline-none focus:border-blue-500"
+          className="w-full border-0 p-2 mb-4 rounded-lg text-gray-400 focus:outline-none focus:border-blue-500 bg-stone-600"
           placeholder="E-Mail Adresse"
           required
         />
 
-        <label className="block mb-2">
+        <label className="block mb-2 text-gray-400">
           Passwort <span className="text-red-500">*</span>
         </label>
         <input
           type="password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          className="w-full border p-2 mb-4 rounded-lg focus:outline-none focus:border-blue-500"
+          className="w-full border-0 p-2 mb-4 rounded-lg text-gray-400 focus:outline-none focus:border-blue-500 bg-stone-600"
           placeholder="Passwort"
           required
         />

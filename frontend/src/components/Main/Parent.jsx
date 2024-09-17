@@ -22,11 +22,11 @@ const Parent = () => {
 
   return (
     <div>
-      <nav className="bg-white w-full py-4 sticky top-0 z-50 shadow-lg rounded-b-lg border-b border-gray-300">
+      <nav className="bg-stone-800 w-full py-4 sticky top-0 z-50 shadow-lg shadow-stone-600 rounded-b-md border-b border-stone-800">
         <div className="w-full mx-auto px-4 lg:px-8 mb-4">
           <div className="grid grid-cols-1 lg:grid-cols-4 gap-4 items-center">
             {/* Logo */}
-            <div className="flex justify-center items-center lg:justify-start lg:col-span-1 lg-row-span-2">
+            <div className="flex justify-center items-center lg:justify-start lg:col-span-1 lg-row-span-2 ">
               <Link to="/" className="flex items-center">
                 <img
                   src={canvaSVG}
@@ -38,7 +38,7 @@ const Parent = () => {
 
             {/* Suchleiste (nur auf Desktop sichtbar) */}
             <motion.div
-              className="hidden lg:flex items-center border border-gray-300 rounded-lg p-1 bg-white shadow-md lg:col-span-2"
+              className="hidden lg:flex items-center border-1 text-gray-400 border-black rounded-lg p-1 bg-stone-600 shadow-xl lg:col-span-2"
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.5, ease: "easeOut" }}
@@ -46,31 +46,32 @@ const Parent = () => {
               <input
                 type="text"
                 placeholder="Suche"
-                className="outline-none w-full px-2 py-1 text-gray-700"
+                className="outline-none w-full px-2 py-1 bg-stone-600 shadow-xl"
               />
-              <button className="text-black">
+              <button className="text-gray-400 pr-3">
                 <FaSearch />
               </button>
             </motion.div>
+
             {/* Icons: Kontakt, Konto, Warenkorb */}
             <div className="flex justify-center lg:justify-end lg:col-span-1 lg:space-x-10 relative">
               <Link
                 to="/kontakt"
-                className="flex flex-col items-center text-black hover:text-gray-700"
+                className="flex flex-col items-center text-center text-gray-400 hover:text-gray-200 transition-transform duration-300 ease-in-out transform hover:scale-105"
               >
-                <FaPhone className="text-lg text-black-700" />
+                <FaPhone className="text-lg" />
                 <span className="mt-3 text-sm">Kontakt</span>
               </Link>
               <Link
                 to="/konto"
-                className="flex flex-col items-center text-black hover:text-gray-700"
+                className="flex flex-col items-center text-center text-gray-400 hover:text-gray-200 transition-transform duration-300 ease-in-out transform hover:scale-105"
               >
                 <FaUser className="text-lg" />
                 <span className="mt-3 text-sm">Konto</span>
               </Link>
               <Link
                 to="/warenkorb"
-                className="flex flex-col items-center text-black hover:text-gray-700"
+                className="flex flex-col items-center text-center text-gray-400 hover:text-gray-200 transition-transform duration-300 ease-in-out transform hover:scale-105"
               >
                 <FaShoppingCart className="text-lg" />
                 {cartItems.length > 0 && (
@@ -84,46 +85,39 @@ const Parent = () => {
           </div>
         </div>
 
-        {/* Anzeige der Rolle */}
-        {/* {user && (
-          <div className="text-center mt-4 text-green-600">
-            Eingeloggt: {role === 'admin' ? `${user.name}` : `${user.name}`}
-          </div>
-        )} */}
-
         {/* Links für Desktop (nur sichtbar auf größeren Bildschirmen) */}
         <div className="hidden lg:w-1/2 lg:mx-auto lg:py-4 lg:flex lg:grid lg:grid-cols-5 lg:gap-2 lg:justify-items-center">
           <Link
             to="/"
-            className="text-center text-black hover:text-gray-700 hover:scale-105 transition-transform duration-300 ease-in-out"
+            className="text-center text-gray-400 hover:text-gray-200 hover:scale-105 transition-transform duration-300 ease-in-out"
             onClick={handleLinkClick}
           >
             Home
           </Link>
           <Link
             to="/Fernseher"
-            className="text-center text-black hover:text-gray-700 hover:scale-105 transition-transform duration-300 ease-in-out"
+            className="text-center text-gray-400 hover:text-gray-200 hover:scale-105 transition-transform duration-300 ease-in-out"
             onClick={handleLinkClick}
           >
             Fernseher
           </Link>
           <Link
             to="/GamingPC"
-            className="text-center text-black hover:text-gray-700 hover:scale-105 transition-transform duration-300 ease-in-out"
+            className="text-center text-gray-400 hover:text-gray-200 hover:scale-105 transition-transform duration-300 ease-in-out"
             onClick={handleLinkClick}
           >
             Gaming PC
           </Link>
           <Link
             to="/Handys"
-            className="text-center text-black hover:text-gray-700 hover:scale-105 transition-transform duration-300 ease-in-out"
+            className="text-center text-gray-400 hover:text-gray-200 hover:scale-105 transition-transform duration-300 ease-in-out"
             onClick={handleLinkClick}
           >
             Handys
           </Link>
           <Link
             to="/Laptops"
-            className="text-center text-black hover:text-gray-700 hover:scale-105 transition-transform duration-300 ease-in-out"
+            className="text-center text-gray-400 hover:text-gray-200 hover:scale-105 transition-transform duration-300 ease-in-out"
             onClick={handleLinkClick}
           >
             Laptops
@@ -166,35 +160,35 @@ const Parent = () => {
             >
               <Link
                 to="/"
-                className="text-2xl hover:text-gray-400"
+                className="text-2xl hover:text-gray-400 transition-colors duration-300 ease-in-out"
                 onClick={handleLinkClick}
               >
                 Home
               </Link>
               <Link
                 to="/Fernseher"
-                className="text-2xl hover:text-gray-400"
+                className="text-2xl hover:text-gray-400 transition-colors duration-300 ease-in-out"
                 onClick={handleLinkClick}
               >
                 Fernseher
               </Link>
               <Link
                 to="/GamingPC"
-                className="text-2xl hover:text-gray-400"
+                className="text-2xl hover:text-gray-400 transition-colors duration-300 ease-in-out"
                 onClick={handleLinkClick}
               >
                 Gaming PC
               </Link>
               <Link
                 to="/Handys"
-                className="text-2xl hover:text-gray-400"
+                className="text-2xl hover:text-gray-400 transition-colors duration-300 ease-in-out"
                 onClick={handleLinkClick}
               >
                 Handys
               </Link>
               <Link
                 to="/Laptops"
-                className="text-2xl hover:text-gray-400"
+                className="text-2xl hover:text-gray-400 transition-colors duration-300 ease-in-out"
                 onClick={handleLinkClick}
               >
                 Laptops

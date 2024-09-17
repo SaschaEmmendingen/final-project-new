@@ -3,7 +3,8 @@ import { FaStar, FaShoppingCart, FaHeart } from "react-icons/fa";
 import { useCart } from "./CartContext";
 import axios from "axios";
 import { Link } from "react-router-dom";
-import gamingpc from "../banner/gamingpc.jpg"
+import bannerGamingPC from "../banner/gamingpc.jpg"; // Banner-Bild für Gaming PCs
+import bannerCategory from "../banner/banner-category-gaming-pc-home-series.png"; // Alternativer Banner
 
 const GamingPC = () => {
   const [products, setProducts] = useState([]);
@@ -74,26 +75,32 @@ const GamingPC = () => {
 
   return (
     <div className="relative w-full md:w-[95%] lg:w-[95%] xl:w-[95%] mx-auto">
-      <h1 className="text-3xl font-bold my-8 text-center">GAMING PC</h1>
-      <img src={gamingpc} alt="Gaming PC Banner"
-      style={{height: "500px", width: "100vw"}}/>
-
+      <img
+        src={bannerCategory}
+        alt="Gaming PC Banner"
+        className="border-gray-400 rounded-md border-0 shadow-2xl shadow-stone-900"
+        style={{ height: "500px", width: "100vw" }}
+      />
+      <h1 className="text-3xl font-bold my-8 text-center text-gray-400">
+        GAMING PC
+      </h1>
       {loading ? (
-        <div className="text-center">Loading...</div>
+        <div className="text-center text-gray-400">Loading...</div>
       ) : (
         <>
           {error && <div className="text-red-500 text-center">{error}</div>}
-          <div className="space-y-4 md:space-y-0 md:grid md:grid-cols-2 md:gap-4">
+          <div className="space-y-4 md:space-y-0 md:grid md:grid-cols-3 md:gap-4 p-4">
             {products.map((product, index) => (
               <div
                 key={index}
-                className="bg-white border border-gray-200 rounded-lg shadow-md p-4"
+                className="bg-white border-0 border-gray-200 rounded-lg shadow-md p-8 transition-transform duration-300 hover:scale-105"
+                style={{ background: "linear-gradient(gray, white 10%)" }}
               >
                 <Link to={`/products/${product._id}`}>
                   <img
                     src={product.imageUrl}
                     alt={product.name}
-                    className="w-full h-32 object-contain mb-4"
+                    className="w-full h-32 object-contain mb-4 py-4"
                   />
                 </Link>
                 <h3 className="text-lg font-semibold text-center">
