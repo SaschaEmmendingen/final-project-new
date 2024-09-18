@@ -21,6 +21,7 @@ import ProtectedRoute from "./components/Main/ProtectedRoute";
 import OrderManagmentUser from "../src/components/Order/OrderManagmentUser";
 import "./index.css";
 import Retoure from "./components/User/Retoure";
+import ProductSearch from "./components/Main/ProductSearch"; // Importieren der ProductSearch-Komponente
 
 function App() {
   return (
@@ -55,6 +56,7 @@ function App() {
                   }
                 />
                 <Route path="/products/:id" element={<ProductDetail />} />
+                <Route path="/search" element={<ProductSearch />} /> {/* Route für Produktsuche */}
               </Route>
             </Routes>
           </BrowserRouter>

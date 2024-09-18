@@ -1,16 +1,18 @@
 import React, { useState } from "react";
-import { Link, Outlet } from "react-router-dom";
+import { Link, Outlet, useNavigate } from "react-router-dom"; // useNavigate hinzugefügt
 import { FaSearch, FaUser, FaShoppingCart, FaPhone } from "react-icons/fa";
 import { motion, AnimatePresence } from "framer-motion";
 import Footer from "./Footer";
 import { useCart } from "../CartContext";
-import { useAuth } from "../Main/AuthContext"; // Importieren Sie useAuth
+import { useAuth } from "../Main/AuthContext";
 import canvaSVG from "../../media/Untitled design.svg";
 
 const Parent = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [searchTerm, setSearchTerm] = useState(""); // State für den Suchbegriff
+  const navigate = useNavigate();
   const { cartItems } = useCart();
-  const { user, role } = useAuth(); // Holen Sie Benutzer und Rolle aus dem AuthContext
+  const { user } = useAuth();
 
   const handleMenuToggle = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -18,6 +20,13 @@ const Parent = () => {
 
   const handleLinkClick = () => {
     setIsMenuOpen(false);
+  };
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+    if (searchTerm.trim()) {
+      navigate(`/search?name=${searchTerm}`); // Leite zur Suchseite weiter mit Suchbegriff
+    }
   };
 
   return (
@@ -36,9 +45,10 @@ const Parent = () => {
               </Link>
             </div>
 
-            {/* Suchleiste (nur auf Desktop sichtbar) */}
-            <motion.div
+            {/* Suchleiste */}
+            <motion.form
               className="hidden lg:flex items-center border-1 text-gray-400 border-black rounded-lg p-1 bg-stone-600 shadow-xl lg:col-span-2"
+              onSubmit={handleSearch} // Form-Submit-Event
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.5, ease: "easeOut" }}
@@ -47,11 +57,13 @@ const Parent = () => {
                 type="text"
                 placeholder="Suche"
                 className="outline-none w-full px-2 py-1 bg-stone-600 shadow-xl"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)} // Suchbegriff aktualisieren
               />
-              <button className="text-gray-400 pr-3">
+              <button type="submit" className="text-gray-400 pr-3">
                 <FaSearch />
               </button>
-            </motion.div>
+            </motion.form>
 
             {/* Icons: Kontakt, Konto, Warenkorb */}
             <div className="flex justify-center lg:justify-end lg:col-span-1 lg:space-x-10 relative">
@@ -206,12 +218,14 @@ const Parent = () => {
                   <span className="mt-2 text-sm">Kontakt</span>
                 </Link>
                 <Link
-                  to="/konto"
+                  to={user ? "/dashboard" : "/konto"}
                   className="text-white hover:text-gray-400 flex flex-col items-center"
                   onClick={handleLinkClick}
                 >
                   <FaUser className="text-3xl" />
-                  <span className="mt-2 text-sm">Konto</span>
+                  <span className="mt-2 text-sm">
+                    {user ? "Dashboard" : "Konto"}
+                  </span>
                 </Link>
                 <Link
                   to="/warenkorb"
@@ -220,7 +234,7 @@ const Parent = () => {
                 >
                   <FaShoppingCart className="text-3xl" />
                   {cartItems.length > 0 && (
-                    <span className="absolute top-0 right-0 bg-red-600 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center -translate-x-1/2 -translate-y-1/2">
+                    <span className="absolute top-0 right-0 bg-red-600 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center -translate-x-1/2 -translate-y-1/2">
                       {cartItems.length}
                     </span>
                   )}
@@ -232,12 +246,10 @@ const Parent = () => {
         </AnimatePresence>
       </nav>
 
-      {/* Main Content */}
       <main>
         <Outlet />
       </main>
 
-      {/* Footer */}
       <Footer />
     </div>
   );
