@@ -1,21 +1,25 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../Main/AuthContext"; // AuthContext importieren
+import { useAuth } from "../Main/AuthContext";
 import Registrierung from "../Register";
 import Login from "./Login";
 import { FaRegClock, FaList, FaShippingFast, FaTag } from "react-icons/fa";
 
 const Konto = () => {
   const [isRegistering, setIsRegistering] = useState(false);
-  const { token, role } = useAuth(); // Token und Role aus dem AuthContext holen
+  const { token, role } = useAuth();
   const navigate = useNavigate();
-
+  
   useEffect(() => {
-    // Wenn der Benutzer eingeloggt ist, leite ihn abhängig von seiner Rolle weiter
+    console.log("Token:", token); // Debugging-Anweisung
+    console.log("Role:", role); // Debugging-Anweisung
+
     if (token) {
       if (role === "admin") {
+        console.log("Navigating to admin-dashboard"); // Debugging-Anweisung
         navigate("/admin-dashboard");
       } else if (role === "user") {
+        console.log("Navigating to dashboard"); // Debugging-Anweisung
         navigate("/dashboard");
       }
     }

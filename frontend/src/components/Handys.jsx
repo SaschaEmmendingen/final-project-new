@@ -76,7 +76,10 @@ const Handys = () => {
         className="border-gray-400 rounded-md border-0 shadow-2xl shadow-stone-900"
         style={{ height: "500px", width: "100vw" }}
       />
-      <h1 className="text-3xl font-bold my-8 text-center text-gray-400">
+      <h1
+        className="text-3xl font-bold my-8 text-center text-gray-400"
+        style={{ textShadow: "2px 2px 4px rgba(0, 0, 0, 0.6)" }}
+      >
         Handys
       </h1>
       {loading ? (

@@ -9,7 +9,7 @@ const AdminBestellungen = () => {
   useEffect(() => {
     const fetchOrders = async () => {
       try {
-        const token = localStorage.getItem("token"); 
+        const token = localStorage.getItem("token");
         const response = await axios.get("http://localhost:1312/api/orders", {
           headers: { Authorization: `Bearer ${token}` },
         });
@@ -30,7 +30,7 @@ const AdminBestellungen = () => {
       await axios.delete(`http://localhost:1312/api/orders/${orderId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
-      setOrders(orders.filter((order) => order._id !== orderId)); 
+      setOrders(orders.filter((order) => order._id !== orderId));
     } catch (error) {
       setError(error.response ? error.response.data : error.message);
     }
@@ -39,29 +39,50 @@ const AdminBestellungen = () => {
   const toggleOrderItems = (orderId) => {
     setExpandedOrders((prev) => ({
       ...prev,
-      [orderId]: !prev[orderId], 
+      [orderId]: !prev[orderId],
     }));
   };
 
-  if (loading) return <p>Bestellungen werden geladen...</p>;
-  if (error) return <p className="text-red-500">Fehler: {error.message || "Unbekannter Fehler"}</p>;
+  if (loading)
+    return <p className="text-gray-400">Bestellungen werden geladen...</p>;
+  if (error)
+    return (
+      <p className="text-red-500">
+        Fehler: {error.message || "Unbekannter Fehler"}
+      </p>
+    );
 
   return (
     <div className="w-4/5 mx-auto mt-8">
-      <h2 className="text-2xl font-bold mb-4">Verwaltung der Bestellungen</h2>
+      <h2
+        className="text-2xl font-bold mb-4 text-gray-400"
+        style={{ textShadow: "2px 2px 4px rgba(0, 0, 0, 0.6)" }}
+      >
+        Verwaltung der Bestellungen
+      </h2>
       {orders.length === 0 ? (
         <p>Keine Bestellungen vorhanden.</p>
       ) : (
         <ul>
           {orders.map((order) => (
-            <li key={order._id} className="bg-white p-4 rounded-lg shadow-md mb-4">
+            <li
+              key={order._id}
+              className="bg-white p-4 rounded-lg shadow-md mb-4"
+            >
               <div className="flex justify-between items-center">
                 <div>
-                  <h3 className="text-lg font-medium">Bestellung #{order._id}</h3>
+                  <h3 className="text-lg font-medium">
+                    Bestellung #{order._id}
+                  </h3>
                   <p className="text-base">
-                    Erstellt von: <span className="font-bold text-orange-500">{order.user ? order.user.name : "Unbekannt"}</span>
+                    Erstellt von:{" "}
+                    <span className="font-bold text-orange-500">
+                      {order.user ? order.user.name : "Unbekannt"}
+                    </span>
                   </p>
-                  <p className="text-base font-bold">Gesamtbetrag: {order.total} €</p>
+                  <p className="text-base font-bold">
+                    Gesamtbetrag: {order.total} €
+                  </p>
                 </div>
                 <button
                   className="text-gray-600 hover:text-gray-800"
@@ -70,7 +91,7 @@ const AdminBestellungen = () => {
                   {expandedOrders[order._id] ? "▲" : "▼"}
                 </button>
               </div>
-              
+
               {expandedOrders[order._id] && (
                 <ul className="mt-2">
                   {order.items.map((item) => (

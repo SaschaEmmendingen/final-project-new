@@ -1,106 +1,147 @@
-import React, { useEffect, useState } from 'react';
-import ProductManagement from '../Order/ProductManagment';
-import AdminProfile from './AdminProfile';
-import UserManagment from '../User/UserManagment';
-import OrderManagment from '../Order/OrderManagmentAdmin';
-import { useNavigate } from 'react-router-dom';
-import RetourenManagement from '../Order/RetourenManagement';
+import React, { useEffect, useState } from "react";
+import ProductManagement from "../Order/ProductManagment";
+import AdminProfile from "./AdminProfile";
+import UserManagment from "../User/UserManagment";
+import OrderManagment from "../Order/OrderManagmentAdmin";
+import { useNavigate } from "react-router-dom";
+import RetourenManagement from "../Order/RetourenManagement";
 
 const AdminDashboard = () => {
-  const [activeView, setActiveView] = useState('dashboard');
-  const [role, setRole] = useState('');
+  const [activeView, setActiveView] = useState("dashboard");
+  const [role, setRole] = useState("");
   const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Rolle und Benutzerinformationen aus localStorage holen
-    const storedRole = localStorage.getItem('role');
-    const storedUser = localStorage.getItem('userInfo');
+    const storedRole = localStorage.getItem("role");
+    const storedUser = localStorage.getItem("userInfo");
 
-    console.log('Stored Role on Dashboard Load:', storedRole); // Debugging-Ausgabe
-    console.log('Stored User Info on Dashboard Load:', storedUser); // Debugging-Ausgabe
+    console.log("Stored Role on Dashboard Load:", storedRole);
+    console.log("Stored User Info on Dashboard Load:", storedUser);
 
-    setRole(storedRole || 'Unbekannt');
+    setRole(storedRole || "Unbekannt");
     setUser(storedUser ? JSON.parse(storedUser) : null);
 
-    // Weiterleitung bei fehlender Admin-Rolle
-    if (storedRole !== 'admin') {
-      navigate('/login'); // Weiterleitung zu einer anderen Seite
+    if (storedRole !== "admin") {
+      navigate("/login");
     }
   }, [navigate]);
 
   const renderView = () => {
     switch (activeView) {
-      case 'product':
+      case "product":
         return <ProductManagement />;
-      case 'profile':
+      case "profile":
         return <AdminProfile />;
-      case 'user':
+      case "user":
         return <UserManagment />;
-      case 'orders':
+      case "orders":
         return <OrderManagment />;
-      case 'retoure':
+      case "retoure":
         return <RetourenManagement />;
       default:
-        return <div>Willkommen im Admin Dashboard</div>;
+        return (
+          <div className="text-gray-400">
+            Willkommen im Admin Dashboard{user ? `, ${user.name}!` : "!"}
+          </div>
+        );
     }
   };
 
+  const handleViewChange = (view) => {
+    setLoading(true);
+    setTimeout(() => {
+      setActiveView(view);
+      setLoading(false);
+    }, 100); // Delay von 100 Millisekunden
+  };
+
   const handleLogout = () => {
-    localStorage.removeItem('token');
-    localStorage.removeItem('role');
-    localStorage.removeItem('userInfo');
-    navigate('/login');
+    localStorage.removeItem("token");
+    localStorage.removeItem("role");
+    localStorage.removeItem("userInfo");
+    navigate("/");
   };
 
   return (
-    <div className="w-4/5 mx-auto mt-8 bg-white p-8 shadow-lg rounded-lg border border-blue-400">
-      <h3 className="text-xl font-bold mb-4">Admin Dashboard</h3>
-      <p className="mb-4 text-green-600">
-        <strong>Eingeloggt:</strong> {user?.name || 'Unbekannt'}
-      </p>
-      <button
-        onClick={() => setActiveView('profile')}
-        className="bg-pink-400 text-white py-2 px-4 rounded my-1"
+    <div
+      className="w-4/5 mx-auto mt-8 p-8 shadow-lg rounded-lg border border-stone-600"
+      style={{ background: "linear-gradient(#78716c, #44403c 10%)" }}
+    >
+      <h3
+        className="text-2xl pt-4 font-bold mb-4 text-center text-gray-400"
+        style={{ textShadow: "2px 2px 4px rgba(0, 0, 0, 0.6)" }}
       >
-        Profil
-      </button>
-      <br />
-      <button
-        onClick={() => setActiveView('user')}
-        className="bg-blue-500 text-white py-2 px-4 rounded my-1"
-      >
-        User Verwaltung
-      </button>
-      <br />
-      <button
-        onClick={() => setActiveView('product')}
-        className="bg-yellow-600 text-white py-2 px-4 rounded my-1"
-      >
-        Produkt Verwaltung
-      </button>
-      <br />
-      <button
-        onClick={() => setActiveView('orders')}
-        className="bg-green-600 text-white py-2 px-4 rounded my-1"
-      >
-        Bestellungen
-      </button>
-      <br />
-      <button
-        onClick={() => setActiveView('retoure')}
-        className="bg-violet-600 text-white py-2 px-4 rounded my-1"
-      >
-        Retouren Verwaltung
-      </button>
-      <br />
-      <button
-        className="bg-red-600 border text-white p-2 mb-2 border-pink-400 rounded"
-        onClick={handleLogout}
-      >
-        Logout
-      </button>
-      <div className="mt-8">{renderView()}</div>
+        Admin Dashboard
+      </h3>
+      <div className="flex">
+        {/* Sidebar Buttons */}
+        <div className="w-1/8 flex flex-col gap-2 pt-8">
+          <button
+            className={`p-2 rounded ${
+              activeView === "profile" ? "text-gray-600" : "text-gray-400"
+            } bg-stone-800 border border-transparent transition-transform duration-300 ease-in-out hover:text-white hover:scale-105`}
+            onClick={() => handleViewChange("profile")}
+          >
+            Profil
+          </button>
+          <button
+            className={`p-2 rounded ${
+              activeView === "user" ? "text-gray-600" : "text-gray-400"
+            } bg-stone-800 border border-transparent transition-transform duration-300 ease-in-out hover:text-white hover:scale-105`}
+            onClick={() => handleViewChange("user")}
+          >
+            User Verwaltung
+          </button>
+          <button
+            className={`p-2 rounded ${
+              activeView === "product" ? "text-gray-600" : "text-gray-400"
+            } bg-stone-800 border border-transparent transition-transform duration-300 ease-in-out hover:text-white hover:scale-105`}
+            onClick={() => handleViewChange("product")}
+          >
+            Produkt Verwaltung
+          </button>
+          <button
+            className={`p-2 rounded ${
+              activeView === "orders" ? "text-gray-600" : "text-gray-400"
+            } bg-stone-800 border border-transparent transition-transform duration-300 ease-in-out hover:text-white hover:scale-105`}
+            onClick={() => handleViewChange("orders")}
+          >
+            Bestellungen
+          </button>
+          <button
+            className={`p-2 rounded ${
+              activeView === "retoure" ? "text-gray-600" : "text-gray-400"
+            } bg-stone-800 border border-transparent transition-transform duration-300 ease-in-out hover:text-white hover:scale-105`}
+            onClick={() => handleViewChange("retoure")}
+          >
+            Retouren Verwaltung
+          </button>
+          <button
+            className={`p-2 rounded ${
+              activeView === "retoure" ? "text-gray-600" : "text-gray-400"
+            } bg-stone-800 border border-transparent transition-transform duration-300 ease-in-out hover:text-white hover:scale-105`}
+            onClick={() => handleViewChange("retoure")}
+          >
+            Support Verwaltung
+          </button>
+          <button
+            className="mt-64 bg-red-600 border text-gray-400 p-1 w-20 border-red-600 rounded"
+            onClick={handleLogout}
+          >
+            Logout
+          </button>
+          <p className=" text-sm text-green-600">
+            <strong>Eingeloggt:</strong> {user?.name || "Unbekannt"}
+          </p>
+        </div>
+
+        {/* Main Content */}
+        <div className="w-3/4 m-5 p-4 border-l-2 border-stone-600">
+          {loading ? <p className="text-gray-400">Laden...</p> : renderView()}
+        </div>
+      </div>
     </div>
   );
 };

@@ -12,6 +12,7 @@ import PageNotFound from "./components/PageNotFound";
 import Parent from "./components/Main/Parent";
 import { CartProvider } from "./components/CartContext";
 import Login from "./components/Main/Login";
+import Logout from "./components/Main/Logout";
 import UserDashboard from "./components/User/UserDashboard";
 import AdminDashboard from "./components/Admin/AdminDashboard";
 import ProductDetail from "./components/Order/ProductDetail";
@@ -36,11 +37,11 @@ function App() {
                 <Route path="Laptops" element={<Laptops />} />
                 <Route path="Kontakt" element={<Kontakt />} />
                 <Route path="Konto" element={<Konto />} />
-                <Route path="/warenkorb" element={<Warenkorb />} />
+                <Route path="Warenkorb" element={<Warenkorb />} />
                 <Route path="*" element={<PageNotFound />} />
-                <Route path="/login" element={<Login />} />
-                <Route path="/orders" element={<OrderManagmentUser />} />
-                <Route path="/retoure" element={<Retoure />} />
+                <Route path="orders" element={<OrderManagmentUser />} />
+                <Route path="retoure" element={<Retoure />} />
+                <Route path="/logout" element={<Logout />} />
                 <Route
                   path="/dashboard"
                   element={

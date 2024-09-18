@@ -83,9 +83,7 @@ const ProductManagement = () => {
         editingProduct
       );
       setProducts(
-        products.map((p) =>
-          p._id === editingProduct._id ? response.data : p
-        )
+        products.map((p) => (p._id === editingProduct._id ? response.data : p))
       );
       setEditingProduct(null); // Schließt das Bearbeitungsformular
       setIsModalOpen(false); // Schließt das Modal
@@ -119,7 +117,10 @@ const ProductManagement = () => {
 
   return (
     <div>
-      <h3 className="text-xl font-bold mb-4 border border-pink-400">
+      <h3
+        className="text-xl font-bold mb-4 text-gray-400"
+        style={{ textShadow: "2px 2px 4px rgba(0, 0, 0, 0.6)" }}
+      >
         Produktverwaltung
       </h3>
 
@@ -131,8 +132,8 @@ const ProductManagement = () => {
             onClick={() => setActiveCategory(category)}
             className={`mr-4 py-2 px-4 rounded ${
               activeCategory === category
-                ? "bg-blue-500 text-white"
-                : "bg-gray-200"
+                ? "bg-stone-800 text-gray-400"
+                : "bg-gray-400"
             }`}
           >
             {category}

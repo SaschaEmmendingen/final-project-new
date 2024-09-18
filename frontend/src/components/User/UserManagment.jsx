@@ -104,7 +104,12 @@ const UserManagment = () => {
 
   return (
     <div className="p-4">
-      <h1 className="text-2xl font-bold mb-4">User Management</h1>
+      <h1
+        className="text-2xl font-bold mb-4 text-gray-400"
+        style={{ textShadow: "2px 2px 4px rgba(0, 0, 0, 0.6)" }}
+      >
+        User Management
+      </h1>
       {errorMessage && <div className="text-red-500 mb-4">{errorMessage}</div>}
       {isLoading ? (
         <div className="text-center">Laden...</div>

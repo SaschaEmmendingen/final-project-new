@@ -63,11 +63,13 @@ const Parent = () => {
                 <span className="mt-3 text-sm">Kontakt</span>
               </Link>
               <Link
-                to="/konto"
+                to={user ? "/dashboard" : "/konto"}
                 className="flex flex-col items-center text-center text-gray-400 hover:text-gray-200 transition-transform duration-300 ease-in-out transform hover:scale-105"
               >
                 <FaUser className="text-lg" />
-                <span className="mt-3 text-sm">Konto</span>
+                <span className="mt-3 text-sm">
+                  {user ? "Dashboard" : "Konto"}
+                </span>
               </Link>
               <Link
                 to="/warenkorb"
@@ -106,7 +108,7 @@ const Parent = () => {
             className="text-center text-gray-400 hover:text-gray-200 hover:scale-105 transition-transform duration-300 ease-in-out"
             onClick={handleLinkClick}
           >
-            Gaming PC
+            Gaming PCs
           </Link>
           <Link
             to="/Handys"

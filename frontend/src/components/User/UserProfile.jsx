@@ -54,10 +54,7 @@ const UserProfile = ({ user }) => {
   return (
     <div
       className="mx-20 w-full p-8 border border-gray-400 rounded-md relative"
-      style={{ 
-        background: "linear-gradient(to top, gray, white 10%)",
-        height:"40vh"
-      }}
+      style={{ background: "linear-gradient(#78716c, #292524 10%)" }}
     >
       <h1 className="text-3xl font-bold mb-4 text-center">Profil</h1>
 
@@ -90,14 +87,14 @@ const UserProfile = ({ user }) => {
           </button>
         </div>
       ) : (
-        <form onSubmit={handleSubmit} className="relative flex flex-col h-full">
+        <form onSubmit={handleSubmit} className="relative flex flex-col">
           <div className="mb-4 pl-4">
             <label className="block mb-1 text-sm">Name</label>
             <input
               type="text"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              className="w-2/3 p-2 border border-stone-800 rounded-md"
+              className="w-2/3 p-1 border border-stone-800 rounded-md"
             />
           </div>
           <div className="mb-4 pl-4">
@@ -106,7 +103,7 @@ const UserProfile = ({ user }) => {
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-2/3 p-2 border border-stone-800 rounded-md"
+              className="w-2/3 p-1 border border-stone-800 rounded-md"
             />
           </div>
           <div className="mb-4 pl-4">
@@ -115,7 +112,7 @@ const UserProfile = ({ user }) => {
               type="text"
               value={address}
               onChange={(e) => setAddress(e.target.value)}
-              className="w-2/3 p-2 border border-stone-800 rounded-md"
+              className="w-2/3 p-1 border border-stone-800 rounded-md"
             />
           </div>
           <div className="mb-4 pl-4">
@@ -124,7 +121,7 @@ const UserProfile = ({ user }) => {
               type="text"
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
-              className="w-2/3 p-2 border border-stone-800 rounded-md"
+              className="w-2/3 p-1 border border-stone-800 rounded-md"
             />
           </div>
           <div className="mb-4 pl-4">
@@ -133,7 +130,7 @@ const UserProfile = ({ user }) => {
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-2/3 p-2 border border-stone-800 rounded-md"
+              className="w-2/3 p-1 border border-stone-800 rounded-md"
             />
           </div>
           <div className="mt-auto pl-4 flex justify-end space-x-2">
