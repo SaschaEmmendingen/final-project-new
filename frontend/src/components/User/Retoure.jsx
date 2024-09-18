@@ -1,17 +1,18 @@
 import React, { useState, useEffect } from "react";
-import { useAuth } from "../Main/AuthContext"; // AuthContext importieren
+import { FaBoxOpen } from "react-icons/fa";
+import { useAuth } from "../Main/AuthContext";
 
 const Retoure = () => {
   const [orders, setOrders] = useState([]);
   const [selectedOrder, setSelectedOrder] = useState("");
   const [reason, setReason] = useState("");
   const [returnItems, setReturnItems] = useState({});
-  const { token } = useAuth(); // Token aus dem AuthContext holen
+  const { token } = useAuth();
 
   useEffect(() => {
     const fetchOrders = async () => {
       if (!token) {
-        return; // Keine Bestellung abrufen, wenn kein Token vorhanden ist
+        return;
       }
 
       try {
@@ -21,7 +22,7 @@ const Retoure = () => {
             method: "GET",
             headers: {
               "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`, // Token in den Headers setzen
+              Authorization: `Bearer ${token}`,
             },
           }
         );
@@ -41,11 +42,10 @@ const Retoure = () => {
     fetchOrders();
   }, [token]);
 
-  // Funktion zum Handhaben der Checkboxen
   const handleItemSelection = (itemId) => {
     setReturnItems((prevItems) => ({
       ...prevItems,
-      [itemId]: !prevItems[itemId], // Toggle Auswahl
+      [itemId]: !prevItems[itemId],
     }));
   };
 
@@ -54,7 +54,7 @@ const Retoure = () => {
       (itemId) => returnItems[itemId]
     );
 
-    console.log("Selected Items for Return:", selectedItems); // Log ausgewählte Artikel
+    console.log("Selected Items for Return:", selectedItems);
 
     if (selectedItems.length === 0) {
       alert("Please select at least one item for return.");
@@ -73,7 +73,7 @@ const Retoure = () => {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`, // Token in den Headers setzen
+            Authorization: `Bearer ${token}`,
           },
           body: JSON.stringify({ reason, items: selectedItems }),
         }
@@ -117,16 +117,21 @@ const Retoure = () => {
   }
 
   return (
-    <div>
-      <h1 className="text-3xl font-bold my-8 text-center">Retouren</h1>
-      <div className="max-w-lg mx-auto p-4 border-2 border-pink-500 rounded-md">
+    <div className="relative w-full md:w-[95%] lg:w-[95%] xl:w-[95%] mx-auto pt-5">
+      <div
+        className="mx-15 p-4 border-0 rounded-md"
+        style={{ background: "linear-gradient(#78716c, #292524 10%)" }}
+      >
+        <h1 className="text-3xl font-bold my-8 text-white text-center">
+          Retouren
+        </h1>
         <div className="mb-4">
-          <label className="block text-sm font-medium mb-2">
+          <label className="block text-sm font-medium mb-2 text-white">
             Bestellungen:
             <select
               value={selectedOrder}
               onChange={(e) => setSelectedOrder(e.target.value)}
-              className="mt-1 block w-full px-3 py-2 border border-pink-500 rounded-md shadow-sm focus:outline-none focus:ring-pink-500 focus:border-pink-500 sm:text-sm"
+              className="mt-1 block w-full px-3 py-2 border border-stone-500 rounded-md shadow-sm focus:outline-none focus:ring-stone-500 focus:border-stone-500 sm:text-sm bg-stone-600 text-white"
             >
               <option value="">Wähle eine Bestellung:</option>
               {orders.map((order) => (
@@ -140,13 +145,13 @@ const Retoure = () => {
 
         {selectedOrder && (
           <div className="mb-4">
-            <h2 className="text-xl font-semibold mb-2">Wähle ein Artikel:</h2>
-            <table className="min-w-full bg-white border">
+            <h2 className="text-xl font-semibold mb-2 text-white">Wähle ein Artikel:</h2>
+            <table className="min-w-full bg-stone-800 border border-stone-600">
               <thead>
                 <tr>
-                  <th className="px-4 py-2 border"></th>
-                  <th className="px-4 py-2 border">Artikel</th>
-                  <th className="px-4 py-2 border">Anzahl</th>
+                  <th className="px-4 py-2 border border-stone-600 text-white"></th>
+                  <th className="px-4 py-2 border border-stone-600 text-white">Artikel</th>
+                  <th className="px-4 py-2 border border-stone-600 text-white">Anzahl</th>
                 </tr>
               </thead>
               <tbody>
@@ -154,7 +159,7 @@ const Retoure = () => {
                   .find((order) => order._id === selectedOrder)
                   ?.items.map((item) => (
                     <tr key={item.productId._id}>
-                      <td className="px-4 py-2 border text-center">
+                      <td className="px-4 py-2 border border-stone-600 text-center">
                         <input
                           type="checkbox"
                           checked={returnItems[item.productId._id] || false}
@@ -165,16 +170,17 @@ const Retoure = () => {
                             orders.find((order) => order._id === selectedOrder),
                             item.productId._id
                           )}
+                          className="form-checkbox"
                         />
                       </td>
                       <td
-                        className={`px-4 py-2 border ${
+                        className={`px-4 py-2 border border-stone-600 ${
                           isItemReturned(
                             orders.find((order) => order._id === selectedOrder),
                             item.productId._id
                           )
-                            ? "text-gray-500"
-                            : ""
+                            ? "text-stone-500"
+                            : "text-white"
                         }`}
                       >
                         {item.productId.name}{" "}
@@ -183,7 +189,7 @@ const Retoure = () => {
                           item.productId._id
                         ) && "(Zurückgeschickt)"}
                       </td>
-                      <td className="px-4 py-2 border text-center">
+                      <td className="px-4 py-2 border border-stone-600 text-center text-white">
                         {item.quantity}
                       </td>
                     </tr>
@@ -194,19 +200,19 @@ const Retoure = () => {
         )}
 
         <div className="mb-4">
-          <label className="block text-sm font-medium mb-2">
+          <label className="block text-sm font-medium mb-2 text-white">
             Grund:
             <textarea
               value={reason}
               onChange={(e) => setReason(e.target.value)}
-              className="mt-1 block w-full px-3 py-2 border border-pink-500 rounded-md shadow-sm focus:outline-none focus:ring-pink-500 focus:border-pink-500 sm:text-sm"
+              className="mt-1 block w-full px-3 py-2 border border-stone-500 rounded-md shadow-sm focus:outline-none focus:ring-stone-500 focus:border-stone-500 sm:text-sm bg-stone-600 text-white"
             />
           </label>
         </div>
 
         <button
           onClick={handleReturn}
-          className="w-full bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 transition duration-300"
+          className="bg-stone-600 text-white  rounded hover:bg-stone-700 text-xs p-2 pl-4 pr-4 mr-4 mt-4 transition duration-300"
         >
           Senden
         </button>

@@ -13,7 +13,7 @@ if (!JWT_SECRET) {
 
 const generateToken = (user) => {
   return jwt.sign({ id: user._id, role: user.role }, JWT_SECRET, {
-    expiresIn: '1h',
+    expiresIn: '2h',
   });
 };
 
@@ -47,6 +47,11 @@ export const loginUser = async (req, res) => {
 
   try {
     const { token, user } = await authenticateUser(email, password);
+
+    // Zeitstempel für erfolgreichen Login ausgeben
+    const timestamp = new Date().toLocaleString("de-DE", { timeZone: "Europe/Berlin" }); // Format: YYYY-MM-DDTHH:mm:ss.sssZ
+    console.log(`Login successful at ${timestamp} for user: ${user.email}`);
+
     res.json({
       token,
       name: user.name,
@@ -56,6 +61,7 @@ export const loginUser = async (req, res) => {
       phone: user.phone,
     });
   } catch (error) {
+    // Fehlerbehandlung
     console.error('Login Error:', error.message);
     res.status(401).json({ message: error.message });
   }

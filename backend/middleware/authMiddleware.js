@@ -13,11 +13,8 @@ export const protect = async (req, res, next) => {
       token = req.headers.authorization.split(' ')[1];
       const decoded = jwt.verify(token, JWT_SECRET);
 
-      console.log('(AM) Decoded Token:', decoded);
-
       // Konvertiere die ID in ObjectId
       const userId = new mongoose.Types.ObjectId(decoded.id);
-      console.log('UserId:', userId);
 
       // Suche den Benutzer in der `users`-Collection
       let user = await User.findById(userId).select('-password');
@@ -27,7 +24,7 @@ export const protect = async (req, res, next) => {
         user = await Admin.findById(userId).select('-password');
       }
 
-      console.log('Found User:', user);
+      // console.log('Found User:', user);
 
       if (!user) {
         console.log('User not found in database');
@@ -35,8 +32,6 @@ export const protect = async (req, res, next) => {
       }
 
       req.user = user;
-
-      console.log('(AM) User Role:', req.user.role);
 
       next();
     } catch (error) {

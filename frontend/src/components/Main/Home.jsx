@@ -119,7 +119,7 @@ const Home = () => {
                   className="w-full h-32 object-contain mb-4 py-4"
                 />
               </a>
-              <h3 className="text-lg font-semibold text-center">
+              <h3 className="text-lg font-semibold text-center text-stone-800">
                 {product.name}
               </h3>
               <div className="flex items-center justify-center mb-2">
@@ -127,7 +127,7 @@ const Home = () => {
                   <FaStar key={i} className="text-yellow-500" />
                 ))}
               </div>
-              <p className="text-md font-medium text-gray-700 text-center">
+              <p className="text-md font-medium text-stone-800 text-center">
                 {product.price} €
               </p>
               <div className="flex justify-center space-x-4 mt-4">

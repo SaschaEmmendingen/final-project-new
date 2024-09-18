@@ -24,7 +24,7 @@ const AdminDashboard = () => {
     setUser(storedUser ? JSON.parse(storedUser) : null);
 
     if (storedRole !== "admin") {
-      navigate("/login");
+      navigate("/konto");
     }
   }, [navigate]);
 
@@ -62,6 +62,7 @@ const AdminDashboard = () => {
     localStorage.removeItem("role");
     localStorage.removeItem("userInfo");
     navigate("/");
+    window.location.reload();
   };
 
   return (

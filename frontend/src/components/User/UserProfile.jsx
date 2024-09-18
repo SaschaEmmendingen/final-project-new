@@ -25,8 +25,6 @@ const UserProfile = ({ user }) => {
         }
       );
 
-      console.log("Response:", response);
-
       if (response.status >= 200 && response.status < 300) {
         setMessage("Profil erfolgreich aktualisiert");
         setIsError(false);
@@ -35,10 +33,6 @@ const UserProfile = ({ user }) => {
         throw new Error("Unbekannter Fehler beim Aktualisieren");
       }
     } catch (error) {
-      console.error(
-        "Fehlerdetails:",
-        error.response ? error.response.data : error.message
-      );
       setMessage("Fehler beim Aktualisieren des Profils");
       setIsError(true);
     }
@@ -52,12 +46,8 @@ const UserProfile = ({ user }) => {
   }, [user]);
 
   return (
-    <div
-      className="mx-20 w-full p-8 border border-gray-400 rounded-md relative"
-      style={{ background: "linear-gradient(#78716c, #292524 10%)" }}
-    >
-      <h1 className="text-3xl font-bold mb-4 text-center">Profil</h1>
-
+    <div className="relative w-full md:w-[95%] lg:w-[95%] xl:w-[95%] mx-auto pt-5 pb-12">
+      {/* Nachricht */}
       {message && (
         <p className={`mb-4 ${isError ? "text-red-500" : "text-green-500"}`}>
           {message}
@@ -65,85 +55,99 @@ const UserProfile = ({ user }) => {
       )}
 
       {!isEditing ? (
-        <div className="mb-4 pl-4">
-          <p>
-            <strong>Name:</strong> {name}
-          </p>
-          <p>
-            <strong>Email:</strong> {email}
-          </p>
-          <p>
-            <strong>Adresse:</strong> {address}
-          </p>
-          <p>
-            <strong>Telefon:</strong> {phone}
-          </p>
-
-          <button
-            onClick={() => setIsEditing(true)}
-            className="bg-pink-500 text-white text-xs p-2 mt-4 rounded absolute bottom-4 right-4"
-          >
-            Profil bearbeiten
-          </button>
+        <div
+          className="mb-4 pt-8 pl-8 space-y-4 bg-stone-800 rounded-lg shadow-lg"
+          style={{ background: "linear-gradient(#78716c, #292524 10%)" }}
+        >
+          <div className="flex items-center">
+            <p className="text-gray-400 text-sm font-semibold w-1/3">Name:</p>
+            <p className="text-gray-300 text-base">{name}</p>
+          </div>
+          <div className="flex items-center">
+            <p className="text-gray-400 text-sm font-semibold w-1/3">Email:</p>
+            <p className="text-gray-300 text-base">{email}</p>
+          </div>
+          <div className="flex items-center">
+            <p className="text-gray-400 text-sm font-semibold w-1/3">Adresse:</p>
+            <p className="text-gray-300 text-base">{address}</p>
+          </div>
+          <div className="flex items-center">
+            <p className="text-gray-400 text-sm font-semibold w-1/3">Telefon:</p>
+            <p className="text-gray-300 text-base">{phone}</p>
+          </div>
+          {/* Profil bearbeiten Button */}
+          <div className="flex justify-end mt-4">
+            <button
+              onClick={() => setIsEditing(true)}
+              className="bg-stone-600 text-white  rounded hover:bg-stone-700 text-xs p-2 mr-4 mb-4"
+            >
+              Profil bearbeiten
+            </button>
+          </div>
         </div>
       ) : (
-        <form onSubmit={handleSubmit} className="relative flex flex-col">
-          <div className="mb-4 pl-4">
-            <label className="block mb-1 text-sm">Name</label>
+        <form
+          onSubmit={handleSubmit}
+          className="relative flex flex-col pt-16 p-6 pb-4 bg-stone-800 rounded-lg shadow-lg"
+          style={{ background: "linear-gradient(#78716c, #292524 10%)" }}
+        >
+          <div className="mb-4">
+            <label className="block mb-1 text-sm text-gray-300">Name</label>
             <input
               type="text"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              className="w-2/3 p-1 border border-stone-800 rounded-md"
+              className="w-2/3 p-2 border border-stone-600 rounded-md bg-stone-700 text-gray-300"
             />
           </div>
-          <div className="mb-4 pl-4">
-            <label className="block mb-1 text-sm">Email</label>
+          <div className="mb-4">
+            <label className="block mb-1 text-sm text-gray-300">Email</label>
             <input
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-2/3 p-1 border border-stone-800 rounded-md"
+              className="w-2/3 p-2 border border-stone-600 rounded-md bg-stone-700 text-gray-300"
             />
           </div>
-          <div className="mb-4 pl-4">
-            <label className="block mb-1 text-sm">Adresse</label>
+          <div className="mb-4">
+            <label className="block mb-1 text-sm text-gray-300">Adresse</label>
             <input
               type="text"
               value={address}
               onChange={(e) => setAddress(e.target.value)}
-              className="w-2/3 p-1 border border-stone-800 rounded-md"
+              className="w-2/3 p-2 border border-stone-600 rounded-md bg-stone-700 text-gray-300"
             />
           </div>
-          <div className="mb-4 pl-4">
-            <label className="block mb-1 text-sm">Telefon</label>
+          <div className="mb-4">
+            <label className="block mb-1 text-sm text-gray-300">Telefon</label>
             <input
               type="text"
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
-              className="w-2/3 p-1 border border-stone-800 rounded-md"
+              className="w-2/3 p-2 border border-stone-600 rounded-md bg-stone-700 text-gray-300"
             />
           </div>
-          <div className="mb-4 pl-4">
-            <label className="block mb-1 text-sm">Neues Passwort (optional)</label>
+          <div className="mb-4">
+            <label className="block mb-1 text-sm text-gray-300">Neues Passwort (optional)</label>
             <input
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-2/3 p-1 border border-stone-800 rounded-md"
+              className="w-2/3 p-2 border border-stone-600 rounded-md bg-stone-700 text-gray-300"
             />
           </div>
-          <div className="mt-auto pl-4 flex justify-end space-x-2">
+          {/* Speicher und Abbrechen Buttons */}
+          <div className="flex justify-end mt-4">
             <button
               type="submit"
-              className="bg-pink-500 text-white text-xs p-2 rounded"
+              className="bg-stone-600 text-white text-xs p-2 rounded hover:bg-stone-700 mt-7"
             >
               Änderungen speichern
             </button>
             <button
               type="button"
               onClick={() => setIsEditing(false)}
-              className="bg-gray-500 text-white text-xs p-2 rounded"
+              className="bg-stone-600 text-white text-xs p-2 rounded hover:bg-stone-700 ml-2 mt-7"
             >
               Abbrechen
             </button>
