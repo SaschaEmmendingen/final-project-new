@@ -1,16 +1,17 @@
-import express from "express";
-import dotenv from "dotenv";
-import cors from "cors";
-import connectDB from "./config/db.js";
-import authRoutes from "./routes/authRoutes.js";
-import productRoutes from "./routes/productRoutes.js";
-import userRoutes from "./routes/userRoutes.js";
-import adminRoutes from "./routes/adminRoutes.js";
-import orderRoutes from "./routes/orderRoutes.js";
-import wishlistRoutes from "./routes/wishlistRoutes.js";
-import { protect } from "./middleware/authMiddleware.js";
-dotenv.config();
+import express from 'express';
+import dotenv from 'dotenv';
+import cors from 'cors';
+import connectDB from './config/db.js';
+import authRoutes from './routes/authRoutes.js';
+import productRoutes from './routes/productRoutes.js';
+import userRoutes from './routes/userRoutes.js';
+import adminRoutes from './routes/adminRoutes.js';
+import orderRoutes from './routes/orderRoutes.js';
+import wishlistRoutes from './routes/wishlistRoutes.js';
+import notifyAdminRoutes from './routes/notifyRoute.js'; // Importiere die Benachrichtigungsrouten
+import { protect } from './middleware/authMiddleware.js';
 
+dotenv.config();
 connectDB();
 
 const app = express();
@@ -23,6 +24,8 @@ app.use(
   })
 );
 
+// Definiere die Routen
+app.use('/api/notify-admin', notifyAdminRoutes); // Route für Benachrichtigungen
 app.use("/api/auth", authRoutes);
 app.use("/api/products", productRoutes);
 app.use("/api/users", protect, userRoutes);
@@ -30,6 +33,7 @@ app.use("/api/admins", protect, adminRoutes);
 app.use("/api/orders", protect, orderRoutes);
 app.use("/api/wishlist", protect, wishlistRoutes);
 
+// Fehlerbehandlung
 app.use((req, res, next) => {
   console.log("Fehlerbehandlung: 404 Not Found");
   res.status(404).json({ message: "Not Found" });

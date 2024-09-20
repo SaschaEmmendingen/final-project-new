@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { FaBoxOpen } from "react-icons/fa";
 import { useAuth } from "../Main/AuthContext";
+import axios from "axios"; // Importiere Axios für HTTP-Anfragen
 
 const Retoure = () => {
   const [orders, setOrders] = useState([]);
@@ -11,9 +11,7 @@ const Retoure = () => {
 
   useEffect(() => {
     const fetchOrders = async () => {
-      if (!token) {
-        return;
-      }
+      if (!token) return;
 
       try {
         const response = await fetch(
@@ -27,9 +25,7 @@ const Retoure = () => {
           }
         );
 
-        if (!response.ok) {
-          throw new Error(`Error: ${response.status}`);
-        }
+        if (!response.ok) throw new Error(`Error: ${response.status}`);
 
         const data = await response.json();
         setOrders(data);
@@ -54,16 +50,19 @@ const Retoure = () => {
       (itemId) => returnItems[itemId]
     );
 
-    console.log("Selected Items for Return:", selectedItems);
-
     if (selectedItems.length === 0) {
-      alert("Please select at least one item for return.");
+      alert("Bitte wähle mindestens einen Artikel zur Rücksendung aus.");
+      return;
+    }
+
+    if (!reason.trim()) {
+      alert("Bitte gib einen Grund für die Rücksendung an.");
       return;
     }
 
     try {
       if (!token) {
-        alert("You are not authenticated. Please log in again.");
+        alert("Du bist nicht authentifiziert. Bitte logge dich erneut ein.");
         return;
       }
 
@@ -80,17 +79,72 @@ const Retoure = () => {
       );
 
       if (response.ok) {
-        alert("Return processed successfully");
+        alert("Rücksendung erfolgreich bearbeitet.");
+
+        // Sende Benachrichtigung an Admin
+        try {
+          const notificationResponse = await axios.post(
+            "http://localhost:1312/api/notify-admin/notifications",
+            {
+              type: "return",
+              message: `Eine Rücksendung wurde erstellt. Bestell-ID: ${selectedOrder}.`,
+            },
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          );
+
+          console.log("Benachrichtigung gesendet:", notificationResponse.data);
+        } catch (notificationError) {
+          console.error(
+            "Fehler beim Senden der Benachrichtigung:",
+            notificationError.message
+          );
+          alert("Fehler beim Senden der Benachrichtigung.");
+        }
+
+        // Aktualisiere die Bestellungen nach der Rücksendung
+        const updatedOrders = orders.map((order) => {
+          if (order._id === selectedOrder) {
+            return {
+              ...order,
+              returns: [
+                ...order.returns,
+                {
+                  reason,
+                  items: selectedItems.map((itemId) => {
+                    const item = order.items.find(
+                      (i) => i.productId._id === itemId
+                    );
+                    return {
+                      productId: item.productId,
+                      name: item.productId.name,
+                      quantity: item.quantity,
+                    };
+                  }),
+                },
+              ],
+            };
+          }
+          return order;
+        });
+
+        setOrders(updatedOrders);
+        setSelectedOrder("");
+        setReason("");
+        setReturnItems({});
       } else {
         const errorData = await response.json();
-        console.error("Failed to process return:", errorData);
+        console.error("Fehler bei der Bearbeitung der Rücksendung:", errorData);
         alert(
-          `Failed to process return: ${errorData.message || "Unknown error"}`
+          `Fehler bei der Bearbeitung der Rücksendung: ${errorData.message || "Unbekannter Fehler"}`
         );
       }
     } catch (error) {
-      console.error("Error processing return:", error);
-      alert("Error processing return");
+      console.error("Fehler bei der Bearbeitung der Rücksendung:", error);
+      alert("Fehler bei der Bearbeitung der Rücksendung.");
     }
   };
 
@@ -136,7 +190,7 @@ const Retoure = () => {
               <option value="">Wähle eine Bestellung:</option>
               {orders.map((order) => (
                 <option key={order._id} value={order._id}>
-                  {order._id} - {order.createdAt}
+                  {order._id} - {new Date(order.createdAt).toLocaleString()}
                 </option>
               ))}
             </select>
@@ -206,13 +260,14 @@ const Retoure = () => {
               value={reason}
               onChange={(e) => setReason(e.target.value)}
               className="mt-1 block w-full px-3 py-2 border border-stone-500 rounded-md shadow-sm focus:outline-none focus:ring-stone-500 focus:border-stone-500 sm:text-sm bg-stone-600 text-white"
+              placeholder="Gib hier deinen Rücksendegrund ein..."
             />
           </label>
         </div>
 
         <button
           onClick={handleReturn}
-          className="bg-stone-600 text-white  rounded hover:bg-stone-700 text-xs p-2 pl-4 pr-4 mr-4 mt-4 transition duration-300"
+          className="bg-stone-600 text-white rounded hover:bg-stone-700 text-xs p-2 pl-4 pr-4 mr-4 mt-4 transition duration-300"
         >
           Senden
         </button>

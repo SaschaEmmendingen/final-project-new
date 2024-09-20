@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { FaShoppingCart, FaStar, FaHeart } from "react-icons/fa";
 import { useCart } from "../CartContext";
+import axios from "axios";
 import FirstBanner from "../../banner/FirstBanner.jpg";
 import SecondBanner from "../../banner/SecondBanner.jpg";
 import ThirdBanner from "../../banner/ThirdBanner.jpg";
@@ -22,6 +23,7 @@ const Home = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [recommendedProducts, setRecommendedProducts] = useState([]);
+  const [token, setToken] = useState(localStorage.getItem("token"));
   const { addToCart } = useCart();
 
   useEffect(() => {
@@ -68,25 +70,30 @@ const Home = () => {
   };
 
   const handleAddToWishlist = async (product) => {
+    if (!token) {
+      // Handle token absence, e.g., navigate to login
+      return;
+    }
     try {
-      const response = await fetch("http://localhost:1312/api/wishlist/add", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
+      const response = await axios.post(
+        "http://localhost:1312/api/wishlist/add",
+        {
+          productId: product._id,
+          name: product.name,
+          price: product.price,
         },
-        body: JSON.stringify({ productId: product._id }),
-      });
-      const data = await response.json();
-      if (response.ok) {
-        console.log("Produkt zur Wunschliste hinzugefügt:", data);
-      } else {
-        console.error("Error adding to wishlist:", data);
-      }
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      console.log("Item added to wishlist:", response.data);
     } catch (error) {
-      console.error("Error adding to wishlist:", error);
+      console.error("Error adding item to wishlist:", error);
     }
   };
+
 
   return (
     <div className="relative w-full md:w-[95%] lg:w-[95%] xl:w-[95%] mx-auto">

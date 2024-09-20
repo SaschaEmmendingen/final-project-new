@@ -1,6 +1,7 @@
 import mongoose from 'mongoose';
 import bcrypt from 'bcryptjs';
 
+// Definiere das User-Schema
 const userSchema = new mongoose.Schema({
   name: {
     type: String,
@@ -40,8 +41,14 @@ const userSchema = new mongoose.Schema({
       },
     },
   ],
+  notifications: [
+    {
+      type: String,
+    }
+  ],
 });
 
+// Middleware zum Hashen des Passworts vor dem Speichern
 userSchema.pre('save', async function (next) {
   if (!this.isModified('password')) {
     return next();
@@ -57,6 +64,7 @@ userSchema.pre('save', async function (next) {
   }
 });
 
+// Methode zum Vergleichen von Passwörtern
 userSchema.methods.matchPassword = async function (enteredPassword) {
   console.log('Entered Password:', enteredPassword);
   console.log('Stored Hashed Password:', this.password);
@@ -65,6 +73,7 @@ userSchema.methods.matchPassword = async function (enteredPassword) {
   return isMatch;
 };
 
+// Erstelle das User-Modell
 const User = mongoose.model('User', userSchema);
 
 export default User;

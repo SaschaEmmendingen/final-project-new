@@ -65,9 +65,9 @@ function ProductDetail() {
   };
 
   return (
-    <div className="flex justify-center items-start min-h-screen pt-8">
+    <div className="flex justify-center items-start min-h-[80vh] pt-6">
       <div
-        className="relative w-full md:w-3/4 lg:w-2/3 h-auto p-6 bg-white shadow-md border-gray-200 rounded-lg"
+        className="relative w-full md:w-3/4 lg:w-[90vw] h-auto p-8 bg-white shadow-md border-gray-200 rounded-lg"
         style={{ background: "linear-gradient(gray, white 10%)" }}
       >
         {/* Schließen-Button */}
@@ -87,21 +87,21 @@ function ProductDetail() {
         </h1>
 
         {/* Produktbild und Details nebeneinander */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 pt-10">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 pt-24">
           {/* Produktbild */}
           {product.imageUrl && (
             <div className="flex justify-center mb-8">
               <img
                 src={product.imageUrl}
                 alt={product.name}
-                className="w-full h-auto object-cover cursor-pointer"
+                className="w-full h-auto object-cover cursor-pointer ml-24"
                 onClick={() => setShowModal(true)} // Zeige das Modal an
               />
             </div>
           )}
 
           {/* Produktdetails */}
-          <div className="text-stone-800 flex flex-col">
+          <div className="text-stone-800 flex flex-col ml-24 mt-5">
             <div className="mb-6">
               <h2 className="text-xl font-semibold mb-2 text-stone-800">
                 Preis

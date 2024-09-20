@@ -4,7 +4,7 @@ import UserProfile from "./UserProfile";
 import OrderManagmentUser from "../Order/OrderManagmentUser";
 import Retoure from "./Retoure";
 import Wishlist from "./Wishlist";
-import Notifications from "./Notifications";
+import Notifications from "./NotificationsUser";
 import UserSupport from "./UserSupport";
 import UserPayment from "./UserPayment";
 import Activities from "./Activities";

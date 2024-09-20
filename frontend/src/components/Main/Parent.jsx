@@ -21,7 +21,7 @@ const Parent = () => {
     setTimeout(() => {
       navigate(path);
       setIsLoading(false);
-    }, 200); // 500 Millisekunden Verzögerung
+    }, 150); // 500 Millisekunden Verzögerung
   };
 
   const handleSearch = (e) => {

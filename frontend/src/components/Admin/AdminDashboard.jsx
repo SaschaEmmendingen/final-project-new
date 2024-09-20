@@ -5,6 +5,8 @@ import UserManagment from "../User/UserManagment";
 import OrderManagment from "../Order/OrderManagmentAdmin";
 import { useNavigate } from "react-router-dom";
 import RetourenManagement from "../Order/RetourenManagement";
+import AdminNotifications from "./AdminNotifications";
+import AdminSupport from "./AdminSupport";
 
 const AdminDashboard = () => {
   const [activeView, setActiveView] = useState("dashboard");
@@ -40,6 +42,10 @@ const AdminDashboard = () => {
         return <OrderManagment />;
       case "retoure":
         return <RetourenManagement />;
+      case "support":
+        return <AdminSupport />;
+      case "notifications":
+        return <AdminNotifications />;
       default:
         return (
           <div className="text-gray-400">
@@ -121,11 +127,19 @@ const AdminDashboard = () => {
           </button>
           <button
             className={`p-2 rounded ${
-              activeView === "retoure" ? "text-gray-600" : "text-gray-400"
+              activeView === "support" ? "text-gray-600" : "text-gray-400"
             } bg-stone-800 border border-transparent transition-transform duration-300 ease-in-out hover:text-white hover:scale-105`}
-            onClick={() => handleViewChange("retoure")}
+            onClick={() => handleViewChange("support")}
           >
             Support Verwaltung
+          </button>
+          <button
+            className={`p-2 rounded ${
+              activeView === "notifications" ? "text-gray-600" : "text-gray-400"
+            } bg-stone-800 border border-transparent transition-transform duration-300 ease-in-out hover:text-white hover:scale-105`}
+            onClick={() => handleViewChange("notifications")}
+          >
+            Nachrichten
           </button>
           <button
             className="mt-64 bg-red-600 border text-gray-400 p-1 w-20 border-red-600 rounded"

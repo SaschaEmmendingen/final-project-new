@@ -1,5 +1,6 @@
 import Order from "../models/Order.js";
 import User from "../models/User.js";
+import axios from "axios"; // Falls noch nicht importiert
 
 // Hole alle Bestellungen (nur Admins)
 export const getAllOrders = async (req, res) => {
@@ -28,6 +29,7 @@ export const getMyOrders = async (req, res) => {
 };
 
 // Erstelle eine neue Bestellung
+
 export const createOrder = async (req, res) => {
   const { items, total } = req.body;
 
@@ -43,34 +45,68 @@ export const createOrder = async (req, res) => {
   // Überprüfen, ob jedes Item ein productId-Feld hat
   for (const item of items) {
     if (!item.productId) {
-      return res
-        .status(400)
-        .json({
-          message: "Ein oder mehrere Produkte fehlen das productId-Feld",
-        });
+      return res.status(400).json({
+        message: "Ein oder mehrere Produkte fehlen das productId-Feld",
+      });
     }
   }
 
   try {
-    const newOrder = new Order({ items, total, user: req.user._id }); // Benutzer wird hier zugewiesen
+    // Bestellung erstellen
+    const newOrder = new Order({ items, total, user: req.user._id });
     await newOrder.save();
+    console.log(`Bestellung erstellt: ${newOrder._id}`);
 
     // Aktivität aufzeichnen
     const activity = {
-      type: 'Order Created',
+      type: "Order Created",
       description: `Bestellung #${newOrder._id} wurde erstellt.`,
     };
 
     // Füge die Aktivität zum User hinzu
-    await User.findByIdAndUpdate(
+    const updatedUser = await User.findByIdAndUpdate(
       req.user._id,
       { $push: { activities: activity } },
       { new: true }
     );
+    if (!updatedUser) {
+      console.error(`User mit ID ${req.user._id} nicht gefunden`);
+      return res.status(404).json({ message: "User nicht gefunden" });
+    }
+    console.log(`Aktivität hinzugefügt für User ${req.user._id}`);
 
-    res.status(201).json({ message: "Bestellung erfolgreich erstellt" });
+    // Benachrichtigung an den Admin senden
+    console.log(
+      "Admin-Benachrichtigung URL:",
+      "http://localhost:1312/api/notify-admin"
+    );
+    try {
+      const notificationResponse = await axios.post(
+        "http://localhost:1312/api/notify-admin",
+        { message: `Neue Bestellung erstellt: ID #${newOrder._id}` },
+        { headers: { Authorization: `Bearer ${req.token}` } }
+      );
+      console.log(
+        "Admin-Benachrichtigung erfolgreich gesendet",
+        notificationResponse.data
+      );
+    } catch (notificationError) {
+      console.error(
+        "Fehler beim Senden der Admin-Benachrichtigung:",
+        notificationError.message
+      );
+      return res
+        .status(500)
+        .json({ message: "Fehler beim Senden der Admin-Benachrichtigung" });
+    }
+
+    // Erfolgsmeldung zurückgeben
+    res.status(201).json({
+      message: "Bestellung erfolgreich erstellt",
+      orderId: newOrder._id,
+    });
   } catch (error) {
-    console.error("Fehler beim Erstellen der Bestellung:", error);
+    console.error("Fehler beim Erstellen der Bestellung:", error.message);
     res.status(500).json({ message: "Serverfehler" });
   }
 };
@@ -161,11 +197,9 @@ export const returnOrder = async (req, res) => {
 
     // Überprüfe, ob der Benutzer der Besteller ist
     if (order.user.toString() !== req.user._id.toString()) {
-      return res
-        .status(401)
-        .json({
-          message: "Sie können nur Ihre eigenen Bestellungen retournieren",
-        });
+      return res.status(401).json({
+        message: "Sie können nur Ihre eigenen Bestellungen retournieren",
+      });
     }
 
     // Füge die Rücksendedetails hinzu
@@ -190,7 +224,7 @@ export const returnOrder = async (req, res) => {
 
     // Aktivität aufzeichnen
     const activity = {
-      type: 'Return Created',
+      type: "Return Created",
       description: `Bestellung #${orderId} wurde zurückgegeben.`,
     };
 
@@ -200,6 +234,31 @@ export const returnOrder = async (req, res) => {
       { $push: { activities: activity } },
       { new: true }
     );
+
+    // Benachrichtigung an den Admin senden
+    console.log(
+      "Admin-Benachrichtigung URL:",
+      "http://localhost:1312/api/notify-admin"
+    );
+    try {
+      const notificationResponse = await axios.post(
+        "http://localhost:1312/api/notify-admin",
+        { message: `Rücksendung für Bestellung ID #${orderId} erstellt.` },
+        { headers: { Authorization: `Bearer ${req.token}` } }
+      );
+      console.log(
+        "Admin-Benachrichtigung erfolgreich gesendet",
+        notificationResponse.data
+      );
+    } catch (notificationError) {
+      console.error(
+        "Fehler beim Senden der Admin-Benachrichtigung:",
+        notificationError.message
+      );
+      return res
+        .status(500)
+        .json({ message: "Fehler beim Senden der Admin-Benachrichtigung" });
+    }
 
     res.status(200).json({ message: "Rücksendung erfolgreich verarbeitet" });
   } catch (error) {

@@ -23,6 +23,12 @@ const adminSchema = new mongoose.Schema({
     enum: ['user', 'admin'],
     default: 'admin', // Standardmäßig 'admin', kann jedoch nach Bedarf angepasst werden
   },
+  notifications: [ // Hier das Feld für Benachrichtigungen hinzufügen
+    {
+      message: { type: String, required: true },  // Der Typ muss String sein
+      date: { type: Date, default: Date.now }
+    }
+  ]
 });
 
 // Middleware, um das Passwort vor dem Speichern zu hashen
@@ -37,10 +43,7 @@ adminSchema.pre('save', async function (next) {
 
 // Methode zur Überprüfung des Passworts
 adminSchema.methods.matchPassword = async function (enteredPassword) {
-  console.log('Entered Password:', enteredPassword);
-  console.log('Stored Hashed Password:', this.password);
   const isMatch = await bcrypt.compare(enteredPassword, this.password);
-  console.log('Password Match:', isMatch);
   return isMatch;
 };
 

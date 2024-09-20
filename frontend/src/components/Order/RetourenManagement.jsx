@@ -10,17 +10,17 @@ const RetourenManagement = () => {
         if (!token) {
           throw new Error("No token found");
         }
-  
+
         const response = await fetch("http://localhost:1312/api/orders", {
           headers: {
             Authorization: `Bearer ${token}`, // Token in den Headers setzen
           },
         });
-  
+
         if (!response.ok) {
           throw new Error(`Error: ${response.status}`);
         }
-  
+
         const data = await response.json();
         console.log("Fetched orders data:", data); // Log der abgerufenen Bestellungen
         setOrders(data);
@@ -29,7 +29,7 @@ const RetourenManagement = () => {
         alert("Fehler beim Abrufen der Bestellungen");
       }
     };
-  
+
     fetchOrders();
   }, []);
 
@@ -46,14 +46,14 @@ const RetourenManagement = () => {
   return (
     <div className="max-w-4xl mx-auto p-4 border-2 border-blue-500 rounded-md">
       <h1 className="text-2xl font-bold mb-4 text-center">Retourenmanagement</h1>
-  
+
       <table className="min-w-full bg-white border">
         <thead>
           <tr>
             <th className="px-4 py-2 border">Order ID</th>
-            <th className="px-4 py-2 border">Reason</th>
-            <th className="px-4 py-2 border">Returned At</th>
             <th className="px-4 py-2 border">Items</th>
+            <th className="px-4 py-2 border">Returned At</th>
+            <th className="px-4 py-2 border">Reason</th>
           </tr>
         </thead>
         <tbody>
@@ -64,10 +64,6 @@ const RetourenManagement = () => {
               ? returns.map((returnItem, index) => (
                   <tr key={index}>
                     <td className="px-4 py-2 border">{order._id}</td>
-                    <td className="px-4 py-2 border">{returnItem.reason}</td>
-                    <td className="px-4 py-2 border">
-                      {new Date(returnItem.returnedAt).toLocaleDateString()}
-                    </td>
                     <td className="px-4 py-2 border">
                       {returnItem.items.map((item) => (
                         <div key={item.productId._id}>
@@ -75,6 +71,10 @@ const RetourenManagement = () => {
                         </div>
                       ))}
                     </td>
+                    <td className="px-4 py-2 border">
+                      {new Date(returnItem.returnedAt).toLocaleString("de-DE", { timeZone: "Europe/Berlin" })}
+                    </td>
+                      <td className="px-4 py-2 border">{returnItem.reason}</td>
                   </tr>
                 ))
               : null;

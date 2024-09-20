@@ -58,9 +58,9 @@ const Wishlist = () => {
         <div className="max-w-8xl mx-auto p-4 border border-stone-500 bg-stone-600 rounded-md" style={{ width: '90%' }}>
           {wishlist.length > 0 ? (
             <ul className="space-y-4">
-              {wishlist.map((item) => (
+              {wishlist.map((item, index) => (
                 <li
-                  key={item.productId}
+                key={`${item.productId}-${index}`}
                   className="flex justify-between items-center p-4 border-b border-stone-400"
                 >
                   <div>
