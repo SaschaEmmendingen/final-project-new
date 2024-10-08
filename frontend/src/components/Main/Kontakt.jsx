@@ -14,16 +14,21 @@ const Kontakt = () => {
   };
 
   return (
-    <div className="w-4/5 mx-auto mt-8 grid grid-cols-1 md:grid-cols-2 gap-8">
+    <div className="w-4/5 mx-auto mt-8 grid grid-cols-1 md:grid-cols-2 text-white gap-8 rounded-md p-8" style={{ background: "linear-gradient(#78716c, #292524 10%)" }}>
       {/* Linke Spalte: Kontaktinformationen */}
       <div>
-        <h2 className="text-2xl font-bold mb-4">Kontakt</h2>
+      <h1
+        className="text-3xl font-bold my-8 text-center text-gray-400"
+        style={{ textShadow: "2px 2px 4px rgba(0, 0, 0, 0.6)" }}
+      >
+        Kontakt
+      </h1>
         <p>
           Bei allen weiteren Fragen steht unser Customer Care Team sehr gern zur Verfügung.
           Kontaktiere uns, wir beraten gerne!
         </p>
         <h3 className="text-lg font-semibold mt-4">Unsere Kontaktdaten:</h3>
-        <p>Telefon: +49 351 89 88 14 44 (Mo.-Fr. 08.00 -16.00 Uhr)</p>
+        <p >Telefon: +49 351 89 88 14 44 (Mo.-Fr. 08.00 -16.00 Uhr)</p>
         <p>E-Mail: info@electro-ecom.com</p>
         <p>Hausanschrift: electro-ecom GmbH, LippeStraße Str. 1, 40221 Düsseldorf, Deutschland</p>
         <p className="mt-4">
@@ -49,13 +54,18 @@ const Kontakt = () => {
 
       {/* Rechte Spalte: Kontaktformular */}
       <div>
-        <h2 className="text-2xl font-bold mb-4">Kontaktformular</h2>
+      <h2
+        className="text-3xl font-bold my-8 text-center text-gray-400"
+        style={{ textShadow: "2px 2px 4px rgba(0, 0, 0, 0.6)" }}
+      >
+        Kontaktformular
+      </h2>
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
             <label className="block text-sm font-semibold mb-2">Name</label>
             <input
               type="text"
-              className="w-full p-2 border border-gray-300 rounded-lg"
+              className="w-full border-0 border-gray-300 p-2 bg-stone-600 rounded outline-none mt-2"
               placeholder="Dein Name"
               required
             />
@@ -64,7 +74,7 @@ const Kontakt = () => {
             <label className="block text-sm font-semibold mb-2">E-Mail</label>
             <input
               type="email"
-              className="w-full p-2 border border-gray-300 rounded-lg"
+              className="w-full border-0 border-gray-300 p-2 bg-stone-600 rounded outline-none mt-2"
               placeholder="Deine E-Mail"
               required
             />
@@ -73,7 +83,7 @@ const Kontakt = () => {
             <label className="block text-sm font-semibold mb-2">Telefonnummer (optional)</label>
             <input
               type="tel"
-              className="w-full p-2 border border-gray-300 rounded-lg"
+              className="w-full border-0 border-gray-300 p-2 bg-stone-600 rounded outline-none mt-2"
               placeholder="Deine Telefonnummer"
             />
           </div>
@@ -81,14 +91,14 @@ const Kontakt = () => {
             <label className="block text-sm font-semibold mb-2">Betreff</label>
             <input
               type="text"
-              className="w-full p-2 border border-gray-300 rounded-lg"
+              className="w-full border-0 border-gray-300 p-2 bg-stone-600 rounded outline-none mt-2"
               placeholder="Betreff der Nachricht"
               required
             />
           </div>
           <div className="mb-4">
             <label className="block text-sm font-semibold mb-2">Thema</label>
-            <select className="w-full p-2 border border-gray-300 rounded-lg" required>
+            <select className="w-full border-0 border-gray-300 p-2 bg-stone-600 rounded outline-none mt-2" required>
               <option value="">Bitte auswählen</option>
               <option>Bestellung</option>
               <option>Rückgabe</option>
@@ -99,19 +109,13 @@ const Kontakt = () => {
           <div className="mb-4">
             <label className="block text-sm font-semibold mb-2">Nachricht</label>
             <textarea
-              className="w-full p-2 border border-gray-300 rounded-lg"
+              className="w-full border-0 border-gray-300 p-2 bg-stone-600 rounded outline-none mt-2"
               placeholder="Deine Nachricht"
               rows="4"
               required
             ></textarea>
           </div>
-          <div className="mb-4">
-            <label className="block text-sm font-semibold mb-2">Dateianhang (optional)</label>
-            <input
-              type="file"
-              className="w-full p-2 border border-gray-300 rounded-lg"
-            />
-          </div>
+          
           <div className="mb-4">
             <label className="inline-flex items-center">
               <input type="checkbox" className="form-checkbox text-blue-600"/>
@@ -120,7 +124,7 @@ const Kontakt = () => {
           </div>
           <button
             type="submit"
-            className="w-full bg-blue-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors"
+            className="w-full bg-stone-600 text-white rounded hover:bg-stone-700 text-xs p-2 pl-4 pr-4 mr-4 mt-4 transition duration-300"
           >
             Senden
           </button>

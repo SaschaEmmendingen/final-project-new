@@ -21,3 +21,22 @@
 
 - Home: 
     
+
+    alles verlinkt an seiten,
+    admin dashboard noch verbessern
+    user dashboard funktionen einfügen?
+
+
+    {
+  "name": "Admin 4",
+  "email": "admin4@db.com",
+  "password": "123",
+  "address": "Rainbow Road 1",
+  "phone": "123-456-7890",
+  "role": "admin"
+}
+
+
+
+NEWS einbauen, banner mit neuigkeiten und sowas
+

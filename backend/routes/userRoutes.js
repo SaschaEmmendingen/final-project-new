@@ -1,19 +1,32 @@
-import express from 'express';
-import { registerUser, getUser, getAllUsers, updateUser, deleteUser, getUserProfile } from '../controllers/userController.js';
-import { isAdmin, protect } from '../middleware/authMiddleware.js';
+import express from "express";
+import {
+  registerUser,
+  getUser,
+  getAllUsers,
+  updateUser,
+  deleteUser,
+  getUserProfile,
+} from "../controllers/userController.js";
+import { protect, isAdmin } from "../middleware/authMiddleware.js";
 
 const router = express.Router();
 
-// Registrierung - keine Authentifizierung erforderlich
-router.post('/', registerUser);
+// Authentifizierung erforderlich für folgende Routen
+// router.use(protect); // Alle nachfolgenden Routen erfordern Authentifizierung
 
-// Alle weiteren Routen erfordern Authentifizierung
-router.use(protect); // Alle nachfolgenden Routen erfordern Authentifizierung
+// Benutzerprofil des angemeldeten Benutzers abrufen
+router.get("/profile", protect, getUserProfile);
 
-router.get('/profile', getUserProfile); // Profil-Details abrufen
-router.get('/:id', getUser); // User nach ID abrufen
-router.get('/', isAdmin, getAllUsers); // Alle Users abrufen (nur für Admins)
-router.put('/:id', isAdmin, updateUser); // User nach ID aktualisieren (nur für Admins)
-router.delete('/:id', isAdmin, deleteUser); // User nach ID löschen (nur für Admins)
+// Benutzer nach ID abrufen
+router.get("/:id", getUser);
+
+// Alle Benutzer auflisten - nur für Admins
+router.get("/", isAdmin, getAllUsers);
+
+// Benutzer aktualisieren - nur für Admins
+router.put("/profile", protect, updateUser);
+
+// Benutzer löschen - nur für Admins
+router.delete("/:id", isAdmin, deleteUser);
 
 export default router;

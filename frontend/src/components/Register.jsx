@@ -18,37 +18,42 @@ const Registrierung = () => {
     setFormData({ ...formData, [name]: value });
   };
 
-const handleSubmit = async (e) => {
-  e.preventDefault();
-  try {
-    const response = await axios.post('http://localhost:1312/api/users/', formData);
-    console.log('Server Antwort:', response.data);
-    setSuccess('Registrierung erfolgreich!');
-    setError('');
-  } catch (err) {
-    // Überprüfen und Protokollieren der Fehlerdetails
-    if (err.response) {
-      // Fehlerantwort vom Server
-      console.error('Server antwortete mit Fehler:', err.response.data);
-      setError('Fehler bei der Registrierung: ' + (err.response.data.message || 'Unbekannter Fehler'));
-    } else if (err.request) {
-      // Kein Antwort vom Server erhalten
-      console.error('Keine Antwort vom Server erhalten:', err.request);
-      setError('Netzwerkfehler. Bitte überprüfen Sie Ihre Verbindung.');
-    } else {
-      // Andere Fehler
-      console.error('Fehler:', err.message);
-      setError('Fehler: ' + err.message);
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await axios.post('http://localhost:1312/api/auth/register', formData); // Stelle sicher, dass der Endpunkt korrekt ist
+      console.log('Server Antwort:', response.data);
+      setSuccess('Registrierung erfolgreich!');
+      setError('');
+  
+      // Formular zurücksetzen
+      setFormData({
+        name: '',
+        email: '',
+        password: '',
+        address: '',
+        phone: '',
+      });
+    } catch (err) {
+      if (err.response) {
+        console.error('Server antwortete mit Fehler:', err.response.data);
+        setError('Fehler bei der Registrierung: ' + (err.response.data.message || 'Unbekannter Fehler'));
+      } else if (err.request) {
+        console.error('Keine Antwort vom Server erhalten:', err.request);
+        setError('Netzwerkfehler. Bitte überprüfen Sie Ihre Verbindung.');
+      } else {
+        console.error('Fehler:', err.message);
+        setError('Fehler: ' + err.message);
+      }
+      setSuccess('');
     }
-    setSuccess('');
-  }
-};
+  };
 
   return (
-    <div className="bg-white p-8 shadow-lg rounded-lg">
-      <h3 className="text-xl font-bold mb-4">Registrieren</h3>
+    <div className="bg-stone-900 p-8 shadow-lg rounded-lg">
+      <h3 className="text-xl font-bold mb-4 text-gray-400">Registrieren</h3>
       <form onSubmit={handleSubmit}>
-        <label className="block mb-2">
+        <label className="block mb-2 text-gray-400">
           Name <span className="text-red-500">*</span>
         </label>
         <input
@@ -56,12 +61,12 @@ const handleSubmit = async (e) => {
           name="name"
           value={formData.name}
           onChange={handleChange}
-          className="w-full border p-2 mb-4 rounded-lg focus:outline-none focus:border-blue-500"
+          className="w-full border-0 p-2 mb-4 rounded-lg focus:outline-none focus:border-blue-500 bg-stone-600"
           placeholder="Name"
           required
         />
 
-        <label className="block mb-2">
+        <label className="block mb-2 text-gray-400">
           E-Mail Adresse <span className="text-red-500">*</span>
         </label>
         <input
@@ -69,12 +74,12 @@ const handleSubmit = async (e) => {
           name="email"
           value={formData.email}
           onChange={handleChange}
-          className="w-full border p-2 mb-4 rounded-lg focus:outline-none focus:border-blue-500"
+          className="w-full border-0 p-2 mb-4 rounded-lg focus:outline-none focus:border-blue-500 bg-stone-600"
           placeholder="E-Mail Adresse"
           required
         />
 
-        <label className="block mb-2">
+        <label className="block mb-2 text-gray-400">
           Passwort <span className="text-red-500">*</span>
         </label>
         <input
@@ -82,12 +87,12 @@ const handleSubmit = async (e) => {
           name="password"
           value={formData.password}
           onChange={handleChange}
-          className="w-full border p-2 mb-4 rounded-lg focus:outline-none focus:border-blue-500"
+          className="w-full border-0 p-2 mb-4 rounded-lg focus:outline-none focus:border-blue-500 bg-stone-600"
           placeholder="Passwort"
           required
         />
 
-        <label className="block mb-2">
+        <label className="block mb-2 text-gray-400">
           Adresse
         </label>
         <input
@@ -95,11 +100,11 @@ const handleSubmit = async (e) => {
           name="address"
           value={formData.address}
           onChange={handleChange}
-          className="w-full border p-2 mb-4 rounded-lg focus:outline-none focus:border-blue-500"
+          className="w-full border-0 p-2 mb-4 rounded-lg focus:outline-none focus:border-blue-500 bg-stone-600"
           placeholder="Adresse"
         />
 
-        <label className="block mb-2">
+        <label className="block mb-2 text-gray-400">
           Telefonnummer
         </label>
         <input
@@ -107,7 +112,7 @@ const handleSubmit = async (e) => {
           name="phone"
           value={formData.phone}
           onChange={handleChange}
-          className="w-full border p-2 mb-4 rounded-lg focus:outline-none focus:border-blue-500"
+          className="w-full border-0 p-2 mb-4 rounded-lg focus:outline-none focus:border-blue-500 bg-stone-600"
           placeholder="Telefonnummer"
         />
 

@@ -1,3 +1,16 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+body {
+  background-color: rgb(63, 63, 63);
+}
+
+.logo-font {
+  font-family: "Silkscreen", sans-serif;
+}
+
+.buttons-container iframe{
+ z-index: 0 !important; 
+} 
+/* nicht globale einstellungen in spezielles css verschieben */
