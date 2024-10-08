@@ -99,7 +99,7 @@ const Footer = () => {
               Preisen.
             </p>
             <p className="text-gray-400">
-              &copy; {new Date().getFullYear()} Electro-Ecom
+              &copy; {new Date().getFullYear()} Ecom
             </p>
           </div>
 
@@ -123,7 +123,7 @@ const Footer = () => {
                 href="mailto:info@electro-ecom.com"
                 className="text-gray-400 hover:text-gray-700"
               >
-                info@electro-ecom.com
+                info@ecom.com
               </a>
             </div>
             <div className="flex items-center justify-center md:justify-start mb-2 text-gray-400 ">

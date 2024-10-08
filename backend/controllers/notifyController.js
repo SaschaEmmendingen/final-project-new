@@ -1,133 +1,158 @@
-import Admin from "../models/Admin.js";
 import User from "../models/User.js";
+import Admin from "../models/Admin.js";
 import Notification from "../models/Notification.js";
+import mongoose from "mongoose";
 
-export const sendNotificationToAdmin = async (req, res) => {
+export const manageNotifications = async (req, res) => {
+  const { method } = req;
+
   try {
-    const { message } = req.body;
+    switch (method) {
+      case "POST": {
+        const { message, recipients } = req.body;
 
-    if (!message) {
-      return res
-        .status(400)
-        .json({ message: "Keine Nachricht bereitgestellt" });
-    }
-
-    console.log("Empfangene Nachricht:", message);
-
-    // Alle Admins finden
-    const admins = await Admin.find({ role: "admin" });
-
-    if (admins.length === 0) {
-      console.log("Keine Admins gefunden");
-      return res.status(404).json({ message: "Keine Admins gefunden" });
-    }
-
-    console.log("Gefundene Admins:", admins);
-
-    // Benachrichtigung an alle Admins hinzufügen
-    for (let admin of admins) {
-      admin.notifications.push({
-        message: message,
-        date: new Date(),
-      });
-      await admin.save();
-    }
-    res
-      .status(200)
-      .json({ message: "Benachrichtigung an alle Admins gesendet." });
-  } catch (error) {
-    console.error("Fehler beim Senden der Benachrichtigung:", error);
-    res
-      .status(500)
-      .json({ message: "Fehler beim Senden der Benachrichtigung.", error });
-  }
-};
-
-export const getNotifications = async (req, res) => {
-  try {
-    // Alle Admins finden
-    const admins = await Admin.find({ role: "admin" });
-
-    // Alle Benachrichtigungen von allen Admins zusammenfassen
-    const notifications = admins
-      .flatMap((admin) => admin.notifications)
-      .sort((a, b) => b.date - a.date);
-
-    res.status(200).json(notifications);
-  } catch (error) {
-    console.error("Fehler beim Abrufen der Benachrichtigungen:", error);
-    res
-      .status(500)
-      .json({ message: "Fehler beim Abrufen der Benachrichtigungen.", error });
-  }
-};
-
-export const clearAllNotifications = async (req, res) => {
-    try {
-      // Alle Admins abrufen
-      const admins = await Admin.updateMany(
-        { role: "admin" }, 
-        { $set: { notifications: [] } } // Setze die Benachrichtigungen für alle Admins auf ein leeres Array
-      );
-  
-      if (!admins) {
-        return res.status(404).json({ message: 'Keine Admins gefunden' });
-      }
-  
-      res.status(200).json({ message: 'Benachrichtigungen erfolgreich gelöscht' });
-    } catch (error) {
-      console.error('Fehler beim Löschen der Benachrichtigungen:', error);
-      res.status(500).json({ message: 'Fehler beim Löschen der Benachrichtigungen' });
-    }
-  };
-
-  // Einzelne Benachrichtigung löschen
-  export const deleteNotificationById = async (req, res) => {
-    try {
-      const { id } = req.params;
-  
-      // Alle Admins durchlaufen und die Benachrichtigung entfernen
-      await Admin.updateMany(
-        { role: 'admin' },
-        { $pull: { notifications: { _id: id } } } // Benachrichtigung anhand der ID entfernen
-      );
-  
-      res.status(200).json({ message: 'Benachrichtigung erfolgreich gelöscht.' });
-    } catch (error) {
-      console.error('Fehler beim Löschen der Benachrichtigung:', error);
-      res.status(500).json({ message: 'Fehler beim Löschen der Benachrichtigung.' });
-    }
-  };
-
-  export const sendNotificationToUsers = async (req, res) => {
-    try {
-      const { message, recipients } = req.body;
-  
-      if (!message || !recipients || recipients.length === 0) {
-        return res.status(400).json({ message: "Nachricht oder Empfänger nicht bereitgestellt." });
-      }
-  
-      // Erstelle eine Benachrichtigung
-      const notification = new Notification({ message, date: new Date() });
-  
-      // Finde und sende die Benachrichtigung an die Empfänger
-      for (const recipientId of recipients) {
-        const user = await User.findById(recipientId);
-        const admin = await Admin.findById(recipientId);
-  
-        if (user) {
-          user.notifications.push(notification);
-          await user.save();
-        } else if (admin) {
-          admin.notifications.push(notification);
-          await admin.save();
+        // Validate the request body
+        if (!message || !recipients || recipients.length === 0) {
+          return res
+            .status(400)
+            .json({ message: "Nachricht und Empfänger sind erforderlich." });
         }
+
+        console.log("Current User:", req.user); // Log for current user
+        console.log("Request Body:", req.body); // Log incoming request body
+
+        const senderModel = req.user.role === "admin" ? "Admin" : "User"; // Determine sender model
+        const recipientModel = recipients[0].startsWith("admin_")
+          ? "Admin"
+          : "User";
+
+        const newNotification = new Notification({
+          sender: req.user._id,
+          senderModel,
+          recipients: recipients.map((id) => id.replace("admin_", "")),
+          recipientModel,
+          messages: [{ sender: req.user._id, message }],
+        });
+
+        // Save the notification to the database
+        await newNotification.save();
+        console.log("Neue Benachrichtigung:", newNotification); // Log new notification
+
+        await Promise.all(
+          recipients.map(async (recipientId) => {
+            const id = recipientId.replace("admin_", "");
+            const Model = recipientModel === "Admin" ? Admin : User;
+            const recipientExists = await Model.findById(id);
+            if (recipientExists) {
+              await Model.findByIdAndUpdate(id, {
+                $push: { notifications: newNotification._id },
+              });
+            } else {
+              console.error(`Recipient not found: ${id}`);
+            }
+          })
+        );
+
+        return res.status(201).json({
+          message: "Benachrichtigung erfolgreich gesendet.",
+          notification: newNotification,
+        });
       }
-  
-      res.status(200).json({ message: "Benachrichtigung erfolgreich gesendet." });
-    } catch (error) {
-      console.error("Fehler beim Senden der Benachrichtigung:", error);
-      res.status(500).json({ message: "Fehler beim Senden der Benachrichtigung.", error });
+
+      case "GET": {
+        const notifications = await Notification.find({
+          $or: [
+            { recipients: req.user._id }, // Notifications where the user is a recipient
+            { sender: req.user._id }, // Notifications sent by the user
+          ],
+        })
+          .populate("sender") // Populate sender
+          .populate("recipients"); // Populate recipients
+
+        // Format notifications
+        const formattedNotifications = notifications.map((notification) => ({
+          id: notification._id,
+          senderName: notification.sender
+            ? notification.sender.name
+            : "Unbekannt",
+          recipientNames: notification.recipients
+            .map((recipient) => recipient.name)
+            .join(", "), // Join recipient names
+          messages: notification.messages,
+          createdAt: notification.createdAt,
+        }));
+
+        return res.status(200).json(formattedNotifications);
+      }
+
+      case "DELETE": {
+        const { id } = req.params;
+
+        const notification = await Notification.findById(id);
+        if (!notification) {
+          return res
+            .status(404)
+            .json({ message: "Benachrichtigung nicht gefunden." });
+        }
+
+        await User.updateMany(
+          { notifications: id },
+          { $pull: { notifications: id } }
+        );
+        await Admin.updateMany(
+          { notifications: id },
+          { $pull: { notifications: id } }
+        );
+
+        await Notification.findByIdAndDelete(id);
+
+        return res
+          .status(200)
+          .json({ message: "Benachrichtigung erfolgreich gelöscht." });
+      }
+
+      case "PUT": {
+        const { notificationId, replyMessage } = req.body;
+
+        // Validate the PUT request
+        if (!replyMessage || !notificationId) {
+          return res.status(400).json({
+            message:
+              "Antwortnachricht und Benachrichtigungs-ID sind erforderlich.",
+          });
+        }
+
+        // Validate the notificationId
+        if (!mongoose.Types.ObjectId.isValid(notificationId)) {
+          return res
+            .status(400)
+            .json({ message: "Ungültige Benachrichtigungs-ID." });
+        }
+
+        const notification = await Notification.findById(notificationId);
+        if (!notification) {
+          return res
+            .status(404)
+            .json({ message: "Benachrichtigung nicht gefunden." });
+        }
+
+        // Add reply to the notification
+        notification.messages.push({
+          sender: req.user._id,
+          message: replyMessage,
+        });
+
+        await notification.save();
+        return res.status(200).json(notification);
+      }
+
+      default:
+        return res.status(405).json({ message: "Methode nicht erlaubt." });
     }
-  };
-  
+  } catch (error) {
+    console.error("Error in manageNotifications:", error); // Log error details
+    return res
+      .status(500)
+      .json({ message: "Interner Serverfehler.", error: error.message });
+  }
+};

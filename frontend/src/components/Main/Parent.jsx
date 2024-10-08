@@ -21,7 +21,7 @@ const Parent = () => {
     setTimeout(() => {
       navigate(path);
       setIsLoading(false);
-    }, 150); // 500 Millisekunden Verzögerung
+    }, 100); // 500 Millisekunden Verzögerung
   };
 
   const handleSearch = (e) => {
@@ -44,11 +44,8 @@ const Parent = () => {
             {/* Logo */}
             <div className="flex justify-center items-center lg:justify-start lg:col-span-1 lg-row-span-2 ">
               <Link to="/" className="flex items-center">
-                <img
-                  src={canvaSVG}
-                  alt="Logo"
-                  className="h-20 w-auto items-center"
-                />
+              <div className="text-gray-400 border-gray-400 text-6xl logo-font border-b-8"
+              style={{  }}>eCOM.com</div>
               </Link>
             </div>
 
@@ -77,25 +74,44 @@ const Parent = () => {
               <Link
                 to="/kontakt"
                 className="flex flex-col items-center text-center text-gray-400 hover:text-gray-200 transition-transform duration-300 ease-in-out transform hover:scale-105"
-                onClick={() => handleLinkClick('/kontakt')}
+                onClick={() => handleLinkClick("/kontakt")}
               >
                 <FaPhone className="text-lg" />
                 <span className="mt-3 text-sm">Kontakt</span>
               </Link>
               <Link
-                to={user ? "/dashboard" : "/konto"}
+                to={
+                  user && user.role === "admin"
+                    ? "/admin-dashboard"
+                    : user
+                    ? "/konto"
+                    : "/konto"
+                }
                 className="flex flex-col items-center text-center text-gray-400 hover:text-gray-200 transition-transform duration-300 ease-in-out transform hover:scale-105"
-                onClick={() => handleLinkClick(user ? '/dashboard' : '/konto')}
+                onClick={() =>
+                  handleLinkClick(
+                    user && user.role === "admin"
+                      ? "/admin-dashboard"
+                      : user
+                      ? "/konto"
+                      : "/konto"
+                  )
+                }
               >
                 <FaUser className="text-lg" />
                 <span className="mt-3 text-sm">
-                  {user ? "Dashboard" : "Konto"}
+                  {user && user.role === "admin"
+                    ? "Admin Dashboard"
+                    : user
+                    ? "Dashboard"
+                    : "Konto"}
                 </span>
               </Link>
+
               <Link
                 to="/warenkorb"
                 className="flex flex-col items-center text-center text-gray-400 hover:text-gray-200 transition-transform duration-300 ease-in-out transform hover:scale-105"
-                onClick={() => handleLinkClick('/warenkorb')}
+                onClick={() => handleLinkClick("/warenkorb")}
               >
                 <FaShoppingCart className="text-lg" />
                 {cartItems.length > 0 && (
@@ -114,35 +130,35 @@ const Parent = () => {
           <Link
             to="/"
             className="text-center text-gray-400 hover:text-gray-200 hover:scale-105 transition-transform duration-300 ease-in-out"
-            onClick={() => handleLinkClick('/')}
+            onClick={() => handleLinkClick("/")}
           >
             Home
           </Link>
           <Link
             to="/Fernseher"
             className="text-center text-gray-400 hover:text-gray-200 hover:scale-105 transition-transform duration-300 ease-in-out"
-            onClick={() => handleLinkClick('/Fernseher')}
+            onClick={() => handleLinkClick("/Fernseher")}
           >
             Fernseher
           </Link>
           <Link
             to="/GamingPC"
             className="text-center text-gray-400 hover:text-gray-200 hover:scale-105 transition-transform duration-300 ease-in-out"
-            onClick={() => handleLinkClick('/GamingPC')}
+            onClick={() => handleLinkClick("/GamingPC")}
           >
             Gaming PCs
           </Link>
           <Link
             to="/Handys"
             className="text-center text-gray-400 hover:text-gray-200 hover:scale-105 transition-transform duration-300 ease-in-out"
-            onClick={() => handleLinkClick('/Handys')}
+            onClick={() => handleLinkClick("/Handys")}
           >
             Handys
           </Link>
           <Link
             to="/Laptops"
             className="text-center text-gray-400 hover:text-gray-200 hover:scale-105 transition-transform duration-300 ease-in-out"
-            onClick={() => handleLinkClick('/Laptops')}
+            onClick={() => handleLinkClick("/Laptops")}
           >
             Laptops
           </Link>
@@ -185,35 +201,35 @@ const Parent = () => {
               <Link
                 to="/"
                 className="text-2xl hover:text-gray-400 transition-colors duration-300 ease-in-out"
-                onClick={() => handleLinkClick('/')}
+                onClick={() => handleLinkClick("/")}
               >
                 Home
               </Link>
               <Link
                 to="/Fernseher"
                 className="text-2xl hover:text-gray-400 transition-colors duration-300 ease-in-out"
-                onClick={() => handleLinkClick('/Fernseher')}
+                onClick={() => handleLinkClick("/Fernseher")}
               >
                 Fernseher
               </Link>
               <Link
                 to="/GamingPC"
                 className="text-2xl hover:text-gray-400 transition-colors duration-300 ease-in-out"
-                onClick={() => handleLinkClick('/GamingPC')}
+                onClick={() => handleLinkClick("/GamingPC")}
               >
                 Gaming PCs
               </Link>
               <Link
                 to="/Handys"
                 className="text-2xl hover:text-gray-400 transition-colors duration-300 ease-in-out"
-                onClick={() => handleLinkClick('/Handys')}
+                onClick={() => handleLinkClick("/Handys")}
               >
                 Handys
               </Link>
               <Link
                 to="/Laptops"
                 className="text-2xl hover:text-gray-400 transition-colors duration-300 ease-in-out"
-                onClick={() => handleLinkClick('/Laptops')}
+                onClick={() => handleLinkClick("/Laptops")}
               >
                 Laptops
               </Link>
@@ -226,7 +242,8 @@ const Parent = () => {
         {/* Ladeanzeige */}
         {isLoading ? (
           <div className="flex justify-center items-center h-full">
-            <div className="loader text-gray-400 pt-8">Laden...</div> {/* Hier kannst du ein Loading-Symbol oder eine Animation verwenden */}
+            <div className="loader text-gray-400 pt-8">Laden...</div>{" "}
+            {/* Hier kannst du ein Loading-Symbol oder eine Animation verwenden */}
           </div>
         ) : (
           <Outlet />

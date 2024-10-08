@@ -67,7 +67,7 @@ const Wishlist = () => {
                     <Link
                       to={`/products/${item.productId}`}
                       state={{ fromWishlist: true }}
-                      className="text-lg font-semibold text-white hover:underline"
+                      className="text-lg font-semibold text-white hover:underline hover:text-blue-400"
                     >
                       {item.name}
                     </Link>

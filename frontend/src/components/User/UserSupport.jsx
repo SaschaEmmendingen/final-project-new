@@ -60,11 +60,10 @@ const UserSupport = () => {
   };
 
   return (
-    <div className="w-3/5 mx-auto mt-8">
-      <h2 className="text-2xl font-semibold mb-4">Support kontaktieren</h2>
-      <form onSubmit={handleSubmit} className="bg-white p-6 rounded-lg shadow-md">
+    <div className="w-3/5 mx-auto mt-8" >
+      <form onSubmit={handleSubmit} className="mx-15 p-4 border-0 rounded-md" style={{ background: "linear-gradient(#78716c, #292524 10%)" }}>
         <div className="mb-4">
-          <label htmlFor="subject" className="block font-medium">
+          <label htmlFor="subject" className="block font-medium text-gray-400">
             Betreff
           </label>
           <input
@@ -73,13 +72,13 @@ const UserSupport = () => {
             name="subject"
             value={formData.subject}
             onChange={handleChange}
-            className="mt-1 block w-full p-2 border border-stone-400 rounded-md"
+            className="mt-1 block w-full p-2 border-0 rounded-md bg-stone-600 outline-none text-white"
             required
           />
         </div>
 
         <div className="mb-4">
-          <label htmlFor="message" className="block font-medium">
+          <label htmlFor="message" className="block font-medium text-gray-400">
             Nachricht
           </label>
           <textarea
@@ -87,14 +86,14 @@ const UserSupport = () => {
             name="message"
             value={formData.message}
             onChange={handleChange}
-            className="mt-1 block w-full p-2 border border-stone-400 rounded-md"
+            className="mt-1 block w-full p-2 border-0 rounded-md bg-stone-600 outline-none text-white"
             required
           />
         </div>
 
         <button
           type="submit"
-          className="bg-blue-500 text-white py-2 px-4 rounded-md w-full hover:bg-blue-600"
+          className="bg-stone-600 text-white py-2 px-4 rounded-md w-full hover:bg-stone-700"
         >
           Anfrage senden
         </button>

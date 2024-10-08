@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom"; // Importiere den useNavigate Hook
 
 const AdminBestellungen = () => {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [expandedOrders, setExpandedOrders] = useState({});
+  const navigate = useNavigate(); // Initialisiere den navigate Hook
+
   useEffect(() => {
     const fetchOrders = async () => {
       try {
@@ -53,13 +56,13 @@ const AdminBestellungen = () => {
     );
 
   return (
-    <div className="w-4/5 mx-auto mt-8">
-      <h2
+    <div>
+      <h1
         className="text-2xl font-bold mb-4 text-gray-400"
         style={{ textShadow: "2px 2px 4px rgba(0, 0, 0, 0.6)" }}
       >
-        Verwaltung der Bestellungen
-      </h2>
+        Bestellungen
+      </h1>
       {orders.length === 0 ? (
         <p>Keine Bestellungen vorhanden.</p>
       ) : (
@@ -68,8 +71,9 @@ const AdminBestellungen = () => {
             <li
               key={order._id}
               className="bg-white p-4 rounded-lg shadow-md mb-4"
+              style={{ background: "linear-gradient(#78716c, #292524 10%)" }}
             >
-              <div className="flex justify-between items-center">
+              <div className="flex justify-between items-center text-gray-400">
                 <div>
                   <h3 className="text-lg font-medium">
                     Bestellung #{order._id}
@@ -93,17 +97,24 @@ const AdminBestellungen = () => {
               </div>
 
               {expandedOrders[order._id] && (
-                <ul className="mt-2">
+                <ul className="mt-2 text-white">
                   {order.items.map((item) => (
                     <li key={item._id} className="border-b py-1">
-                      {item.productId.name} - {item.price} €
+                      {/* Verlinke den Produktnamen */}
+                      <span
+                        onClick={() => navigate(`/products/${item.productId._id}`)} // Navigiere zur Produktdetailseite
+                        className="cursor-pointer hover:text-blue-300"
+                      >
+                        {item.productId.name}
+                      </span>{" "}
+                      - {item.price} €
                     </li>
                   ))}
                 </ul>
               )}
 
               <button
-                className="bg-red-500 text-white py-2 px-4 rounded-md mt-2 hover:bg-red-600"
+                className="bg-red-600 text-red-200 py-1 mt-4 px-2 rounded hover:bg-red-900"
                 onClick={() => handleDeleteOrder(order._id)}
               >
                 Löschen

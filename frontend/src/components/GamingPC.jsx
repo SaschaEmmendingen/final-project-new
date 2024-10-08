@@ -45,6 +45,7 @@ const GamingPC = () => {
       name: product.name,
       price: product.price,
       quantity,
+      image: product.imageUrl
     });
   };
 
@@ -85,7 +86,7 @@ const GamingPC = () => {
         className="text-3xl font-bold my-8 text-center text-gray-400"
         style={{ textShadow: "2px 2px 4px rgba(0, 0, 0, 0.6)" }}
       >
-        GAMING PC
+        Gaming PCs
       </h1>
       {loading ? (
         <div className="text-center text-gray-400">Loading...</div>

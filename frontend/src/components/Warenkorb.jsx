@@ -6,6 +6,28 @@ import axios from "axios";
 import { useAuth } from "./Main/AuthContext";
 import { useNavigate } from "react-router-dom";
 
+// Modal für Erfolgsmeldung
+const SuccessModal = ({ show, onClose }) => {
+  if (!show) return null;
+
+  return (
+    <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center z-50">
+      <div className="bg-white p-6 rounded-lg shadow-lg max-w-sm w-full">
+        <h2 className="text-xl font-bold mb-4">Bestellung erfolgreich!</h2>
+        <p className="text-gray-700 mb-4">
+          Deine Bestellung wurde erfolgreich abgeschickt.
+        </p>
+        <button
+          onClick={onClose}
+          className="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600 w-full"
+        >
+          OK
+        </button>
+      </div>
+    </div>
+  );
+};
+
 const Warenkorb = () => {
   const { cartItems, removeFromCart, clearCart } = useCart();
   const { token } = useAuth();
@@ -14,6 +36,7 @@ const Warenkorb = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
+  const [showModal, setShowModal] = useState(false); // Modal-Steuerung
 
   const totalAmount = cartItems
     .reduce((total, item) => {
@@ -44,7 +67,7 @@ const Warenkorb = () => {
 
   const handleCheckout = async () => {
     if (!token) {
-      navigate("/login");
+      navigate("/konto");
       return;
     }
 
@@ -54,7 +77,6 @@ const Warenkorb = () => {
     try {
       const orderData = prepareOrderData();
 
-      // Erstelle Bestellung
       const response = await axios.post(
         "http://localhost:1312/api/orders",
         orderData,
@@ -67,6 +89,7 @@ const Warenkorb = () => {
 
       if (response.status === 201) {
         setSuccess("Bestellung erfolgreich abgeschlossen!");
+        setShowModal(true); // Modal anzeigen
 
         // Sende Benachrichtigung
         try {
@@ -93,7 +116,6 @@ const Warenkorb = () => {
         }
 
         clearCart();
-        navigate("/");
       } else {
         setError(
           "Fehler beim Abschließen der Bestellung. Bitte versuche es erneut."
@@ -124,7 +146,7 @@ const Warenkorb = () => {
             </p>
           </div>
         ) : (
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               {cartItems.map((item, index) => (
                 <div
@@ -143,7 +165,7 @@ const Warenkorb = () => {
                     <div>
                       <h3 className="text-lg font-medium">{item.name}</h3>
                       <p className="text-sm font-semibold">
-                        {item.price} x {item.quantity || 1}
+                        {item.price}€ x {item.quantity || 1}
                       </p>
                     </div>
                   </div>
@@ -157,8 +179,14 @@ const Warenkorb = () => {
               ))}
             </div>
 
-            <div className="bg-white p-6 rounded-lg shadow-md h-full flex flex-col items-center justify-center">
-              <div className="text-center">
+            <div className="bg-white p-6 rounded-lg shadow-md flex flex-col items-center justify-center">
+              {success && (
+                <p className="text-green-500 text-lg font-semibold mb-4">
+                  {success}
+                </p>
+              )}
+
+              <div className="text-center mb-6">
                 <h3 className="text-xl font-bold mb-4">
                   Gesamtsumme: {totalAmount} €
                 </h3>
@@ -171,13 +199,12 @@ const Warenkorb = () => {
                 </button>
 
                 {error && <p className="text-red-500">{error}</p>}
-                {success && <p className="text-green-500">{success}</p>}
 
-                <p className="text-gray-500 my-2">
+                <p className="text-gray-500 my-4">
                   ---------------------oder express kaufen-------------------
                 </p>
 
-                <div className="w-full mb-4">
+                <div className="w-full mb-4 buttons-container z-0">
                   <PayPalButtons
                     style={{ layout: "vertical" }}
                     createOrder={(data, actions) => {
@@ -222,13 +249,16 @@ const Warenkorb = () => {
           <div className="flex justify-center items-center pt-4">
             <div className="w-4/5 p-4 bg-red-100 text-red-700 border border-red-300 rounded-lg">
               Du musst eingeloggt sein, um den Warenkorb zu verwalten. Bitte{" "}
-              <a href="/login" className="text-blue-500 underline">
+              <a href="/konto" className="text-blue-500 underline">
                 logge dich hier ein
               </a>
               .
             </div>
           </div>
         )}
+
+        {/* Erfolgsmeldung als Pop-up anzeigen */}
+        <SuccessModal show={showModal} onClose={() => setShowModal(false)} />
       </div>
     </PayPalScriptProvider>
   );

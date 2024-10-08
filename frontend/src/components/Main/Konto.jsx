@@ -26,9 +26,9 @@ const Konto = () => {
   }, [token, role, navigate]);
 
   return (
-    <div className="w-4/5 mx-auto mt-8 grid grid-cols-1 lg:grid-cols-2 gap-8">
+    <div className="w-4/5 mx-auto mt-8 grid grid-cols-1 lg:grid-cols-2 gap-8" >
       {/* Linke Spalte: Formular je nach Zustand */}
-      <div className="bg-stone-800 p-8 shadow-lg rounded-lg">
+      <div className="bg-stone-800 p-8 shadow-lg rounded-lg " style={{ background: "linear-gradient(#78716c, #292524 10%)" }}>
         {isRegistering ? (
           <>
             <h3 className="text-xl font-bold mb-4 text-gray-400">
@@ -45,7 +45,7 @@ const Konto = () => {
       </div>
 
       {/* Rechte Spalte: Registrierung und Vorteile */}
-      <div className="bg-stone-800 p-8 shadow-lg rounded-lg">
+      <div className="bg-stone-800 p-8 shadow-lg rounded-lg" style={{ background: "linear-gradient(#78716c, #292524 10%)" }}>
         <h3 className="text-xl font-bold mb-4 text-gray-400">
           Sie haben kein Konto?
         </h3>

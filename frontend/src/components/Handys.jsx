@@ -40,6 +40,7 @@ const Handys = () => {
       name: product.name,
       price: product.price,
       quantity,
+      image: product.imageUrl
     });
   };
 

@@ -3,12 +3,14 @@ import { useParams, useNavigate } from "react-router-dom";
 import { FaShoppingCart, FaHeart, FaTimes } from "react-icons/fa";
 import axios from "axios";
 import Modal from "./Modal"; // Importiere die Modal-Komponente
+import { useCart } from "../CartContext"; // Importiere den Warenkorb-Kontext
 
 function ProductDetail() {
   const { id } = useParams(); // Holt die Produkt-ID aus der URL
   const [product, setProduct] = useState(null);
   const [token, setToken] = useState(localStorage.getItem("token")); // Token von localStorage
   const [showModal, setShowModal] = useState(false); // State für Modal Sichtbarkeit
+  const { addToCart } = useCart(); // Verwende den Warenkorb-Kontext
   const navigate = useNavigate(); // Hook zum Navigieren
 
   // Funktion zum Zurücknavigieren
@@ -33,10 +35,18 @@ function ProductDetail() {
   const handleAddToCart = (quantity = 1) => {
     if (!token) {
       // Token nicht vorhanden, Benutzer zur Anmeldung weiterleiten
+      console.log("Token nicht vorhanden. Benutzer zur Anmeldung weiterleiten.");
       return;
     }
-    // Logik zum Hinzufügen zum Warenkorb
-    console.log("In den Warenkorb legen:", product);
+    // Füge das Produkt zum Warenkorb hinzu
+    addToCart({
+      productId: product._id,
+      name: product.name,
+      price: product.price,
+      quantity,
+      image: product.imageUrl
+    });
+    console.log("In den Warenkorb gelegt:", product);
   };
 
   const handleAddToWishlist = async () => {
@@ -123,7 +133,7 @@ function ProductDetail() {
             {/* Buttons Container */}
             <div className="flex flex-col space-y-4">
               <button
-                onClick={handleAddToCart}
+                onClick={() => handleAddToCart(1)} // Füge hier die Menge hinzu
                 className="bg-blue-500 text-white w-3/5 py-2 rounded-lg shadow-md hover:bg-blue-600"
               >
                 <FaShoppingCart className="inline mr-2" /> In den Warenkorb

@@ -103,7 +103,7 @@ const UserManagment = () => {
   };
 
   return (
-    <div className="p-4">
+    <div className="">
       <h1
         className="text-2xl font-bold mb-4 text-gray-400"
         style={{ textShadow: "2px 2px 4px rgba(0, 0, 0, 0.6)" }}
@@ -115,38 +115,37 @@ const UserManagment = () => {
         <div className="text-center">Laden...</div>
       ) : (
         <div>
-          <h2 className="text-xl font-semibold mb-2">Alle Benutzer</h2>
-          <table className="w-full border border-pink-500">
+          <table className="w-full  border-0 rounded-md text-gray-400" style={{ background: "linear-gradient(#78716c, #292524 10%)" }}>
             <thead>
               <tr>
-                <th className="border-b border-pink-500 p-2">ID</th>
-                <th className="border-b border-pink-500 p-2">Name</th>
-                <th className="border-b border-pink-500 p-2">Email</th>
-                <th className="border-b border-pink-500 p-2">Address</th>
-                <th className="border-b border-pink-500 p-2">Phone</th>
-                <th className="border-b border-pink-500 p-2">Aktionen</th>
+                <th className="border-b border-gray-400 rounded-md p-2">ID</th>
+                <th className="border-b border-gray-400 p-2">Name</th>
+                <th className="border-b border-gray-400 p-2">Email</th>
+                <th className="border-b border-gray-400 p-2">Address</th>
+                <th className="border-b border-gray-400 p-2">Phone</th>
+                <th className="border-b border-gray-400 p-2">Aktionen</th>
               </tr>
             </thead>
             <tbody>
               {users.map((user) => (
                 <tr key={user._id}>
-                  <td className="border-b border-pink-500 p-2">{user._id}</td>
-                  <td className="border-b border-pink-500 p-2">{user.name}</td>
-                  <td className="border-b border-pink-500 p-2">{user.email}</td>
-                  <td className="border-b border-pink-500 p-2">
+                  <td className="border-b border-gray-400 p-2">{user._id}</td>
+                  <td className="border-b border-gray-400 p-2">{user.name}</td>
+                  <td className="border-b border-gray-400 p-2">{user.email}</td>
+                  <td className="border-b border-gray-400 p-2">
                     {user.address}
                   </td>
-                  <td className="border-b border-pink-500 p-2">{user.phone}</td>
-                  <td className="border-b border-pink-500 p-2">
+                  <td className="border-b border-gray-400 p-2">{user.phone}</td>
+                  <td className="border-b border-gray-400 p-2">
                     <button
                       onClick={() => handleEdit(user)}
-                      className="bg-yellow-500 text-white py-1 px-2 rounded mr-2"
+                      className="bg-yellow-500 text-yellow-700 py-1 px-2 rounded mr-2 hover:bg-yellow-600"
                     >
                       Bearbeiten
                     </button>
                     <button
                       onClick={() => handleDelete(user)}
-                      className="bg-red-500 text-white py-1 px-2 rounded"
+                      className="bg-red-600 text-red-200 py-1 px-2 rounded hover:bg-red-900"
                     >
                       Löschen
                     </button>
@@ -173,7 +172,7 @@ const UserManagment = () => {
                       type="text"
                       value={name}
                       onChange={(e) => setName(e.target.value)}
-                      className="border border-pink-500 p-2 rounded w-full"
+                      className="border border-stone-600 p-2 rounded w-full outline-none"
                     />
                   </div>
                   <div>
@@ -182,7 +181,7 @@ const UserManagment = () => {
                       type="email"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
-                      className="border border-pink-500 p-2 rounded w-full"
+                      className="border border-stone-600 p-2 rounded w-full outline-none"
                     />
                   </div>
                   <div>
@@ -191,7 +190,7 @@ const UserManagment = () => {
                       type="text"
                       value={address}
                       onChange={(e) => setAddress(e.target.value)}
-                      className="border border-pink-500 p-2 rounded w-full"
+                      className="border border-stone-600 p-2 rounded w-full outline-none"
                     />
                   </div>
                   <div>
@@ -200,20 +199,20 @@ const UserManagment = () => {
                       type="text"
                       value={phone}
                       onChange={(e) => setPhone(e.target.value)}
-                      className="border border-pink-500 p-2 rounded w-full"
+                      className="border border-stone-600 p-2 rounded w-full outline-none"
                     />
                   </div>
                   <button
                     type="button"
                     onClick={handleSave}
-                    className="bg-yellow-500 text-white py-2 px-4 rounded mr-2"
+                    className="bg-yellow-500 text-yellow-700 py-2 px-4 rounded mr-2 hover:bg-yellow-600"
                   >
                     Speichern
                   </button>
                   <button
                     type="button"
                     onClick={handleCancel}
-                    className="bg-gray-500 text-white py-2 px-4 rounded"
+                    className="bg-red-600 text-white py-2 px-4 rounded hover:bg-red-900"
                   >
                     Abbrechen
                   </button>

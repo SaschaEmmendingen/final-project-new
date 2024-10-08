@@ -104,24 +104,24 @@ export const deleteAdmin = async (req, res) => {
   }
 };
 
-export const notifyUser = async (req, res) => {
-  const { userId, message } = req.body;
+// export const notifyUser = async (req, res) => {
+//   const { userId, message } = req.body;
 
-  // Überprüfe, ob der Admin berechtigt ist, Benachrichtigungen zu senden
-  const admin = req.user; // Der Admin sollte durch die Middleware hinzugefügt worden sein
+//   // Überprüfe, ob der Admin berechtigt ist, Benachrichtigungen zu senden
+//   const admin = req.user; // Der Admin sollte durch die Middleware hinzugefügt worden sein
 
-  if (!admin || admin.role !== "admin") {
-    return res
-      .status(403)
-      .json({ message: "Keine Berechtigung, um Benachrichtigungen zu senden" });
-  }
+//   if (!admin || admin.role !== "admin") {
+//     return res
+//       .status(403)
+//       .json({ message: "Keine Berechtigung, um Benachrichtigungen zu senden" });
+//   }
 
-  try {
-    sendNotification(userId, message);
-    res.status(200).json({ message: "Benachrichtigung gesendet" });
-  } catch (error) {
-    res
-      .status(500)
-      .json({ message: "Fehler beim Senden der Benachrichtigung" });
-  }
-};
+//   try {
+//     sendNotification(userId, message);
+//     res.status(200).json({ message: "Benachrichtigung gesendet" });
+//   } catch (error) {
+//     res
+//       .status(500)
+//       .json({ message: "Fehler beim Senden der Benachrichtigung" });
+//   }
+// };

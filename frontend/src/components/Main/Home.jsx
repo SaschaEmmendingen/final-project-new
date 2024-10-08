@@ -66,6 +66,7 @@ const Home = () => {
       name: product.name,
       price: product.price,
       quantity,
+      image: product.imageUrl
     });
   };
 

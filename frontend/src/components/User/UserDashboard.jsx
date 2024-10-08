@@ -9,6 +9,7 @@ import UserSupport from "./UserSupport";
 import UserPayment from "./UserPayment";
 import Activities from "./Activities";
 import { useNavigate } from "react-router-dom";
+import logo from "../../banner/logo.webp";
 
 const UserDashboard = () => {
   const [user, setUser] = useState(null);
@@ -83,64 +84,96 @@ const UserDashboard = () => {
       case "profile":
         return (
           <div>
-            <h2 className="text-3xl font-bold my-8 text-center text-gray-400"
-        style={{ textShadow: "2px 2px 4px rgba(0, 0, 0, 0.6)" }}>Profil</h2>
+            <h2
+              className="text-3xl font-bold my-8 text-center text-gray-400"
+              style={{ textShadow: "2px 2px 4px rgba(0, 0, 0, 0.6)" }}
+            >
+              Profil
+            </h2>
             <UserProfile user={user} />
           </div>
         );
       case "orders":
         return (
           <div>
-            <h2 className="text-3xl font-bold my-8 text-center text-gray-400"
-        style={{ textShadow: "2px 2px 4px rgba(0, 0, 0, 0.6)" }}>Bestellungen</h2>
+            <h2
+              className="text-3xl font-bold my-8 text-center text-gray-400"
+              style={{ textShadow: "2px 2px 4px rgba(0, 0, 0, 0.6)" }}
+            >
+              Bestellungen
+            </h2>
             <OrderManagmentUser />
           </div>
         );
       case "retoure":
         return (
           <div>
-            <h2 className="text-3xl font-bold my-8 text-center text-gray-400"
-        style={{ textShadow: "2px 2px 4px rgba(0, 0, 0, 0.6)" }}>Retoure</h2>
+            <h2
+              className="text-3xl font-bold my-8 text-center text-gray-400"
+              style={{ textShadow: "2px 2px 4px rgba(0, 0, 0, 0.6)" }}
+            >
+              Retoure
+            </h2>
             <Retoure />
           </div>
         );
       case "wishlist":
         return (
           <div>
-            <h2 className="text-3xl font-bold my-8 text-center text-gray-400"
-        style={{ textShadow: "2px 2px 4px rgba(0, 0, 0, 0.6)" }}>Wunschliste</h2>
+            <h2
+              className="text-3xl font-bold my-8 text-center text-gray-400"
+              style={{ textShadow: "2px 2px 4px rgba(0, 0, 0, 0.6)" }}
+            >
+              Wunschliste
+            </h2>
             <Wishlist />
           </div>
         );
       case "notifications":
         return (
           <div>
-            <h2 className="text-3xl font-bold my-8 text-center text-gray-400"
-        style={{ textShadow: "2px 2px 4px rgba(0, 0, 0, 0.6)" }}>Nachrichten</h2>
+            <h2
+              className="text-3xl font-bold my-8 text-center text-gray-400"
+              style={{ textShadow: "2px 2px 4px rgba(0, 0, 0, 0.6)" }}
+            >
+              Nachrichten
+            </h2>
             <Notifications />
           </div>
         );
       case "support":
         return (
           <div>
-            <h2 className="text-3xl font-bold my-8 text-center text-gray-400"
-        style={{ textShadow: "2px 2px 4px rgba(0, 0, 0, 0.6)" }}>Support</h2>
+            <h2
+              className="text-3xl font-bold my-8 text-center text-gray-400"
+              style={{ textShadow: "2px 2px 4px rgba(0, 0, 0, 0.6)" }}
+            >
+              Support
+            </h2>
             <UserSupport />
           </div>
         );
       case "payment":
         return (
           <div>
-            <h2 className="text-3xl font-bold my-8 text-center text-gray-400"
-        style={{ textShadow: "2px 2px 4px rgba(0, 0, 0, 0.6)" }}>Rechnungen</h2>
+            <h2
+              className="text-3xl font-bold my-8 text-center text-gray-400"
+              style={{ textShadow: "2px 2px 4px rgba(0, 0, 0, 0.6)" }}
+            >
+              Rechnungen
+            </h2>
             <UserPayment />
           </div>
         );
       case "activities":
         return (
           <div>
-            <h2 className="text-3xl font-bold my-8 text-center text-gray-400"
-        style={{ textShadow: "2px 2px 4px rgba(0, 0, 0, 0.6)" }}>Benutzer Aktivitäten</h2>
+            <h2
+              className="text-3xl font-bold my-8 text-center text-gray-400"
+              style={{ textShadow: "2px 2px 4px rgba(0, 0, 0, 0.6)" }}
+            >
+              Benutzer Aktivitäten
+            </h2>
             <Activities />
           </div>
         );
@@ -224,7 +257,9 @@ const UserDashboard = () => {
             </button>
             <button
               className={`p-2 rounded ${
-                activeSection === "activities" ? "text-gray-600" : "text-gray-400"
+                activeSection === "activities"
+                  ? "text-gray-600"
+                  : "text-gray-400"
               } bg-stone-800 border border-transparent transition-transform duration-300 ease-in-out hover:text-white hover:scale-105`}
               onClick={() => handleButtonClick("activities")}
             >
@@ -243,6 +278,12 @@ const UserDashboard = () => {
 
         {/* Main Content */}
         <div className="w-[80vw] m-5 p-4 border-l-2 border-stone-600">
+          <div className="flex flex-col items-center">
+            {/* Logo über der Überschrift und dem gerenderten Inhalt */}
+            <img src={logo} alt="Logo" className="rounded-md border-0 shadow-2xl shadow-stone-900" style={ {height: "45vh", width:"60vw"} }/>
+          </div>
+
+          {/* Hier wird die Section-Inhalt gerendert, inklusive Überschrift */}
           {renderSection()}
         </div>
       </div>

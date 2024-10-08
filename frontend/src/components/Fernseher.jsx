@@ -42,6 +42,7 @@ const TVs = () => {
       name: product.name,
       price: product.price,
       quantity,
+      image: product.imageUrl
     });
   };
 

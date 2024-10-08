@@ -1,7 +1,6 @@
-import mongoose from 'mongoose';
-import bcrypt from 'bcryptjs';
+import mongoose from "mongoose";
+import bcrypt from "bcryptjs";
 
-// Definiere das Schema für Admins
 const adminSchema = new mongoose.Schema({
   name: {
     type: String,
@@ -20,20 +19,20 @@ const adminSchema = new mongoose.Schema({
   phone: String,
   role: {
     type: String,
-    enum: ['user', 'admin'],
-    default: 'admin', // Standardmäßig 'admin', kann jedoch nach Bedarf angepasst werden
+    enum: ["user", "admin"],
+    default: "admin",
   },
-  notifications: [ // Hier das Feld für Benachrichtigungen hinzufügen
+  // Behalte die Referenz für Benachrichtigungen
+  notifications: [
     {
-      message: { type: String, required: true },  // Der Typ muss String sein
-      date: { type: Date, default: Date.now }
-    }
-  ]
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Notification",
+    },
+  ],
 });
 
-// Middleware, um das Passwort vor dem Speichern zu hashen
-adminSchema.pre('save', async function (next) {
-  if (!this.isModified('password')) {
+adminSchema.pre("save", async function (next) {
+  if (!this.isModified("password")) {
     return next();
   }
   const salt = await bcrypt.genSalt(10);
@@ -41,13 +40,9 @@ adminSchema.pre('save', async function (next) {
   next();
 });
 
-// Methode zur Überprüfung des Passworts
 adminSchema.methods.matchPassword = async function (enteredPassword) {
-  const isMatch = await bcrypt.compare(enteredPassword, this.password);
-  return isMatch;
+  return await bcrypt.compare(enteredPassword, this.password);
 };
 
-// Erstelle das Admin-Modell
-const Admin = mongoose.model('Admin', adminSchema);
-
+const Admin = mongoose.model("Admin", adminSchema);
 export default Admin;
